@@ -3,417 +3,833 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Imagine Fashion | Direct X-Series Sync v4.3</title>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Imagine Fashion | Lightspeed Importer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root { --bg:#FAFAFA; --surface:#fff; --border:#000; --text:#1a1a1a; --accent:#4CAF50; --radius:2px; }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;padding:40px 20px;}
-header{max-width:850px;margin:0 auto 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--text);padding-bottom:20px;}
-.if-logo{height:65px;width:auto;}
-.container{max-width:850px;margin:0 auto;}
+  :root {
+    --bg: #d2a2a2;
+    --surface: rgba(255,255,255,0.18);
+    --surface2: rgba(255,255,255,0.12);
+    --border: rgba(255,255,255,0.35);
+    --text: #ffffff;
+    --muted: rgba(255,255,255,0.7);
+    --radius: 4px;
+  }
 
-.template-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
-.btn-temp{background:#eee;border:1px solid #000;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-#product-list{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
 
-.product-card{background:var(--surface);border:1px solid #ccc;border-radius:var(--radius);overflow:hidden;}
-.card-header{display:flex;align-items:center;padding:15px;cursor:pointer;background:#fff;}
-.card-num{background:#000;color:#fff;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;margin-right:15px;}
-.card-preview{flex:1;font-weight:600;font-size:14px;text-transform:uppercase;}
-.card-actions{display:flex;gap:8px;}
+  header {
+    max-width: 860px;
+    margin: 0 auto 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
 
-.btn-ui{background:#fff;border:1px solid #000;padding:5px 10px;font-size:10px;cursor:pointer;font-weight:700;}
-.btn-black{background:#000;color:#fff;border:none;padding:6px 12px;font-size:10px;cursor:pointer;font-weight:700;}
+  .if-logo { height: 52px; width: auto; display: block; }
 
-.card-body{display:none;padding:20px;border-top:1px solid #eee;background:#fafafa;}
-.card-body.open{display:block;}
+  .header-right p {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: right;
+  }
 
-.fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
-.field-full{grid-column:1 / -1;}
+  .header-right p + p { margin-top: 3px; color: rgba(255,255,255,0.4); }
 
-label{font-size:10px;font-weight:800;text-transform:uppercase;margin-bottom:5px;display:block;}
-input,select{border:1px solid #000;padding:10px;width:100%;font-family:'DM Mono';font-size:13px;background:#fff;}
+  .container { max-width: 860px; margin: 0 auto; }
 
-.config-panel{background:#f0f0f0;border:1px solid #000;padding:20px;margin-bottom:20px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  /* Config panel */
+  .config-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    align-items: end;
+  }
 
-.export-section{background:#000;color:#fff;padding:25px;border-radius:4px;}
+  .config-panel .field-full { grid-column: 1 / -1; }
 
-.btn-sync{background:var(--accent);color:#fff;border:none;padding:12px 25px;cursor:pointer;font-weight:800;font-family:'DM Mono';font-size:16px;}
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #7fff7f;
+    margin-right: 6px;
+    box-shadow: 0 0 6px rgba(127,255,127,0.6);
+  }
 
-.drawer{position:fixed;top:0;right:-450px;width:380px;height:100%;background:#fff;border-left:2px solid #000;transition:0.4s;z-index:2000;padding:40px 30px;}
-.drawer.active{right:0;}
+  .status-text { font-size: 11px; font-weight: 700; color: #7fff7f; letter-spacing: 0.08em; }
 
-.drawer-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);display:none;z-index:1999;}
-.drawer-overlay.active{display:block;}
+  /* Template bar */
+  .template-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
 
-#toast{position:fixed;bottom:20px;right:20px;background:#333;color:#fff;padding:12px 20px;border-radius:4px;opacity:0;transition:0.3s;z-index:3000;font-size:12px;}
-#toast.show{opacity:1;}
+  .template-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn-temp {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #ffffff;
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .btn-temp:hover { background: rgba(255,255,255,0.28); border-color: #ffffff; }
+
+  /* Product list */
+  #product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .product-card:focus-within { border-color: rgba(255,255,255,0.7); }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .card-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #b07878;
+    background: #ffffff;
+    width: 28px; height: 28px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-preview {
+    flex: 1;
+    font-size: 13px;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .card-preview.empty {
+    color: rgba(255,255,255,0.45);
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+  }
+
+  .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+  .card-price-badge {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 500;
+    min-width: 50px;
+    text-align: right;
+  }
+
+  .btn-card {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #ffffff;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-card:hover { background: rgba(255,255,255,0.28); border-color: #ffffff; }
+  .btn-card.danger:hover { background: rgba(255,80,80,0.2); border-color: rgba(255,120,120,0.6); color: #ffaaaa; }
+
+  .card-toggle {
+    color: rgba(255,255,255,0.6);
+    font-size: 16px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .card-toggle.open { transform: rotate(180deg); }
+
+  .card-body {
+    display: none;
+    padding: 0 18px 20px;
+    border-top: 1px solid var(--border);
+    animation: slideDown 0.15s ease;
+  }
+
+  .card-body.open { display: block; }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fields-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .field-full { grid-column: 1 / -1; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    font-weight: 600;
+  }
+
+  label .optional { color: rgba(255,255,255,0.5); font-size: 9px; text-transform: none; letter-spacing: 0; font-weight: 400; }
+  label .required { color: #ffffff; }
+
+  input, select {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.38);
+    border-radius: var(--radius);
+    color: #ffffff;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 10px 12px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+    outline: none;
+  }
+
+  input:focus, select:focus {
+    border-color: rgba(255,255,255,0.85);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.12);
+  }
+
+  select option { background: #b07878; color: #ffffff; }
+  input::placeholder { color: rgba(255,255,255,0.4); }
+  input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
+
+  /* Stock drawer */
+  .drawer-overlay {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.35);
+    display: none; z-index: 1999;
+  }
+
+  .drawer-overlay.active { display: block; }
+
+  .drawer {
+    position: fixed; top: 0; right: -440px;
+    width: 380px; height: 100%;
+    background: #c49090;
+    border-left: 1px solid rgba(255,255,255,0.3);
+    transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+    z-index: 2000;
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawer.active { right: 0; }
+
+  .drawer h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    padding-bottom: 14px;
+    margin-bottom: 24px;
+  }
+
+  .drawer-fields { display: flex; flex-direction: column; gap: 16px; flex: 1; }
+
+  .drawer-save {
+    background: #ffffff;
+    color: #b07878;
+    border: none;
+    padding: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: var(--radius);
+    margin-top: 28px;
+    transition: all 0.15s;
+  }
+
+  .drawer-save:hover { background: #f0e8e8; }
+
+  /* Add button */
+  .add-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background: rgba(255,255,255,0.1);
+    border: 1px dashed rgba(255,255,255,0.38);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    color: rgba(255,255,255,0.75);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+
+  .add-btn:hover { border-color: #ffffff; color: #ffffff; background: rgba(255,255,255,0.18); }
+
+  /* Sync section */
+  .export-section {
+    background: rgba(0,0,0,0.18);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-top: 8px;
+  }
+
+  .export-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+  }
+
+  .export-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  .btn-sync {
+    background: #ffffff;
+    color: #b07878;
+    border: none;
+    padding: 12px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all 0.15s;
+  }
+
+  .btn-sync:hover { background: #f5eded; box-shadow: 0 2px 16px rgba(0,0,0,0.15); }
+  .btn-sync:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+  .btn-clear {
+    background: transparent;
+    border: 1px solid rgba(255,120,120,0.45);
+    color: rgba(255,170,170,0.9);
+    padding: 12px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all 0.15s;
+  }
+
+  .btn-clear:hover { border-color: #ff9090; color: #ffbbbb; background: rgba(255,80,80,0.1); }
+
+  .counter { font-size: 11px; color: rgba(255,255,255,0.6); margin-left: auto; letter-spacing: 0.06em; }
+  .counter span { color: #ffffff; font-weight: 600; }
+
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 28px; right: 28px;
+    background: #ffffff;
+    color: #b07878;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 12px 22px;
+    border-radius: var(--radius);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s;
+    pointer-events: none;
+    z-index: 3000;
+    letter-spacing: 0.05em;
+  }
+
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    .fields-grid { grid-template-columns: 1fr; }
+    .config-panel { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .drawer { width: 100%; right: -100%; }
+    .card-actions { gap: 5px; }
+  }
 </style>
 </head>
-
 <body>
 
 <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
 
 <div class="drawer" id="drawer">
-<h3 style="font-family:'Syne';text-transform:uppercase;border-bottom:2px solid #000;padding-bottom:10px;">Stock Levels</h3>
-<div id="drawer-content" style="margin-top:20px;"></div>
-<button class="btn-black" style="width:100%;margin-top:30px;padding:15px;" onclick="closeDrawer()">SAVE & CLOSE</button>
+  <h3>Stock Levels</h3>
+  <div class="drawer-fields" id="drawer-content"></div>
+  <button class="drawer-save" onclick="closeDrawer()">SAVE &amp; CLOSE</button>
 </div>
 
 <header>
-<img src="Imagine Fashion Logo Transp.png" class="if-logo">
-<div style="text-align:right">
-<p style="font-weight:800;font-size:12px;">DIRECT API v4.3</p>
-<p style="font-size:10px;color:#666;">LIGHTSPEED X-SERIES</p>
-</div>
+  <img src="https://www.imaginefashion.com.au/cdn/shop/files/White_Logo.png?v=1738727364&width=150" class="if-logo" alt="Imagine Fashion">
+  <div class="header-right">
+    <p>Lightspeed X-Series</p>
+    <p>Direct Product Sync</p>
+  </div>
 </header>
 
 <div class="container">
 
-<div class="config-panel">
-<div class="field-full">
-<label>Permanent Access Token</label>
-<input type="password" id="api_token" oninput="saveConfig()" placeholder="Bearer Token">
-</div>
+  <!-- API Config -->
+  <div class="config-panel">
+    <div class="field field-full">
+      <label>Permanent Access Token</label>
+      <input type="password" id="api_token" oninput="saveConfig()" placeholder="Paste your Bearer token here">
+    </div>
+    <div class="field">
+      <label>Lightspeed Domain</label>
+      <input type="text" id="api_domain" oninput="saveConfig()" placeholder="yourstorename">
+    </div>
+    <div class="field">
+      <label>Tax Name</label>
+      <input type="text" id="default_tax" value="GST" placeholder="GST">
+    </div>
+    <div class="field" style="justify-content:flex-end; padding-bottom:2px;">
+      <div><span class="status-dot"></span><span class="status-text">READY</span></div>
+    </div>
+  </div>
 
-<div>
-<label>Lightspeed Domain</label>
-<input type="text" id="api_domain" oninput="saveConfig()" placeholder="yourstorename">
-</div>
+  <!-- Quick templates -->
+  <div class="template-label">Quick Add</div>
+  <div class="template-bar" id="templates"></div>
 
-<div>
-<label>Status</label>
-<div style="font-size:11px;margin-top:10px;font-weight:700;color:#4CAF50;">READY</div>
-</div>
-</div>
+  <!-- Product list -->
+  <div id="product-list"></div>
 
-<label>Quick Templates</label>
-<div class="template-bar" id="templates"></div>
+  <button class="add-btn" onclick="addProduct()">
+    <span style="font-size:18px;line-height:1;">+</span> Add Product
+  </button>
 
-<div id="product-list"></div>
-
-<div style="display:flex;gap:10px;margin-bottom:30px;">
-<button style="flex:3;padding:15px;border:2px dashed #000;background:none;cursor:pointer;font-weight:700;" onclick="addProduct()">+ ADD NEW PRODUCT</button>
-<button style="flex:1;padding:15px;border:1px solid #ff4d4d;color:#ff4d4d;background:none;cursor:pointer;font-weight:700;" onclick="clearAll()">CLEAR ALL</button>
-</div>
-
-<div class="export-section">
-<h2 style="font-family:'Syne';margin-bottom:15px;text-transform:uppercase;">Sync Directly</h2>
-<div style="display:flex;align-items:center;">
-<button class="btn-sync" id="sync_btn" onclick="startDirectSync()">SYNC TO LIGHTSPEED</button>
-<div id="counter" style="margin-left:auto;font-weight:700;">0 PRODUCTS</div>
-</div>
-</div>
+  <!-- Sync -->
+  <div class="export-section">
+    <h2>Sync to Lightspeed</h2>
+    <div class="export-row">
+      <button class="btn-sync" id="sync_btn" onclick="startSync()">SYNC PRODUCTS</button>
+      <button class="btn-clear" onclick="clearAll()">CLEAR ALL</button>
+      <div class="counter" id="counter"><span>0</span> products</div>
+    </div>
+  </div>
 
 </div>
 
 <div id="toast"></div>
 
 <script>
-
-let products=[];
-let nextId=1;
-
-const CATEGORIES=[
-'Sample Top','Sample Pant','Sample Dress','Sample Skirt','Sample Jacket','Sample Knit',
-'Sample Accessory','Sample Belt','Sample Jewellery','Sample Scarf','Sample Shoes','Sample Shorts','Sample Vest'
-];
-
-const BRANDS=[
-'Imagine Fashion','Accessories','All Season','Belts','Discontinued','Ex Display','Final Clearance','Freight','Gift Card',
-'Imagine Fashion Dev 1','Imagine Fashion Wholesale','Jewellery','Needs Altering','Not specified',
-'Summer 20-21','Summer 21-22','Summer 22-23','Summer 23-24','Summer 24-25','Summer 25-26',
-'Summer 25-27','Summer 25-28','Summer Discontinued',
-'Winter 2021','Winter 2022','Winter 2023','Winter 2024','Winter 2025','Winter 2026',
-'Wrapped Gift Cards'
-];
-
-const OUTLET_IDS={
-ht:'06f24f8b-21a8-11ef-f4ca-d46876ffea7a',
-pf:'06f24f8b-21a8-11ef-f4ca-d468a998f3bc',
-ss:'06f24f8b-21fd-11ef-f4ca-d466e09040b3',
-sw:'06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200'
-};
-
-window.onload=()=>{
-document.getElementById('api_token').value=localStorage.getItem('ls_token')||'';
-document.getElementById('api_domain').value=localStorage.getItem('ls_domain')||'';
-};
-
-function saveConfig(){
-localStorage.setItem('ls_token',document.getElementById('api_token').value);
-localStorage.setItem('ls_domain',document.getElementById('api_domain').value);
-}
-
-CATEGORIES.forEach(cat=>{
-const btn=document.createElement('button');
-btn.className='btn-temp';
-btn.innerText=`+ ${cat.replace('Sample ','')}`;
-btn.onclick=()=>addProduct(cat);
-document.getElementById('templates').appendChild(btn);
-});
-
-function addProduct(cat=''){
-products.push({_id:nextId++,open:true,name:'',category:cat,brand:'Imagine Fashion',supplyPrice:0,retailPrice:0,sku:'',stock:{ht:0,pf:0,ss:0,sw:0}});
-renderList();
-updateCounter();
-}
-
-function renderList(){
-const list=document.getElementById('product-list');
-list.innerHTML='';
-
-products.forEach((p,idx)=>{
-
-const total=Object.values(p.stock).reduce((a,b)=>a+b,0);
-
-const card=document.createElement('div');
-card.className='product-card';
-
-card.innerHTML=`
-<div class="card-header" onclick="toggleCard(${p._id})">
-<div class="card-num">${idx+1}</div>
-<div class="card-preview" id="preview-${p._id}">${p.name||'NEW PRODUCT'}</div>
-<div class="card-actions">
-<button class="btn-ui" onclick="event.stopPropagation();duplicate(${p._id})">DUP</button>
-<button class="btn-black" onclick="event.stopPropagation();openDrawer(${p._id})">STOCK [${total}]</button>
-<button class="btn-ui" style="color:red" onclick="event.stopPropagation();remove(${p._id})">X</button>
-</div>
-</div>
-
-<div class="card-body ${p.open?'open':''}">
-<div class="fields-grid">
-
-<div class="field-full">
-<label>Product Name</label>
-<input type="text" value="${p.name}" oninput="updateField(${p._id},'name',this.value)">
-</div>
-
-<div>
-<label>Category</label>
-<select onchange="updateField(${p._id},'category',this.value)">
-<option value="">-- SELECT --</option>
-${CATEGORIES.map(c=>`<option value="${c}" ${p.category===c?'selected':''}>${c}</option>`).join('')}
-</select>
-</div>
-
-<div>
-<label>Brand</label>
-<select onchange="updateField(${p._id},'brand',this.value)">
-${BRANDS.map(b=>`<option value="${b}" ${p.brand===b?'selected':''}>${b}</option>`).join('')}
-</select>
-</div>
-
-<div>
-<label>SKU</label>
-<input type="text" value="${p.sku}" oninput="updateField(${p._id},'sku',this.value)">
-</div>
-
-<div>
-<label>Cost</label>
-<input type="number" value="${p.supplyPrice}" oninput="updateField(${p._id},'supplyPrice',this.value)">
-</div>
-
-<div>
-<label>Retail Price</label>
-<input type="number" value="${p.retailPrice}" oninput="updateField(${p._id},'retailPrice',this.value)">
-</div>
-
-</div>
-</div>
-`;
-
-list.appendChild(card);
-
-});
-}
-
-function updateField(id,f,v){
-let p=products.find(x=>x._id===id);
-p[f]=v;
-if(f==='name')document.getElementById(`preview-${id}`).innerText=v||'NEW PRODUCT';
-}
-
-function toggleCard(id){
-let p=products.find(x=>x._id===id);
-p.open=!p.open;
-renderList();
-}
-
-function remove(id){
-products=products.filter(x=>x._id!==id);
-renderList();
-updateCounter();
-}
-
-function duplicate(id){
-let p=products.find(x=>x._id===id);
-let copy=JSON.parse(JSON.stringify(p));
-copy._id=nextId++;
-products.push(copy);
-renderList();
-updateCounter();
-}
-
-function updateCounter(){
-document.getElementById('counter').innerText=`${products.length} PRODUCTS`;
-}
-
-function clearAll(){
-if(confirm("Clear everything?")){
-products=[];
-renderList();
-updateCounter();
-}
-}
-
-function showToast(m){
-const t=document.getElementById('toast');
-t.innerText=m;
-t.classList.add('show');
-setTimeout(()=>t.classList.remove('show'),4000);
-}
-
-function openDrawer(id){
-const p=products.find(x=>x._id===id);
-
-document.getElementById('drawer-content').innerHTML=`
-
-<div style="display:flex;flex-direction:column;gap:15px;">
-
-<div>
-<label>Harbour Town</label>
-<input type="number" value="${p.stock.ht}" oninput="updateStock(${id},'ht',this.value)">
-</div>
-
-<div>
-<label>Pacific Fair</label>
-<input type="number" value="${p.stock.pf}" oninput="updateStock(${id},'pf',this.value)">
-</div>
-
-<div>
-<label>Southport Showroom</label>
-<input type="number" value="${p.stock.ss}" oninput="updateStock(${id},'ss',this.value)">
-</div>
-
-<div>
-<label>Southport Warehouse</label>
-<input type="number" value="${p.stock.sw}" oninput="updateStock(${id},'sw',this.value)">
-</div>
-
-</div>
-`;
-
-document.getElementById('drawer').classList.add('active');
-document.getElementById('overlay').classList.add('active');
-}
-
-function updateStock(id,loc,val){
-products.find(x=>x._id===id).stock[loc]=parseInt(val)||0;
-}
-
-function closeDrawer(){
-document.getElementById('drawer').classList.remove('active');
-document.getElementById('overlay').classList.remove('active');
-renderList();
-}
-
-async function startDirectSync(){
-
-const token=document.getElementById('api_token').value.trim();
-const domain=document.getElementById('api_domain').value.trim();
-
-if(!token||!domain){
-alert("Token and Domain required");
-return;
-}
-
-const btn=document.getElementById('sync_btn');
-btn.disabled=true;
-btn.innerText="SYNCING";
-
-const proxy="https://corsproxy.io/?";
-
-for(const p of products){
-
-try{
-
-const autoSku=Math.floor(10000000+Math.random()*90000000).toString();
-const finalSku=p.sku.trim()||autoSku;
-const finalName=`${p.name} - ${Math.floor(1000+Math.random()*9000)}`;
-
-const productUrl=`${proxy}https://${domain}.retail.lightspeed.app/api/2.0/products`;
-
-const res=await fetch(productUrl,{
-method:"POST",
-headers:{
-Authorization:`Bearer ${token}`,
-"Content-Type":"application/json",
-Accept:"application/json"
-},
-body:JSON.stringify({
-name:finalName,
-sku:finalSku,
-supply_price:parseFloat(p.supplyPrice)||0,
-retail_price:parseFloat(p.retailPrice)||0,
-type:p.category,
-brand_name:p.brand,
-track_inventory:true,
-active:true
-})
-});
-
-if(!res.ok)throw new Error(await res.text());
-
-const data=await res.json();
-
-const product_id=data?.data?.id||data?.data?.[0]?.id;
-
-if(!product_id)throw new Error("No product id returned");
-
-const invUrl=`${proxy}https://${domain}.retail.lightspeed.app/api/2.0/inventory`;
-
-await fetch(invUrl,{
-method:"POST",
-headers:{
-Authorization:`Bearer ${token}`,
-"Content-Type":"application/json"
-},
-body:JSON.stringify([
-{product_id,outlet_id:OUTLET_IDS.ht,count:Number(p.stock.ht)||0},
-{product_id,outlet_id:OUTLET_IDS.pf,count:Number(p.stock.pf)||0},
-{product_id,outlet_id:OUTLET_IDS.ss,count:Number(p.stock.ss)||0},
-{product_id,outlet_id:OUTLET_IDS.sw,count:Number(p.stock.sw)||0}
-])
-});
-
-}catch(err){
-console.error(err);
-alert(`Sync failed for ${p.name}`);
-btn.disabled=false;
-btn.innerText="SYNC TO LIGHTSPEED";
-return;
-}
-
-}
-
-btn.innerText="SYNC COMPLETE";
-showToast("Products synced successfully");
-
-setTimeout(()=>{
-btn.innerText="SYNC TO LIGHTSPEED";
-btn.disabled=false;
-},3000);
-
-}
-
-addProduct();
-
+  let products = [];
+  let nextId = 1;
+
+  const CATEGORIES = [
+    '', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt',
+    'Sample Jacket', 'Sample Knit', 'Jewellery', 'Accessories',
+    'Homewares', 'Belts', 'Bags', 'Scarves'
+  ];
+
+  const BRANDS = [
+    '', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display',
+    'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion',
+    'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery',
+    'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22',
+    'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26',
+    'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021',
+    'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 'Winter 2026',
+    'Wrapped Gift Cards'
+  ];
+
+  const OUTLET_IDS = {
+    ht: '06f24f8b-21a8-11ef-f4ca-d46876ffea7a',
+    pf: '06f24f8b-21a8-11ef-f4ca-d468a998f3bc',
+    ss: '06f24f8b-21fd-11ef-f4ca-d466e09040b3',
+    sw: '06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200'
+  };
+
+  // ---- Init ----
+  window.onload = () => {
+    document.getElementById('api_token').value = localStorage.getItem('ls_token') || '';
+    document.getElementById('api_domain').value = localStorage.getItem('ls_domain') || '';
+
+    CATEGORIES.filter(c => c).forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-temp';
+      btn.textContent = '+ ' + cat.replace('Sample ', '');
+      btn.onclick = () => addProduct(cat);
+      document.getElementById('templates').appendChild(btn);
+    });
+
+    addProduct();
+  };
+
+  function saveConfig() {
+    localStorage.setItem('ls_token', document.getElementById('api_token').value);
+    localStorage.setItem('ls_domain', document.getElementById('api_domain').value);
+  }
+
+  // ---- Helpers ----
+  function uid() {
+    return Math.random().toString(36).slice(2, 10).toUpperCase();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  function updateCounter() {
+    document.getElementById('counter').innerHTML = `<span>${products.length}</span> product${products.length !== 1 ? 's' : ''}`;
+  }
+
+  function esc(str) {
+    return (str || '').toString()
+      .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ---- Product management ----
+  function addProduct(cat) {
+    if (cat === undefined) cat = '';
+    products.push({
+      _id: nextId++,
+      open: true,
+      name: '',
+      category: cat,
+      brandName: 'Imagine Fashion',
+      retailPrice: '',
+      supplyPrice: '',
+      supplierName: '',
+      supplierCode: '',
+      stock: { ht: 0, pf: 0, ss: 0, sw: 0 }
+    });
+    renderList();
+    updateCounter();
+    setTimeout(() => {
+      const cards = document.querySelectorAll('.product-card');
+      if (cards.length) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
+  }
+
+  function removeProduct(id) {
+    products = products.filter(p => p._id !== id);
+    renderList();
+    updateCounter();
+  }
+
+  function duplicate(id) {
+    const src = products.find(p => p._id === id);
+    const copy = JSON.parse(JSON.stringify(src));
+    copy._id = nextId++;
+    copy.open = true;
+    products.push(copy);
+    renderList();
+    updateCounter();
+  }
+
+  function toggleCard(id) {
+    const p = products.find(p => p._id === id);
+    if (p) p.open = !p.open;
+    renderList();
+  }
+
+  function updateField(id, field, value) {
+    const p = products.find(p => p._id === id);
+    if (!p) return;
+    p[field] = value;
+    const card = document.querySelector(`[data-pid="${id}"]`);
+    if (card) {
+      const preview = card.querySelector('.card-preview');
+      const badge = card.querySelector('.card-price-badge');
+      preview.textContent = p.name || 'New Product';
+      preview.className = 'card-preview' + (p.name ? '' : ' empty');
+      badge.textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+    }
+  }
+
+  // ---- Stock drawer ----
+  function openDrawer(id) {
+    const p = products.find(p => p._id === id);
+    document.getElementById('drawer-content').innerHTML = `
+      <div class="field"><label>Harbour Town</label>
+        <input type="number" value="${p.stock.ht}" oninput="updateStock(${id},'ht',this.value)"></div>
+      <div class="field"><label>Pacific Fair</label>
+        <input type="number" value="${p.stock.pf}" oninput="updateStock(${id},'pf',this.value)"></div>
+      <div class="field"><label>Southport Showroom</label>
+        <input type="number" value="${p.stock.ss}" oninput="updateStock(${id},'ss',this.value)"></div>
+      <div class="field"><label>Southport Warehouse</label>
+        <input type="number" value="${p.stock.sw}" oninput="updateStock(${id},'sw',this.value)"></div>
+    `;
+    document.getElementById('drawer').classList.add('active');
+    document.getElementById('overlay').classList.add('active');
+  }
+
+  function updateStock(id, loc, val) {
+    const p = products.find(p => p._id === id);
+    if (p) p.stock[loc] = parseInt(val) || 0;
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('active');
+    document.getElementById('overlay').classList.remove('active');
+    renderList();
+  }
+
+  // ---- Render ----
+  function renderList() {
+    const list = document.getElementById('product-list');
+    list.innerHTML = '';
+
+    products.forEach((p, idx) => {
+      const total = Object.values(p.stock).reduce((a, b) => a + b, 0);
+      const displayName = p.name || 'New Product';
+      const isEmpty = !p.name;
+      const priceLabel = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.setAttribute('data-pid', p._id);
+
+      card.innerHTML = `
+        <div class="card-header" onclick="toggleCard(${p._id})">
+          <div class="card-num">${idx + 1}</div>
+          <div class="card-preview${isEmpty ? ' empty' : ''}">${esc(displayName)}</div>
+          <div class="card-actions">
+            <div class="card-price-badge">${priceLabel}</div>
+            <button class="btn-card" onclick="event.stopPropagation(); openDrawer(${p._id})">STOCK [${total}]</button>
+            <button class="btn-card" onclick="event.stopPropagation(); duplicate(${p._id})">DUP</button>
+            <button class="btn-card danger" onclick="event.stopPropagation(); removeProduct(${p._id})">&#x2715;</button>
+          </div>
+          <div class="card-toggle${p.open ? ' open' : ''}">&#x25BE;</div>
+        </div>
+        <div class="card-body${p.open ? ' open' : ''}">
+          <div class="fields-grid">
+            <div class="field field-full">
+              <label>Product Name <span class="required">*</span></label>
+              <input type="text" placeholder="e.g. Black Bag" value="${esc(p.name)}"
+                oninput="updateField(${p._id},'name',this.value)">
+            </div>
+            <div class="field">
+              <label>Category <span class="required">*</span></label>
+              <select onchange="updateField(${p._id},'category',this.value)">
+                ${CATEGORIES.map(c => `<option value="${c}"${p.category === c ? ' selected' : ''}>${c || '-- Select category --'}</option>`).join('')}
+              </select>
+            </div>
+            <div class="field">
+              <label>Brand <span class="optional">(optional)</span></label>
+              <select onchange="updateField(${p._id},'brandName',this.value)">
+                ${BRANDS.map(b => `<option value="${b}"${p.brandName === b ? ' selected' : ''}>${b || '-- Select brand --'}</option>`).join('')}
+              </select>
+            </div>
+            <div class="field">
+              <label>Retail Price (AUD) <span class="required">*</span></label>
+              <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.retailPrice)}"
+                oninput="updateField(${p._id},'retailPrice',this.value)">
+            </div>
+            <div class="field">
+              <label>Supply Price <span class="optional">(optional)</span></label>
+              <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.supplyPrice)}"
+                oninput="updateField(${p._id},'supplyPrice',this.value)">
+            </div>
+            <div class="field">
+              <label>Supplier Name <span class="optional">(optional)</span></label>
+              <input type="text" placeholder="e.g. Fulfilment Co." value="${esc(p.supplierName)}"
+                oninput="updateField(${p._id},'supplierName',this.value)">
+            </div>
+            <div class="field">
+              <label>Supplier Code <span class="optional">(optional)</span></label>
+              <input type="text" placeholder="e.g. SUP-001" value="${esc(p.supplierCode)}"
+                oninput="updateField(${p._id},'supplierCode',this.value)">
+            </div>
+          </div>
+        </div>
+      `;
+
+      list.appendChild(card);
+    });
+  }
+
+  // ---- Direct Sync ----
+  async function startSync() {
+    const token = document.getElementById('api_token').value.trim();
+    const domain = document.getElementById('api_domain').value.trim();
+
+    if (!token || !domain) {
+      alert('Please enter your Access Token and Lightspeed Domain first.');
+      return;
+    }
+
+    const invalid = products.filter(p => !p.name || !p.retailPrice || !p.category);
+    if (invalid.length > 0) {
+      showToast(`${invalid.length} product(s) missing required fields.`);
+      return;
+    }
+
+    const btn = document.getElementById('sync_btn');
+    btn.disabled = true;
+    btn.textContent = 'SYNCING...';
+
+    const proxy = 'https://corsproxy.io/?';
+    const tax = document.getElementById('default_tax').value || 'GST';
+    let synced = 0;
+
+    for (const p of products) {
+      try {
+        const suffixLen = Math.floor(Math.random() * 3) + 1;
+        const suffix = Math.floor(Math.random() * Math.pow(10, suffixLen));
+        const finalName = `${p.name} - ${suffix}`;
+        const finalSku = `SKU-${uid()}`;
+
+        btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
+
+        const res = await fetch(`${proxy}https://${domain}.retail.lightspeed.app/api/2.0/products`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          body: JSON.stringify({
+            name: finalName,
+            sku: finalSku,
+            supply_price: parseFloat(p.supplyPrice) || 0,
+            retail_price: parseFloat(p.retailPrice) || 0,
+            type: p.category,
+            brand_name: p.brandName || '',
+            supplier_name: p.supplierName || '',
+            supplier_code: p.supplierCode || '',
+            tax_name: tax,
+            track_inventory: true,
+            active: true
+          })
+        });
+
+        if (!res.ok) throw new Error(await res.text());
+
+        const data = await res.json();
+        const product_id = data?.data?.id || data?.data?.[0]?.id;
+        if (!product_id) throw new Error('No product ID returned from Lightspeed.');
+
+        const hasStock = Object.values(p.stock).some(v => v > 0);
+        if (hasStock) {
+          await fetch(`${proxy}https://${domain}.retail.lightspeed.app/api/2.0/inventory`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify([
+              { product_id, outlet_id: OUTLET_IDS.ht, count: Number(p.stock.ht) || 0 },
+              { product_id, outlet_id: OUTLET_IDS.pf, count: Number(p.stock.pf) || 0 },
+              { product_id, outlet_id: OUTLET_IDS.ss, count: Number(p.stock.ss) || 0 },
+              { product_id, outlet_id: OUTLET_IDS.sw, count: Number(p.stock.sw) || 0 }
+            ])
+          });
+        }
+
+        synced++;
+
+      } catch (err) {
+        console.error(err);
+        btn.disabled = false;
+        btn.textContent = 'SYNC PRODUCTS';
+        alert(`Sync failed for "${p.name}".\n\n${err.message}`);
+        return;
+      }
+    }
+
+    btn.textContent = 'SYNC COMPLETE';
+    showToast(`${synced} product${synced !== 1 ? 's' : ''} synced successfully!`);
+
+    setTimeout(() => {
+      btn.textContent = 'SYNC PRODUCTS';
+      btn.disabled = false;
+    }, 3000);
+  }
+
+  function clearAll() {
+    if (products.length === 0) return;
+    if (confirm('Clear all products?')) {
+      products = [];
+      nextId = 1;
+      renderList();
+      updateCounter();
+    }
+  }
 </script>
 </body>
 </html>

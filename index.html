@@ -91,11 +91,21 @@
 
   const CATEGORIES = ['', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt', 'Sample Jacket', 'Sample Knit'];
 
-  function addProduct() {
-    products.push({ _id: nextId++, open: true, name: '', category: '', supplyPrice: 0, retailPrice: 0, supplierCode: '', stock: { ht: 0, pf: 0, ss: 0, sw: 0 } });
+function addProduct() {
+    products.push({ 
+        _id: nextId++, 
+        open: true, 
+        name: '', 
+        category: '', 
+        brand: 'Imagine Fashion', // Added this
+        supplyPrice: 0, 
+        retailPrice: 0, 
+        supplierCode: '', 
+        stock: { ht: 0, pf: 0, ss: 0, sw: 0 } 
+    });
     renderList();
     updateCounter();
-  }
+}
 
   function renderList() {
     const list = document.getElementById('product-list');
@@ -138,6 +148,10 @@
             <div class="field"><label>Retail Price *</label>
                 <input type="number" step="0.01" class="req-field" data-field="retailPrice" value="${p.retailPrice}" oninput="updateField(${p._id},'retailPrice',parseFloat(this.value)||0)">
                 <div class="margin-info">MARGIN: ${margin}%</div>
+            </div>
+            <div class="field">
+                <label>Brand</label>
+                <input type="text" value="Imagine Fashion" oninput="updateField(${p._id},'brand',this.value)">
             </div>
           </div>
         </div>

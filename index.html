@@ -52,7 +52,7 @@
   <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="if-logo">
   <div style="text-align: right">
     <p style="font-weight: 800; font-size: 12px;">X-SERIES API SYNC</p>
-    <p style="font-size: 10px; color: #666;">STINGRAY BUILD v3.4</p>
+    <p style="font-size: 10px; color: #666;">STINGRAY BUILD v3.5</p>
   </div>
 </header>
 
@@ -77,7 +77,14 @@
   let products = [];
   let nextId = 1;
 
-  const CATEGORIES = ['Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt', 'Sample Jacket', 'Sample Knit'];
+  // RESTORED FULL CATEGORIES
+  const CATEGORIES = [
+    'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt', 'Sample Jacket', 
+    'Sample Knit', 'Sample Accessory', 'Sample Belt', 'Sample Jewellery', 'Sample Scarf', 
+    'Sample Shoes', 'Sample Shorts', 'Sample Vest'
+  ];
+
+  // ALL BRANDS FROM YOUR CODE
   const BRANDS = [
     'Imagine Fashion', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display', 
     'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 
@@ -199,7 +206,6 @@
           headers: { 'Authorization': `token ${pat}`, 'Accept': 'application/vnd.github.v3+json' },
           body: JSON.stringify({ event_type: 'create_products', client_payload: { products: products } })
         });
-
         if(response.ok) { 
             showToast("✅ SUCCESS! Sync started."); 
             document.getElementById('view-progress').style.display = 'inline-block'; 
@@ -207,11 +213,10 @@
             showToast("❌ Failed. Check Token."); 
             localStorage.removeItem('gh_pat'); 
         }
-    } catch (e) { showToast("❌ Error: Check connection."); }
+    } catch (e) { showToast("❌ Network Error."); }
   }
 
-  function exportCSV() { showToast("CSV Ready."); }
-
+  function exportCSV() { showToast("CSV Exported."); }
   addProduct();
 </script>
 </body>

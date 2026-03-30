@@ -1,42 +1,43 @@
-name Lightspeed X-Series Import
-on
-  repository_dispatch
-    types [create_products]
+name: Lightspeed X-Series Import
 
-jobs
-  sync
-    runs-on ubuntu-latest
-    steps
-      - name Post to X-Series API
-        env
-          TOKEN ${{ secrets.X_SERIES_TOKEN }}
-          DOMAIN ${{ secrets.X_SERIES_DOMAIN }}
-          PAYLOAD ${{ toJson(github.event.client_payload.products) }}
-        run 
-          # Loop through each product in the payload sent from the HTML UI
-          echo $PAYLOAD  jq -c '.[]'  while read -r item; do
-            NAME=$(echo $item  jq -r .name)
-            RETAIL=$(echo $item  jq -r .retailPrice)
-            SUPPLY=$(echo $item  jq -r .supplyPrice)
-            CAT=$(echo $item  jq -r .category)
+on:
+  repository_dispatch:
+    types: [create_products]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to X-Series API
+        env:
+          TOKEN: ${{ secrets.X_SERIES_TOKEN }}
+          DOMAIN: ${{ secrets.X_SERIES_DOMAIN }}
+          PAYLOAD: ${{ toJson(github.event.client_payload.products) }}
+        run: |
+          echo "Starting import for $(echo $PAYLOAD | jq 'length') products..."
+          
+          echo "$PAYLOAD" | jq -c '.[]' | while read -r item; do
+            NAME=$(echo $item | jq -r .name)
+            RETAIL=$(echo $item | jq -r .retailPrice)
+            SUPPLY=$(echo $item | jq -r .supplyPrice)
+            CAT=$(echo $item | jq -r .category)
+            SKU=$(echo $item | jq -r .supplierCode)
             
-            # We generate a SKU if one isn't provided in the UI
-            SKU=$(echo $item  jq -r .supplierCode)
-            if [ $SKU == null ]  [ $SKU ==  ]; then
-              SKU=IF-$(date +%s%N  cut -b10-15)
+            # Default SKU if empty
+            if [ "$SKU" == "null" ] || [ "$SKU" == "" ]; then
+              SKU="IF-$(date +%s%N | cut -b10-15)"
             fi
 
-            echo Syncing $NAME to X-Series...
+            echo "Syncing: $NAME (SKU: $SKU)"
 
-            # API Call to X-Series (Vend) Product Endpoint
-            curl -X POST https$DOMAIN.retail.lightspeedapp.comapi2.0products 
-              -H Authorization Bearer $TOKEN 
-              -H Content-Type applicationjson 
-              -d {
-                name $NAME,
-                sku $SKU,
-                supply_price $SUPPLY,
-                retail_price $RETAIL,
-                type $CAT
-              }
+            curl -s -X POST "https://$DOMAIN.retail.lightspeedapp.com/api/2.0/products" \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"name\": \"$NAME\",
+                \"sku\": \"$SKU\",
+                \"supply_price\": \"$SUPPLY\",
+                \"price\": \"$RETAIL\",
+                \"type\": \"$CAT\"
+              }"
           done

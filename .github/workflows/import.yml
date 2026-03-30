@@ -40,6 +40,7 @@ jobs:
 
             echo "Syncing: $NAME (SKU: $SKU)"
 
+            # Create Product
             RESPONSE=$(curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/products" \
               -H "Authorization: Bearer $TOKEN" \
               -H "Content-Type: application/json" \
@@ -52,11 +53,11 @@ jobs:
                 \"brand_name\": \"$BRAND\"
               }")
             
-            # Smart ID capture logic
-            PRODUCT_ID=$(echo $RESPONSE | jq -r '.data.id // .data[0].id // empty')
+            # FIXED: Handles both single object and array responses from Lightspeed
+            PRODUCT_ID=$(echo $RESPONSE | jq -r 'if .data | type == "array" then .data[0].id else .data.id end // empty')
 
             if [ -n "$PRODUCT_ID" ] && [ "$PRODUCT_ID" != "null" ]; then
-              echo "Success! Updating Inventory for $PRODUCT_ID..."
+              echo "Success! ID: $PRODUCT_ID. Updating Inventory..."
               
               curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/inventory" \
                 -H "Authorization: Bearer $TOKEN" \
@@ -68,7 +69,7 @@ jobs:
                   {\"product_id\": \"$PRODUCT_ID\", \"outlet_id\": \"$SW_ID\", \"count\": $STOCK_SW}
                 ]"
             else
-              echo "ERROR: Response was $RESPONSE"
+              echo "ERROR: Could not get Product ID. API Response: $RESPONSE"
               exit 1
             fi
           done

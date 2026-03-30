@@ -8,12 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #d2a2a2;
-    --surface: rgba(255,255,255,0.18);
-    --surface2: rgba(255,255,255,0.12);
-    --border: rgba(255,255,255,0.35);
-    --text: #ffffff;
-    --muted: rgba(255,255,255,0.7);
+    --bg: #fafafa;
+    --surface: rgba(0,0,0,0.04);
+    --surface2: rgba(0,0,0,0.06);
+    --border: rgba(0,0,0,0.12);
+    --text: #1a1a1a;
+    --muted: rgba(0,0,0,0.45);
     --radius: 4px;
   }
 
@@ -41,13 +41,13 @@
 
   .header-right p {
     font-size: 11px;
-    color: var(--muted);
+    color: #6b6259;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     text-align: right;
   }
 
-  .header-right p + p { margin-top: 3px; color: rgba(255,255,255,0.4); }
+  .header-right p + p { margin-top: 3px; color: rgba(0,0,0,0.3); }
 
   .container { max-width: 860px; margin: 0 auto; }
 
@@ -70,12 +70,12 @@
     display: inline-block;
     width: 8px; height: 8px;
     border-radius: 50%;
-    background: #7fff7f;
+    background: #2ecc71;
     margin-right: 6px;
-    box-shadow: 0 0 6px rgba(127,255,127,0.6);
+    box-shadow: 0 0 6px rgba(46,204,113,0.5);
   }
 
-  .status-text { font-size: 11px; font-weight: 700; color: #7fff7f; letter-spacing: 0.08em; }
+  .status-text { font-size: 11px; font-weight: 700; color: #27ae60; letter-spacing: 0.08em; }
 
   /* Template bar */
   .template-label {
@@ -94,9 +94,9 @@
   }
 
   .btn-temp {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.35);
-    color: #ffffff;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.15);
+    color: #1a1a1a;
     padding: 6px 12px;
     font-size: 10px;
     font-weight: 700;
@@ -108,7 +108,7 @@
     text-transform: uppercase;
   }
 
-  .btn-temp:hover { background: rgba(255,255,255,0.28); border-color: #ffffff; }
+  .btn-temp:hover { background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.3); }
 
   /* Product list */
   #product-list {
@@ -141,8 +141,8 @@
     font-family: 'Syne', sans-serif;
     font-size: 11px;
     font-weight: 700;
-    color: #b07878;
-    background: #ffffff;
+    color: #ffffff;
+    background: #1a1a1a;
     width: 28px; height: 28px;
     border-radius: 2px;
     display: flex;
@@ -154,7 +154,7 @@
   .card-preview {
     flex: 1;
     font-size: 13px;
-    color: #ffffff;
+    color: #1a1a1a;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -163,26 +163,24 @@
   }
 
   .card-preview.empty {
-    color: rgba(255,255,255,0.45);
+    color: rgba(0,0,0,0.3);
     font-style: italic;
     font-weight: 400;
     text-transform: none;
   }
 
-  .card-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-
   .card-price-badge {
     font-size: 12px;
-    color: rgba(255,255,255,0.8);
+    color: rgba(0,0,0,0.5);
     font-weight: 500;
     min-width: 50px;
     text-align: right;
   }
 
   .btn-card {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.35);
-    color: #ffffff;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.15);
+    color: #1a1a1a;
     padding: 5px 10px;
     font-size: 10px;
     font-weight: 700;
@@ -193,11 +191,11 @@
     letter-spacing: 0.05em;
   }
 
-  .btn-card:hover { background: rgba(255,255,255,0.28); border-color: #ffffff; }
-  .btn-card.danger:hover { background: rgba(255,80,80,0.2); border-color: rgba(255,120,120,0.6); color: #ffaaaa; }
+  .btn-card:hover { background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.3); }
+  .btn-card.danger:hover { background: rgba(200,0,0,0.08); border-color: rgba(200,0,0,0.3); color: #c00; }
 
   .card-toggle {
-    color: rgba(255,255,255,0.6);
+    color: rgba(0,0,0,0.35);
     font-size: 16px;
     transition: transform 0.2s;
     flex-shrink: 0;
@@ -238,18 +236,18 @@
     font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.85);
+    color: rgba(0,0,0,0.55);
     font-weight: 600;
   }
 
-  label .optional { color: rgba(255,255,255,0.5); font-size: 9px; text-transform: none; letter-spacing: 0; font-weight: 400; }
-  label .required { color: #ffffff; }
+  label .optional { color: rgba(0,0,0,0.35); font-size: 9px; text-transform: none; letter-spacing: 0; font-weight: 400; }
+  label .required { color: #1a1a1a; }
 
   input, select {
-    background: rgba(255,255,255,0.18);
-    border: 1px solid rgba(255,255,255,0.38);
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.15);
     border-radius: var(--radius);
-    color: #ffffff;
+    color: #1a1a1a;
     font-family: 'DM Mono', monospace;
     font-size: 13px;
     padding: 10px 12px;
@@ -259,12 +257,12 @@
   }
 
   input:focus, select:focus {
-    border-color: rgba(255,255,255,0.85);
-    box-shadow: 0 0 0 3px rgba(255,255,255,0.12);
+    border-color: rgba(0,0,0,0.4);
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
   }
 
-  select option { background: #b07878; color: #ffffff; }
-  input::placeholder { color: rgba(255,255,255,0.4); }
+  select option { background: #ffffff; color: #1a1a1a; }
+  input::placeholder { color: rgba(0,0,0,0.3); }
   input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
 
   /* Stock drawer */
@@ -280,8 +278,8 @@
   .drawer {
     position: fixed; top: 0; right: -440px;
     width: 380px; height: 100%;
-    background: #c49090;
-    border-left: 1px solid rgba(255,255,255,0.3);
+    background: #f0eeeb;
+    border-left: 1px solid rgba(0,0,0,0.1);
     transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
     z-index: 2000;
     padding: 36px 28px;
@@ -295,9 +293,9 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
     font-weight: 600;
-    color: #ffffff;
+    color: #1a1a1a;
     letter-spacing: 0.04em;
-    border-bottom: 1px solid rgba(255,255,255,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
     padding-bottom: 14px;
     margin-bottom: 24px;
   }
@@ -305,8 +303,8 @@
   .drawer-fields { display: flex; flex-direction: column; gap: 16px; flex: 1; }
 
   .drawer-save {
-    background: #ffffff;
-    color: #b07878;
+    background: #1a1a1a;
+    color: #ffffff;
     border: none;
     padding: 14px;
     font-family: 'DM Mono', monospace;
@@ -319,7 +317,7 @@
     transition: all 0.15s;
   }
 
-  .drawer-save:hover { background: #f0e8e8; }
+  .drawer-save:hover { background: #333; }
 
   /* Add button */
   .add-btn {
@@ -327,11 +325,11 @@
     align-items: center;
     gap: 8px;
     width: 100%;
-    background: rgba(255,255,255,0.1);
-    border: 1px dashed rgba(255,255,255,0.38);
+    background: rgba(0,0,0,0.03);
+    border: 1px dashed rgba(0,0,0,0.2);
     border-radius: var(--radius);
     padding: 14px 18px;
-    color: rgba(255,255,255,0.75);
+    color: rgba(0,0,0,0.45);
     font-family: 'DM Mono', monospace;
     font-size: 12px;
     cursor: pointer;
@@ -340,12 +338,12 @@
     margin-bottom: 16px;
   }
 
-  .add-btn:hover { border-color: #ffffff; color: #ffffff; background: rgba(255,255,255,0.18); }
+  .add-btn:hover { border-color: rgba(0,0,0,0.4); color: #1a1a1a; background: rgba(0,0,0,0.07); }
 
   /* Sync section */
   .export-section {
-    background: rgba(0,0,0,0.18);
-    border: 1px solid rgba(0,0,0,0.12);
+    background: #1a1a1a;
+    border: 1px solid #111;
     border-radius: var(--radius);
     padding: 22px;
     margin-top: 8px;
@@ -364,7 +362,7 @@
 
   .btn-sync {
     background: #ffffff;
-    color: #b07878;
+    color: #1a1a1a;
     border: none;
     padding: 12px 28px;
     font-family: 'DM Mono', monospace;
@@ -376,13 +374,13 @@
     transition: all 0.15s;
   }
 
-  .btn-sync:hover { background: #f5eded; box-shadow: 0 2px 16px rgba(0,0,0,0.15); }
+  .btn-sync:hover { background: #f0f0f0; box-shadow: 0 2px 16px rgba(0,0,0,0.2); }
   .btn-sync:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 
   .btn-clear {
     background: transparent;
-    border: 1px solid rgba(255,120,120,0.45);
-    color: rgba(255,170,170,0.9);
+    border: 1px solid rgba(255,100,100,0.4);
+    color: rgba(255,150,150,0.9);
     padding: 12px 20px;
     font-family: 'DM Mono', monospace;
     font-size: 12px;
@@ -393,16 +391,16 @@
     transition: all 0.15s;
   }
 
-  .btn-clear:hover { border-color: #ff9090; color: #ffbbbb; background: rgba(255,80,80,0.1); }
+  .btn-clear:hover { border-color: #ff8080; color: #ffb0b0; background: rgba(255,80,80,0.1); }
 
-  .counter { font-size: 11px; color: rgba(255,255,255,0.6); margin-left: auto; letter-spacing: 0.06em; }
+  .counter { font-size: 11px; color: rgba(255,255,255,0.55); margin-left: auto; letter-spacing: 0.06em; }
   .counter span { color: #ffffff; font-weight: 600; }
 
   /* Toast */
   #toast {
     position: fixed; bottom: 28px; right: 28px;
-    background: #ffffff;
-    color: #b07878;
+    background: #1a1a1a;
+    color: #ffffff;
     font-family: 'DM Mono', monospace;
     font-size: 12px;
     font-weight: 700;
@@ -438,7 +436,7 @@
 </div>
 
 <header>
-  <img src="https://www.imaginefashion.com.au/cdn/shop/files/White_Logo.png?v=1738727364&width=150" class="if-logo" alt="Imagine Fashion">
+  <img src="Imagine Fashion Logo Transp.png" class="if-logo" alt="Imagine Fashion">
   <div class="header-right">
     <p>Lightspeed X-Series</p>
     <p>Direct Product Sync</p>
@@ -447,15 +445,11 @@
 
 <div class="container">
 
-  <!-- API Config -->
+  <!-- Config -->
   <div class="config-panel">
-    <div class="field field-full">
-      <label>Permanent Access Token</label>
-      <input type="password" id="api_token" oninput="saveConfig()" placeholder="Paste your Bearer token here">
-    </div>
     <div class="field">
-      <label>Lightspeed Domain</label>
-      <input type="text" id="api_domain" oninput="saveConfig()" placeholder="yourstorename">
+      <label>Portal Password <span class="required">*</span></label>
+      <input type="password" id="portal_password" oninput="saveConfig()" placeholder="Enter portal password">
     </div>
     <div class="field">
       <label>Tax Name</label>
@@ -519,10 +513,12 @@
     sw: '06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200'
   };
 
+  // ---- Worker URL - paste your Cloudflare Worker URL here ----
+  const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
+
   // ---- Init ----
   window.onload = () => {
-    document.getElementById('api_token').value = localStorage.getItem('ls_token') || '';
-    document.getElementById('api_domain').value = localStorage.getItem('ls_domain') || '';
+    document.getElementById('portal_password').value = localStorage.getItem('portal_password') || '';
 
     CATEGORIES.filter(c => c).forEach(cat => {
       const btn = document.createElement('button');
@@ -536,8 +532,7 @@
   };
 
   function saveConfig() {
-    localStorage.setItem('ls_token', document.getElementById('api_token').value);
-    localStorage.setItem('ls_domain', document.getElementById('api_domain').value);
+    localStorage.setItem('portal_password', document.getElementById('portal_password').value);
   }
 
   // ---- Helpers ----
@@ -723,13 +718,12 @@
     });
   }
 
-  // ---- Direct Sync ----
+  // ---- Sync via Cloudflare Worker ----
   async function startSync() {
-    const token = document.getElementById('api_token').value.trim();
-    const domain = document.getElementById('api_domain').value.trim();
+    const password = document.getElementById('portal_password').value.trim();
 
-    if (!token || !domain) {
-      alert('Please enter your Access Token and Lightspeed Domain first.');
+    if (!password) {
+      alert('Please enter the portal password first.');
       return;
     }
 
@@ -743,90 +737,77 @@
     btn.disabled = true;
     btn.textContent = 'SYNCING...';
 
-    const proxy = 'https://corsproxy.io/?';
     const tax = document.getElementById('default_tax').value || 'GST';
     let synced = 0;
 
+    // Helper to call the Worker
+    async function workerCall(body) {
+      const res = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Portal-Password': password
+        },
+        body: JSON.stringify(body)
+      });
+      if (res.status === 401) throw new Error('Incorrect portal password.');
+      const data = await res.json();
+      if (!res.ok) throw new Error(JSON.stringify(data).slice(0, 300));
+      return data;
+    }
+
     for (const p of products) {
       try {
-        const suffixLen = Math.floor(Math.random() * 3) + 1;
-        const suffix = Math.floor(Math.random() * Math.pow(10, suffixLen));
+        const suffix = String(Math.floor(1000 + Math.random() * 9000));
         const finalName = `${p.name} - ${suffix}`;
-        // 8 random digits, no prefix
         let finalSku = '';
         for (let i = 0; i < 8; i++) finalSku += Math.floor(Math.random() * 10);
 
         btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
 
-        const res = await fetch(`${proxy}https://${domain}.retail.lightspeed.app/api/2.0/products`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-          },
-          body: JSON.stringify({
+        // Step 1: Create product
+        const createData = await workerCall({
+          action: 'create_product',
+          payload: {
             name: finalName,
             sku: finalSku,
             supply_price: parseFloat(p.supplyPrice) || 0,
             retail_price: parseFloat(p.retailPrice) || 0,
-            type: p.category,
-            brand_name: p.brandName || '',
+            tax_name: tax,
             ...(p.supplierName ? { supplier_name: p.supplierName } : {}),
             ...(p.supplierCode ? { supplier_code: p.supplierCode } : {}),
-            tax_name: tax,
             track_inventory: true,
             active: true
-          })
-        });
-
-        if (!res.ok) throw new Error(await res.text());
-
-        const data = await res.json();
-        console.log('Lightspeed response:', JSON.stringify(data));
-
-        // Response is {"data":["dc250efb-fd5b-4ff8-bb2b-064424f67bf9"]}
-        // The ID is the first element of the data array as a plain string
-        const product_id =
-          (Array.isArray(data?.data) ? data.data[0] : null) ||
-          data?.data?.id ||
-          data?.id ||
-          data?.product?.id ||
-          data?.product_id;
-
-        if (!product_id) {
-          console.warn('Could not find product ID. Full response:', JSON.stringify(data));
-          throw new Error(`No product ID found in Lightspeed response.\n\nResponse: ${JSON.stringify(data).slice(0, 300)}`);
-        }
-
-        // Step 2: Use v2.1 PUT to enable track_inventory and set stock levels in one call
-        const inventoryPayload = {
-          details: {
-            inventory: [
-              { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
-              { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
-              { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
-              { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 }
-            ]
-          },
-          common: {
-            track_inventory: true
           }
-        };
-
-        const putRes = await fetch(`${proxy}https://${domain}.retail.lightspeed.app/api/2.1/products/${product_id}`, {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(inventoryPayload)
         });
 
-        const putData = await putRes.json();
-        console.log('v2.1 PUT status:', putRes.status, JSON.stringify(putData).slice(0, 200));
+        const product_id =
+          (Array.isArray(createData?.data) ? createData.data[0] : null) ||
+          createData?.data?.id ||
+          createData?.id;
 
-        if (!putRes.ok) throw new Error(`Failed to set inventory: ${JSON.stringify(putData).slice(0, 300)}`);
+        if (!product_id) throw new Error(`No product ID in response: ${JSON.stringify(createData).slice(0, 200)}`);
+
+        // Step 2: Set brand, category, inventory tracking and stock levels
+        await workerCall({
+          action: 'update_product',
+          product_id,
+          payload: {
+            common: {
+              track_inventory: true,
+              ...(p.brandName ? { brand_name: p.brandName } : {}),
+              ...(p.category  ? { type: p.category }         : {})
+            },
+            details: {
+              inventory: [
+                { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
+                { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
+                { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
+                { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 }
+              ]
+            }
+          }
+        });
 
         synced++;
 

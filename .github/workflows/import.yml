@@ -12,28 +12,33 @@ jobs:
         env:
           TOKEN: ${{ secrets.X_SERIES_TOKEN }}
           DOMAIN: ${{ secrets.X_SERIES_DOMAIN }}
+          HT_ID: ${{ secrets.OUTLET_ID_HT }}
+          PF_ID: ${{ secrets.OUTLET_ID_PF }}
+          SS_ID: ${{ secrets.OUTLET_ID_SS }}
+          SW_ID: ${{ secrets.OUTLET_ID_SW }}
           PAYLOAD: ${{ toJson(github.event.client_payload.products) }}
         run: |
-          echo "Starting import for $(echo $PAYLOAD | jq 'length') products..."
-          
           echo "$PAYLOAD" | jq -c '.[]' | while read -r item; do
             NAME=$(echo $item | jq -r .name)
             RETAIL=$(echo $item | jq -r .retailPrice)
             SUPPLY=$(echo $item | jq -r .supplyPrice)
             CAT=$(echo $item | jq -r .category)
             
-            # Grab SKU and Strip Spaces
+            # Stock Levels (default to 0 if null)
+            STOCK_HT=$(echo $item | jq -r '.stock.ht // 0')
+            STOCK_PF=$(echo $item | jq -r '.stock.pf // 0')
+            STOCK_SS=$(echo $item | jq -r '.stock.ss // 0')
+            STOCK_SW=$(echo $item | jq -r '.stock.sw // 0')
+
+            # SKU processing
             RAW_SKU=$(echo $item | jq -r .supplierCode)
             SKU=$(echo $RAW_SKU | sed 's/ /-/g')
-            
-            if [ "$SKU" == "null" ] || [ "$SKU" == "" ]; then
-              SKU="IF-$(date +%s%N | cut -b10-15)"
-            fi
+            [ "$SKU" == "null" ] || [ "$SKU" == "" ] && SKU="IF-$(date +%s%N | cut -b10-15)"
 
-            echo "Syncing: $NAME (SKU: $SKU) as Category: $CAT"
+            echo "Creating Product: $NAME..."
 
-            # FIX: Use "type" for Category and add "Imagine Fashion" as a Tag
-            curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/products" \
+            # STEP 1: Create Product and Capture the new Product ID
+            RESPONSE=$(curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/products" \
               -H "Authorization: Bearer $TOKEN" \
               -H "Content-Type: application/json" \
               -d "{
@@ -43,5 +48,25 @@ jobs:
                 \"retail_price\": ${RETAIL:-0},
                 \"type\": \"$CAT\",
                 \"tags\": \"Imagine Fashion\"
-              }"
+              }")
+            
+            PRODUCT_ID=$(echo $RESPONSE | jq -r '.data.id')
+
+            if [ "$PRODUCT_ID" != "null" ]; then
+              echo "Setting Inventory for Product ID: $PRODUCT_ID..."
+              
+              # STEP 2: Update Inventory for each outlet
+              # Note: Creating inventory records requires a PUT or POST to the inventory endpoint
+              curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/inventory" \
+                -H "Authorization: Bearer $TOKEN" \
+                -H "Content-Type: application/json" \
+                -d "[
+                  {\"product_id\": \"$PRODUCT_ID\", \"outlet_id\": \"$HT_ID\", \"count\": $STOCK_HT},
+                  {\"product_id\": \"$PRODUCT_ID\", \"outlet_id\": \"$PF_ID\", \"count\": $STOCK_PF},
+                  {\"product_id\": \"$PRODUCT_ID\", \"outlet_id\": \"$SS_ID\", \"count\": $STOCK_SS},
+                  {\"product_id\": \"$PRODUCT_ID\", \"outlet_id\": \"$SW_ID\", \"count\": $STOCK_SW}
+                ]"
+            else
+              echo "Failed to create product. Response: $RESPONSE"
+            fi
           done

@@ -799,33 +799,32 @@
           throw new Error(`No product ID found in Lightspeed response.\n\nResponse: ${JSON.stringify(data).slice(0, 300)}`);
         }
 
-        // Step 2: Enable inventory tracking via v0.9 API (v2.0 does not support PUT on products)
-        const putRes = await fetch(`${proxy}https://${domain}.retail.lightspeed.app/api/0.9/Product/${product_id}`, {
+        // Step 2: Use v2.1 PUT to enable track_inventory and set stock levels in one call
+        const inventoryPayload = {
+          details: {
+            track_inventory: true,
+            inventory: [
+              { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
+              { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
+              { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
+              { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 }
+            ]
+          }
+        };
+
+        const putRes = await fetch(`${proxy}https://${domain}.retail.lightspeed.app/api/2.1/products/${product_id}`, {
           method: 'PUT',
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ trackInventory: true })
+          body: JSON.stringify(inventoryPayload)
         });
-        console.log('Track inventory PUT status:', putRes.status);
 
-        const hasStock = Object.values(p.stock).some(v => v > 0);
-        if (hasStock) {
-          await fetch(`${proxy}https://${domain}.retail.lightspeed.app/api/2.0/inventory`, {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify([
-              { product_id, outlet_id: OUTLET_IDS.ht, count: Number(p.stock.ht) || 0 },
-              { product_id, outlet_id: OUTLET_IDS.pf, count: Number(p.stock.pf) || 0 },
-              { product_id, outlet_id: OUTLET_IDS.ss, count: Number(p.stock.ss) || 0 },
-              { product_id, outlet_id: OUTLET_IDS.sw, count: Number(p.stock.sw) || 0 }
-            ])
-          });
-        }
+        const putData = await putRes.json();
+        console.log('v2.1 PUT status:', putRes.status, JSON.stringify(putData).slice(0, 200));
+
+        if (!putRes.ok) throw new Error(`Failed to set inventory: ${JSON.stringify(putData).slice(0, 300)}`);
 
         synced++;
 

@@ -187,79 +187,114 @@
   function closeDrawer() { document.getElementById('drawer').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); renderList(); }
 
 async function startDirectSync() {
-    const token = document.getElementById('api_token').value.trim();
-    const domain = document.getElementById('api_domain').value.trim();
-    if(!token || !domain) { alert("Please ensure Token and Domain are filled."); return; }
+  const token = document.getElementById('api_token').value.trim();
+  const domain = document.getElementById('api_domain').value.trim();
 
-    document.getElementById('sync_btn').innerText = "⏳ SYNCING...";
-    document.getElementById('sync_btn').disabled = true;
-    const proxy = "https://corsproxy.io/?"; 
-
-    for (let p of products) {
-        try {
-            // Generate 8-digit SKU if the field is empty
-            const autoSku = Math.floor(10000000 + Math.random() * 90000000).toString();
-            const finalSku = p.sku.trim() || autoSku;
-            
-            // Product Name suffix using "-"
-            const finalName = `${p.name} - ${Math.floor(1000 + Math.random() * 9000)}`;
-            
-            const productUrl = `${proxy}https://${domain}.retail.lightspeed.app/api/2.0/products`;
-            
-            const res = await fetch(productUrl, {
-                method: 'POST',
-                headers: { 
-                  'Authorization': `Bearer ${token}`, 
-                  'Content-Type': 'application/json', 
-                  'Accept': 'application/json' 
-                },
-                body: JSON.stringify({
-                    name: finalName, 
-                    sku: finalSku,
-                    supply_price: parseFloat(p.supplyPrice) || 0,
-                    retail_price: parseFloat(p.retailPrice) || 0,
-                    type: p.category, 
-                    brand_name: p.brand,
-                    track_inventory: 1 // Changed from true to 1 for system compatibility
-                })
-            });
-
-            if (!res.ok) throw new Error(`Lightspeed Error: ${res.status}`);
-            const data = await res.json();
-            
-            const product_id = data.data?.id || (Array.isArray(data.data) ? data.data[0]?.id : null);
-
-            if (product_id) {
-                const invUrl = `${proxy}https://${domain}.retail.lightspeed.app/api/2.0/inventory`;
-                await fetch(invUrl, {
-                    method: 'POST',
-                    headers: { 
-                      'Authorization': `Bearer ${token}`, 
-                      'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify([
-                        { product_id, outlet_id: OUTLET_IDS.ht, count: p.stock.ht || 0 },
-                        { product_id, outlet_id: OUTLET_IDS.pf, count: p.stock.pf || 0 },
-                        { product_id, outlet_id: OUTLET_IDS.ss, count: p.stock.ss || 0 },
-                        { product_id, outlet_id: OUTLET_IDS.sw, count: p.stock.sw || 0 }
-                    ])
-                });
-            }
-        } catch (err) { 
-          console.error(err);
-          alert(`Sync Failed for ${p.name || 'Product'}.`);
-          break;
-        }
-    }
-    
-    document.getElementById('sync_btn').innerText = "🚀 SYNC COMPLETE";
-    showToast("Sync Successful (Inventory Tracking: 1)");
-    
-    setTimeout(() => { 
-        document.getElementById('sync_btn').innerText = "🚀 SYNC TO LIGHTSPEED";
-        document.getElementById('sync_btn').disabled = false;
-    }, 3000);
+  if (!token || !domain) {
+    alert("Please ensure Token and Domain are filled.");
+    return;
   }
+
+  const syncBtn = document.getElementById('sync_btn');
+  syncBtn.innerText = "SYNCING...";
+  syncBtn.disabled = true;
+
+  const proxy = "https://corsproxy.io/?";
+
+  for (const p of products) {
+
+    try {
+
+      const autoSku = Math.floor(10000000 + Math.random() * 90000000).toString();
+      const finalSku = p.sku.trim() || autoSku;
+
+      const finalName = `${p.name} ${Math.floor(1000 + Math.random() * 9000)}`;
+
+      const productUrl = `${proxy}https://${domain}.retail.lightspeed.app/api/2.0/products`;
+
+      const productPayload = {
+        name: finalName,
+        sku: finalSku,
+        supply_price: parseFloat(p.supplyPrice) || 0,
+        retail_price: parseFloat(p.retailPrice) || 0,
+        type: p.category || "General",
+        brand_name: p.brand || "",
+        track_inventory: true,
+        active: true
+      };
+
+      const res = await fetch(productUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify(productPayload)
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Product create failed: ${res.status} ${errText}`);
+      }
+
+      const data = await res.json();
+
+      const product_id =
+        data?.data?.id ||
+        data?.data?.[0]?.id ||
+        data?.id ||
+        null;
+
+      if (!product_id) {
+        throw new Error("Could not extract product id from Lightspeed response.");
+      }
+
+      const inventoryUrl = `${proxy}https://${domain}.retail.lightspeed.app/api/2.0/inventory`;
+
+      const inventoryPayload = [
+        { product_id, outlet_id: OUTLET_IDS.ht, count: Number(p.stock.ht) || 0 },
+        { product_id, outlet_id: OUTLET_IDS.pf, count: Number(p.stock.pf) || 0 },
+        { product_id, outlet_id: OUTLET_IDS.ss, count: Number(p.stock.ss) || 0 },
+        { product_id, outlet_id: OUTLET_IDS.sw, count: Number(p.stock.sw) || 0 }
+      ];
+
+      const invRes = await fetch(inventoryUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(inventoryPayload)
+      });
+
+      if (!invRes.ok) {
+        const errText = await invRes.text();
+        throw new Error(`Inventory update failed: ${invRes.status} ${errText}`);
+      }
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(`Sync failed for ${p.name || "Product"}.\n${err.message}`);
+
+      syncBtn.innerText = "SYNC FAILED";
+      syncBtn.disabled = false;
+
+      return;
+    }
+  }
+
+  syncBtn.innerText = "SYNC COMPLETE";
+
+  showToast("Products synced successfully with inventory tracking enabled.");
+
+  setTimeout(() => {
+    syncBtn.innerText = "SYNC TO LIGHTSPEED";
+    syncBtn.disabled = false;
+  }, 3000);
+}
   addProduct();
 </script>
 </body>

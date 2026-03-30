@@ -30,14 +30,15 @@ jobs:
 
             echo "Syncing: $NAME (SKU: $SKU)"
 
-            curl -s -X POST "https://$DOMAIN.retail.lightspeedapp.com/api/2.0/products" \
+            # Using the .lightspeed.app endpoint to match your account
+            curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/products" \
               -H "Authorization: Bearer $TOKEN" \
               -H "Content-Type: application/json" \
               -d "{
                 \"name\": \"$NAME\",
                 \"sku\": \"$SKU\",
                 \"supply_price\": \"$SUPPLY\",
-                \"price\": \"$RETAIL\",
+                \"retail_price\": \"$RETAIL\",
                 \"type\": \"$CAT\"
               }"
           done

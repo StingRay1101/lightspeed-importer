@@ -22,18 +22,17 @@ jobs:
             SUPPLY=$(echo $item | jq -r .supplyPrice)
             CAT=$(echo $item | jq -r .category)
             
-            # 1. Grab SKU and Strip Spaces (X-Series Requirement)
+            # Grab SKU and Strip Spaces
             RAW_SKU=$(echo $item | jq -r .supplierCode)
             SKU=$(echo $RAW_SKU | sed 's/ /-/g')
             
-            # Default SKU if empty
             if [ "$SKU" == "null" ] || [ "$SKU" == "" ]; then
               SKU="IF-$(date +%s%N | cut -b10-15)"
             fi
 
-            echo "Syncing: $NAME (SKU: $SKU)"
+            echo "Syncing: $NAME (SKU: $SKU) as Category: $CAT"
 
-            # 2. Send POST without quotes around the price numbers
+            # FIX: Use "type" for Category and add "Imagine Fashion" as a Tag
             curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/products" \
               -H "Authorization: Bearer $TOKEN" \
               -H "Content-Type: application/json" \
@@ -42,6 +41,7 @@ jobs:
                 \"sku\": \"$SKU\",
                 \"supply_price\": ${SUPPLY:-0},
                 \"retail_price\": ${RETAIL:-0},
-                \"type\": \"$CAT\"
+                \"type\": \"$CAT\",
+                \"tags\": \"Imagine Fashion\"
               }"
           done

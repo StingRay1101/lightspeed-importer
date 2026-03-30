@@ -752,7 +752,9 @@
         const suffixLen = Math.floor(Math.random() * 3) + 1;
         const suffix = Math.floor(Math.random() * Math.pow(10, suffixLen));
         const finalName = `${p.name} - ${suffix}`;
-        const finalSku = `SKU-${uid()}`;
+        // 8 random digits, no prefix
+        let finalSku = '';
+        for (let i = 0; i < 8; i++) finalSku += Math.floor(Math.random() * 10);
 
         btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
 
@@ -774,7 +776,7 @@
             ...(p.supplierCode ? { supplier_code: p.supplierCode } : {}),
             tax_name: tax,
             track_inventory: true,
-            active: true
+            inventory_tracking: 'all'
           })
         });
 
@@ -783,18 +785,16 @@
         const data = await res.json();
         console.log('Lightspeed response:', JSON.stringify(data));
 
-        // Handle multiple possible response shapes from Lightspeed
+        // Response is {"data":["dc250efb-fd5b-4ff8-bb2b-064424f67bf9"]}
+        // The ID is the first element of the data array as a plain string
         const product_id =
+          (Array.isArray(data?.data) ? data.data[0] : null) ||
           data?.data?.id ||
-          data?.data?.[0]?.id ||
           data?.id ||
-          data?.[0]?.id ||
           data?.product?.id ||
-          data?.data?.product_id ||
           data?.product_id;
 
         if (!product_id) {
-          // Log full response so we can see what Lightspeed actually returned
           console.warn('Could not find product ID. Full response:', JSON.stringify(data));
           throw new Error(`No product ID found in Lightspeed response.\n\nResponse: ${JSON.stringify(data).slice(0, 300)}`);
         }

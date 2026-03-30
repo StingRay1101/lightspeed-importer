@@ -21,7 +21,10 @@ jobs:
             RETAIL=$(echo $item | jq -r .retailPrice)
             SUPPLY=$(echo $item | jq -r .supplyPrice)
             CAT=$(echo $item | jq -r .category)
-            SKU=$(echo $item | jq -r .supplierCode)
+            
+            # 1. Grab SKU and Strip Spaces (X-Series Requirement)
+            RAW_SKU=$(echo $item | jq -r .supplierCode)
+            SKU=$(echo $RAW_SKU | sed 's/ /-/g')
             
             # Default SKU if empty
             if [ "$SKU" == "null" ] || [ "$SKU" == "" ]; then
@@ -30,15 +33,15 @@ jobs:
 
             echo "Syncing: $NAME (SKU: $SKU)"
 
-            # Using the .lightspeed.app endpoint to match your account
+            # 2. Send POST without quotes around the price numbers
             curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/products" \
               -H "Authorization: Bearer $TOKEN" \
               -H "Content-Type: application/json" \
               -d "{
                 \"name\": \"$NAME\",
                 \"sku\": \"$SKU\",
-                \"supply_price\": \"$SUPPLY\",
-                \"retail_price\": \"$RETAIL\",
+                \"supply_price\": ${SUPPLY:-0},
+                \"retail_price\": ${RETAIL:-0},
                 \"type\": \"$CAT\"
               }"
           done

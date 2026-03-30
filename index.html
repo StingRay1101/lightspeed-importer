@@ -34,20 +34,23 @@
   @keyframes flash-red-field { 0% { border-color: #ff0000; } 50% { border-color: #ff0000; background: #ffebeb; } 100% { border-color: #000; } }
   .flash-red { animation: flash-red-field 0.7s ease 3; border-width: 2px !important; }
 
-  .card-actions { display: flex; gap: 8px; }
-  .btn-stock { background: #000; color: #fff; border: none; padding: 5px 12px; font-size: 10px; cursor: pointer; font-weight: 700; }
-  .card-duplicate { background: #f0f7ff; border: 1px solid #bcd8f5; color: #0056b3; padding: 5px 10px; font-size: 10px; cursor: pointer; font-weight: 700; }
-  .card-remove { background: #fff0f0; border: 1px solid #f5c6c6; color: #b30000; padding: 5px 10px; cursor: pointer; font-weight: 700; }
+  .card-actions { display: flex; gap: 8px; align-items: center; }
+  .btn-stock { background: #000; color: #fff; border: none; padding: 6px 12px; font-size: 10px; cursor: pointer; font-weight: 700; display: flex; gap: 8px; align-items: center; }
+  .stock-badge { background: #fff; color: #000; padding: 1px 5px; border-radius: 2px; font-size: 9px; font-weight: 900; }
+  
+  .card-duplicate { background: #f0f7ff; border: 1px solid #bcd8f5; color: #0056b3; padding: 6px 10px; font-size: 10px; cursor: pointer; font-weight: 700; }
+  .card-remove { background: #fff0f0; border: 1px solid #f5c6c6; color: #b30000; padding: 6px 10px; cursor: pointer; font-weight: 700; }
 
   .card-body { display: none; padding: 20px; border-top: 1px solid #eee; background: #fff; }
   .card-body.open { display: block; }
 
   /* Drawer / Slider CSS */
-  .drawer { position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background: #fff; border-left: 2px solid #000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.3s ease; z-index: 2000; padding: 40px 30px; }
+  .drawer { position: fixed; top: 0; right: -450px; width: 380px; height: 100%; background: #fff; border-left: 2px solid #000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); z-index: 2000; padding: 40px 30px; }
   .drawer.active { right: 0; }
-  .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); display: none; z-index: 1999; }
+  .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: none; z-index: 1999; backdrop-filter: blur(2px); }
   .drawer-overlay.active { display: block; }
-  .drawer h3 { font-family: 'Syne'; text-transform: uppercase; margin-bottom: 20px; font-size: 18px; border-bottom: 1px solid #000; padding-bottom: 10px; }
+  .drawer h3 { font-family: 'Syne'; text-transform: uppercase; margin-bottom: 10px; font-size: 18px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+  .drawer p { font-size: 11px; margin-bottom: 30px; color: #666; }
   
   .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
   .field-full { grid-column: 1 / -1; }
@@ -56,8 +59,8 @@
 
   .add-btn { width: 100%; background: #fff; border: 2px dashed #000; padding: 15px; font-weight: 700; cursor: pointer; margin-bottom: 30px; font-family: 'DM Mono'; }
   .export-section { background: #000; color: #fff; padding: 25px; border-radius: 4px; }
-  .btn-accent { background: #fff; color: #000; border: none; padding: 12px 25px; cursor: pointer; font-weight: 800; font-family: 'DM Mono'; }
-  .btn-ghost { background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 25px; margin-left: 10px; cursor: pointer; font-family: 'DM Mono'; }
+  .btn-accent { background: #fff; color: #000; border: none; padding: 12px 25px; cursor: pointer; font-weight: 800; font-family: 'DM Mono'; text-transform: uppercase; }
+  .btn-ghost { background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 25px; margin-left: 10px; cursor: pointer; font-family: 'DM Mono'; text-transform: uppercase; }
 
   #toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff; padding: 12px 20px; border-radius: 4px; opacity: 0; transition: 0.3s; z-index: 3000; }
   #toast.show { opacity: 1; }
@@ -68,15 +71,16 @@
 <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <h3 id="drawer-title">Inventory</h3>
+  <p id="drawer-subtitle">Allocate stock across physical locations.</p>
   <div id="drawer-content"></div>
-  <button class="btn-accent" style="width:100%; margin-top:30px;" onclick="closeDrawer()">SAVE & CLOSE</button>
+  <button class="btn-accent" style="width:100%; margin-top:30px;" onclick="closeDrawer()">CONFIRM & CLOSE</button>
 </div>
 
 <header>
   <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="if-logo">
   <div style="text-align: right">
     <p style="font-weight: 800; font-size: 12px; letter-spacing: 2px;">PRODUCT IMPORTER</p>
-    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.7</p>
+    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.8</p>
   </div>
 </header>
 
@@ -99,7 +103,6 @@
 <script>
   let products = [];
   let nextId = 1;
-  let activeProductId = null;
 
   const CATEGORIES = ['', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt', 'Sample Jacket', 'Sample Knit', 'Jewellery', 'Accessories', 'Homewares', 'Belts', 'Bags', 'Scarves'];
   const BRANDS = ['', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display', 'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion', 'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery', 'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22', 'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26', 'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021', 'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 'Winter 2026', 'Wrapped Gift Cards'];
@@ -122,11 +125,10 @@
     };
     products.push(p);
     renderList();
-    document.getElementById('counter').innerHTML = `${products.length} PRODUCTS`;
+    updateGlobalCounter();
   }
 
   function openDrawer(id) {
-    activeProductId = id;
     const p = products.find(x => x._id === id);
     document.getElementById('drawer-title').innerText = p.name || 'Set Stock Levels';
     document.getElementById('drawer-content').innerHTML = `
@@ -148,7 +150,13 @@
 
   function updateStock(id, loc, val) {
     const p = products.find(x => x._id === id);
-    if(p) p.stock[loc] = val || 0;
+    if(p) {
+      p.stock[loc] = parseInt(val) || 0;
+      // Update badge in real-time
+      const total = Object.values(p.stock).reduce((a, b) => a + b, 0);
+      const badge = document.querySelector(`[data-pid="${id}"] .stock-badge`);
+      if(badge) badge.innerText = total;
+    }
   }
 
   function updateField(id, field, value) {
@@ -165,12 +173,23 @@
 
   function duplicateProduct(id) {
     const p = products.find(p => p._id === id);
-    if (p) { addProduct({...p}); showToast("CLONED DATA"); }
+    if (p) { 
+      const clone = JSON.parse(JSON.stringify(p));
+      clone._id = nextId++;
+      products.push(clone);
+      renderList();
+      updateGlobalCounter();
+      showToast("CLONED DATA"); 
+    }
   }
 
   function removeProduct(id) {
     products = products.filter(p => p._id !== id);
     renderList();
+    updateGlobalCounter();
+  }
+
+  function updateGlobalCounter() {
     document.getElementById('counter').innerHTML = `${products.length} PRODUCTS`;
   }
 
@@ -183,6 +202,7 @@
     const list = document.getElementById('product-list');
     list.innerHTML = '';
     products.forEach((p, idx) => {
+      const totalStock = Object.values(p.stock).reduce((a, b) => a + b, 0);
       const card = document.createElement('div');
       card.className = 'product-card';
       card.setAttribute('data-pid', p._id);
@@ -191,7 +211,9 @@
           <div class="card-num">${idx + 1}</div>
           <div class="card-preview ${!p.name ? 'empty' : ''}">${p.name || 'UNTITLED PRODUCT'}</div>
           <div class="card-actions">
-            <button class="btn-stock" onclick="event.stopPropagation(); openDrawer(${p._id})">STOCK LEVELS</button>
+            <button class="btn-stock" onclick="event.stopPropagation(); openDrawer(${p._id})">
+               STOCK <span class="stock-badge">${totalStock}</span>
+            </button>
             <button class="card-duplicate" onclick="event.stopPropagation(); duplicateProduct(${p._id})">DUPLICATE</button>
             <button class="card-remove" onclick="event.stopPropagation(); removeProduct(${p._id})">✕</button>
           </div>
@@ -249,7 +271,7 @@
     a.href = url; a.download = `IMAGINE-EXPORT-${Date.now()}.csv`; a.click();
   }
 
-  function clearAll() { if(confirm("CLEAR ALL?")) { products = []; renderList(); document.getElementById('counter').innerHTML = "0 PRODUCTS"; } }
+  function clearAll() { if(confirm("CLEAR ALL?")) { products = []; renderList(); updateGlobalCounter(); } }
   addProduct();
 </script>
 </body>

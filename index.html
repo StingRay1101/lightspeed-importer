@@ -802,13 +802,15 @@
         // Step 2: Use v2.1 PUT to enable track_inventory and set stock levels in one call
         const inventoryPayload = {
           details: {
-            track_inventory: true,
             inventory: [
               { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
               { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
               { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
               { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 }
             ]
+          },
+          common: {
+            track_inventory: true
           }
         };
 

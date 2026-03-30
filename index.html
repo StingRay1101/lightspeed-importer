@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Lightspeed Product Importer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f2;
+    --surface: #ffffff;
+    --surface2: #f2efe9;
+    --border: #ddd9d2;
+    --accent: #1a1a1a;
+    --accent-dim: rgba(26,26,26,0.06);
+    --accent-mid: rgba(26,26,26,0.14);
+    --text: #1a1a1a;
+    --muted: #9a9087;
+    --danger: #c0392b;
+    --radius: 4px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  header {
+    max-width: 820px;
+    margin: 0 auto 48px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+
+  .logo-block h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .logo-block p {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .tag {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    padding: 4px 10px;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  /* Product cards list */
+  #product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .product-card:focus-within {
+    border-color: var(--accent);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .card-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--surface2);
+    width: 28px;
+    height: 28px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-preview {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-preview.empty {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .card-price-badge {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .card-toggle {
+    color: var(--muted);
+    font-size: 16px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .card-toggle.open {
+    transform: rotate(180deg);
+  }
+
+  .card-remove {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .card-remove:hover {
+    color: var(--danger);
+    background: rgba(255,95,95,0.1);
+  }
+
+  .card-body {
+    display: none;
+    padding: 0 18px 20px;
+    border-top: 1px solid var(--border);
+    animation: slideDown 0.15s ease;
+  }
+
+  .card-body.open {
+    display: block;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fields-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .field-full { grid-column: 1 / -1; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  label .required {
+    color: var(--text);
+    margin-left: 2px;
+  }
+
+  label .optional {
+    color: var(--muted);
+    font-size: 9px;
+    opacity: 0.7;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  input, textarea, select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 10px 12px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+    outline: none;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--text);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 72px;
+  }
+
+  select option {
+    background: var(--surface2);
+  }
+
+  input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
+
+  input::placeholder, textarea::placeholder {
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  /* Buttons */
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+    padding: 11px 18px;
+  }
+
+  .btn-ghost {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--text);
+    color: var(--text);
+    background: var(--accent-dim);
+  }
+
+  .btn-accent {
+    background: var(--text);
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
+  .btn-accent:hover {
+    background: #3a3a3a;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  .btn-accent:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Action bar */
+  .action-bar {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .add-btn:hover {
+    border-color: var(--text);
+    color: var(--text);
+    background: var(--accent-dim);
+  }
+
+  .add-btn .plus {
+    font-size: 18px;
+    line-height: 1;
+    color: inherit;
+  }
+
+  /* Export section */
+  .export-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 28px;
+  }
+
+  .export-section p {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+
+  .export-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .counter {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  .counter span {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Defaults section */
+  .defaults-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 28px;
+  }
+
+  .defaults-section h2, .export-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .defaults-section p {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+
+  .defaults-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--text);
+    color: #ffffff;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: 2px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  #toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 580px) {
+    .fields-grid { grid-template-columns: 1fr; }
+    .defaults-grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-block">
+    <h1>Product Importer</h1>
+    <p>Lightspeed CSV Generator</p>
+  </div>
+  <div class="tag">CSV Ready</div>
+</header>
+
+<div class="container">
+
+  <!-- Defaults -->
+  <div class="defaults-section">
+    <h2>Store Defaults</h2>
+    <p>These values apply to every product in the export. Set them once here.</p>
+    <div class="defaults-grid">
+      <div class="field">
+        <label>Tax Name <span class="required">*</span></label>
+        <input type="text" id="default-tax" value="GST" placeholder="GST">
+      </div>
+      <div class="field">
+        <label>Account Code</label>
+        <input type="text" id="default-account" placeholder="200">
+      </div>
+      <div class="field">
+        <label>Account Code Purchase</label>
+        <input type="text" id="default-account-purchase" placeholder="500">
+      </div>
+    </div>
+  </div>
+
+  <!-- Product list -->
+  <div id="product-list"></div>
+
+  <button class="add-btn" onclick="addProduct()">
+    <span class="plus">+</span> Add Product
+  </button>
+
+  <!-- Export -->
+  <div class="export-section">
+    <h2>Export CSV</h2>
+    <p>Downloads a CSV file ready to import directly into Lightspeed. All required columns are included with auto-generated fields where needed.</p>
+    <div class="export-row">
+      <button class="btn btn-accent" onclick="exportCSV()">Download CSV</button>
+      <button class="btn btn-ghost" onclick="clearAll()">Clear All</button>
+      <div class="counter" id="counter"><span>0</span> products</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+  // ---- Data ----
+  let products = [];
+  let nextId = 1;
+
+  const CATEGORIES = [
+    '', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt',
+    'Sample Jacket', 'Sample Knit', 'Jewellery', 'Accessories',
+    'Homewares', 'Belts', 'Bags', 'Scarves'
+  ];
+
+  const BRANDS = [
+    '', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display',
+    'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion',
+    'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery',
+    'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22',
+    'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26',
+    'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021',
+    'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 'Winter 2026',
+    'Wrapped Gift Cards'
+  ];
+
+  // ---- Helpers ----
+  function uid() {
+    return Math.random().toString(36).slice(2, 10).toUpperCase();
+  }
+
+  function randomProductName() {
+    // 12 random digits
+    let digits = '';
+    for (let i = 0; i < 12; i++) digits += Math.floor(Math.random() * 10);
+    return digits;
+  }
+
+  function slugify(str) {
+    return (str || 'product').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') || 'product';
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function updateCounter() {
+    document.getElementById('counter').innerHTML = `<span>${products.length}</span> product${products.length !== 1 ? 's' : ''}`;
+  }
+
+  // ---- Product management ----
+  function addProduct() {
+    const p = {
+      _id: nextId++,
+      open: true,
+      name: randomProductName(),
+      description: '',
+      category: '',
+      retailPrice: '',
+      supplyPrice: '',
+      supplierName: '',
+      supplierCode: '',
+      brandName: '',
+    };
+    products.push(p);
+    renderList();
+    updateCounter();
+    // scroll to new card
+    setTimeout(() => {
+      const cards = document.querySelectorAll('.product-card');
+      if (cards.length) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
+  }
+
+  function removeProduct(id) {
+    products = products.filter(p => p._id !== id);
+    renderList();
+    updateCounter();
+  }
+
+  function toggleCard(id) {
+    const p = products.find(p => p._id === id);
+    if (p) p.open = !p.open;
+    renderList();
+  }
+
+  function updateField(id, field, value) {
+    const p = products.find(p => p._id === id);
+    if (p) {
+      p[field] = value;
+      // Update preview label without full re-render
+      const card = document.querySelector(`[data-pid="${id}"]`);
+      if (card) {
+        const preview = card.querySelector('.card-preview');
+        const badge = card.querySelector('.card-price-badge');
+        const displayName = p.name || null;
+        preview.textContent = displayName || 'Untitled product';
+        preview.className = 'card-preview' + (displayName ? '' : ' empty');
+        badge.textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+      }
+    }
+  }
+
+  // ---- Render ----
+  function renderList() {
+    const list = document.getElementById('product-list');
+    list.innerHTML = '';
+    products.forEach((p, idx) => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.setAttribute('data-pid', p._id);
+
+      const displayName = p.name || 'Untitled product';
+      const isEmpty = !p.name;
+      const priceLabel = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+
+      card.innerHTML = `
+        <div class="card-header" onclick="toggleCard(${p._id})">
+          <div class="card-num">${idx + 1}</div>
+          <div class="card-preview${isEmpty ? ' empty' : ''}">${displayName}</div>
+          ${priceLabel ? `<div class="card-price-badge">${priceLabel}</div>` : '<div class="card-price-badge"></div>'}
+          <button class="card-remove" onclick="event.stopPropagation(); removeProduct(${p._id})" title="Remove">&#x2715;</button>
+          <div class="card-toggle${p.open ? ' open' : ''}">&#x25BE;</div>
+        </div>
+        <div class="card-body${p.open ? ' open' : ''}">
+          <div class="fields-grid">
+            <div class="field field-full">
+              <label>Product Name <span class="required">*</span></label>
+              <input type="text" placeholder="Auto-generated 12-digit code" value="${esc(p.name)}"
+                oninput="updateField(${p._id},'name',this.value)">
+            </div>
+            <div class="field field-full">
+              <label>Description</label>
+              <textarea placeholder="Brief product description..." oninput="updateField(${p._id},'description',this.value)">${esc(p.description)}</textarea>
+            </div>
+            <div class="field">
+              <label>Category <span class="required">*</span></label>
+              <select onchange="updateField(${p._id},'category',this.value)">
+                ${CATEGORIES.map(c => `<option value="${c}"${p.category === c ? ' selected' : ''}>${c || '-- Select category --'}</option>`).join('')}
+              </select>
+            </div>
+            <div class="field">
+              <label>Retail Price (AUD) <span class="required">*</span></label>
+              <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.retailPrice)}"
+                oninput="updateField(${p._id},'retailPrice',this.value)">
+            </div>
+            <div class="field">
+              <label>Supply Price <span class="optional">(optional)</span></label>
+              <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.supplyPrice)}"
+                oninput="updateField(${p._id},'supplyPrice',this.value)">
+            </div>
+            <div class="field">
+              <label>Brand Name <span class="optional">(optional)</span></label>
+              <select onchange="updateField(${p._id},'brandName',this.value)">
+                ${BRANDS.map(b => `<option value="${b}"${p.brandName === b ? ' selected' : ''}>${b || '-- Select brand --'}</option>`).join('')}
+              </select>
+            </div>
+            <div class="field">
+              <label>Supplier Name <span class="optional">(optional)</span></label>
+              <input type="text" placeholder="e.g. Fulfilment Co." value="${esc(p.supplierName)}"
+                oninput="updateField(${p._id},'supplierName',this.value)">
+            </div>
+            <div class="field">
+              <label>Supplier Code <span class="optional">(optional)</span></label>
+              <input type="text" placeholder="e.g. SUP-001" value="${esc(p.supplierCode)}"
+                oninput="updateField(${p._id},'supplierCode',this.value)">
+            </div>
+          </div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function esc(str) {
+    return (str || '').toString()
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  // ---- CSV Export ----
+  function exportCSV() {
+    if (products.length === 0) {
+      showToast('Add at least one product first.');
+      return;
+    }
+
+    const invalid = products.filter(p => !p.name || !p.retailPrice || !p.category);
+    if (invalid.length > 0) {
+      showToast(`${invalid.length} product(s) missing required fields.`);
+      return;
+    }
+
+    const tax = document.getElementById('default-tax').value || 'GST';
+    const acct = document.getElementById('default-account').value || '';
+    const acctPurch = document.getElementById('default-account-purchase').value || '';
+
+    const headers = [
+      'id','handle','sku','composite_name','composite_sku','composite_quantity','name',
+      'description','product_category',
+      'variant_option_one_name','variant_option_one_value',
+      'variant_option_two_name','variant_option_two_value',
+      'variant_option_three_name','variant_option_three_value',
+      'tags','supply_price','retail_price','tax_name','account_code',
+      'account_code_purchase','brand_name','supplier_name','supplier_code',
+      'active','track_inventory',
+      'inventory_Harbour_Town_Premium_Outlets','reorder_point_Harbour_Town_Premium_Outlets','restock_level_Harbour_Town_Premium_Outlets',
+      'inventory_Pacific_Fair','reorder_point_Pacific_Fair','restock_level_Pacific_Fair',
+      'inventory_Southport_Showroom','reorder_point_Southport_Showroom','restock_level_Southport_Showroom',
+      'inventory_Southport_Warehouse','reorder_point_Southport_Warehouse','restock_level_Southport_Warehouse'
+    ];
+
+    const rows = products.map((p, idx) => {
+      const autoId = idx + 1;
+      const handle = slugify(p.name);
+      const sku = `SKU-${uid()}`;
+
+      return [
+        autoId,           // id
+        handle,           // handle
+        sku,              // sku
+        '',               // composite_name
+        '',               // composite_sku
+        '',               // composite_quantity
+        p.name,           // name
+        p.description,    // description
+        p.category,       // product_category
+        '','',            // variant_option_one
+        '','',            // variant_option_two
+        '','',            // variant_option_three
+        '',               // tags
+        p.supplyPrice || '',   // supply_price
+        p.retailPrice,    // retail_price
+        tax,              // tax_name
+        acct,             // account_code
+        acctPurch,        // account_code_purchase
+        p.brandName || '',     // brand_name
+        p.supplierName || '',  // supplier_name
+        p.supplierCode || '',  // supplier_code
+        'true',           // active
+        'true',           // track_inventory
+        0, 0, 0,          // Harbour Town
+        0, 0, 0,          // Pacific Fair
+        0, 0, 0,          // Southport Showroom
+        0, 0, 0,          // Southport Warehouse
+      ];
+    });
+
+    const csv = [headers, ...rows].map(row =>
+      row.map(v => {
+        const s = String(v ?? '');
+        return s.includes(',') || s.includes('"') || s.includes('\n')
+          ? `"${s.replace(/"/g, '""')}"` : s;
+      }).join(',')
+    ).join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `lightspeed-import-${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast(`${products.length} product${products.length !== 1 ? 's' : ''} exported!`);
+  }
+
+  function clearAll() {
+    if (products.length === 0) return;
+    if (confirm('Clear all products?')) {
+      products = [];
+      nextId = 1;
+      renderList();
+      updateCounter();
+    }
+  }
+
+  // ---- Init ----
+  addProduct();
+</script>
+</body>
+</html>

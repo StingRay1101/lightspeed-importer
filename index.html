@@ -770,8 +770,8 @@
             retail_price: parseFloat(p.retailPrice) || 0,
             type: p.category,
             brand_name: p.brandName || '',
-            supplier_name: p.supplierName || '',
-            supplier_code: p.supplierCode || '',
+            ...(p.supplierName ? { supplier_name: p.supplierName } : {}),
+            ...(p.supplierCode ? { supplier_code: p.supplierCode } : {}),
             tax_name: tax,
             track_inventory: true,
             active: true
@@ -781,8 +781,23 @@
         if (!res.ok) throw new Error(await res.text());
 
         const data = await res.json();
-        const product_id = data?.data?.id || data?.data?.[0]?.id;
-        if (!product_id) throw new Error('No product ID returned from Lightspeed.');
+        console.log('Lightspeed response:', JSON.stringify(data));
+
+        // Handle multiple possible response shapes from Lightspeed
+        const product_id =
+          data?.data?.id ||
+          data?.data?.[0]?.id ||
+          data?.id ||
+          data?.[0]?.id ||
+          data?.product?.id ||
+          data?.data?.product_id ||
+          data?.product_id;
+
+        if (!product_id) {
+          // Log full response so we can see what Lightspeed actually returned
+          console.warn('Could not find product ID. Full response:', JSON.stringify(data));
+          throw new Error(`No product ID found in Lightspeed response.\n\nResponse: ${JSON.stringify(data).slice(0, 300)}`);
+        }
 
         const hasStock = Object.values(p.stock).some(v => v > 0);
         if (hasStock) {

@@ -63,7 +63,6 @@
   .card-preview { flex: 1; font-weight: 600; font-size: 14px; }
   .card-preview.empty { color: #aaa; font-style: italic; }
 
-  /* Red Flash Animation */
   @keyframes flash-red-field {
     0% { border-color: #ff0000; background: #fff; }
     50% { border-color: #ff0000; background: #ffebeb; }
@@ -115,8 +114,8 @@
 <header>
   <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="if-logo">
   <div style="text-align: right">
-    <p style="font-weight: 800; font-size: 12px; letter-spacing: 2px;">LIGHTSPEED PRODUCT IMPORTER</p>
-    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.4</p>
+    <p style="font-weight: 800; font-size: 12px; letter-spacing: 2px;">PRODUCT IMPORTER</p>
+    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.5</p>
   </div>
 </header>
 
@@ -144,6 +143,7 @@
   const BRANDS = ['', 'Imagine Fashion', 'Summer 24-25', 'Winter 2025', 'Winter 2026'];
 
   function uid() { return Math.random().toString(36).slice(2, 10).toUpperCase(); }
+  function genCode() { return Math.floor(Math.random() * 900) + 100; } // Generates 3-digit code
   function slugify(str) { return (str || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'product'; }
   function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
 
@@ -258,19 +258,23 @@
 
     const headers = ['handle','sku','name','product_category','retail_price','tax_name','brand_name','supplier_code','active','track_inventory','inventory_Harbour_Town','inventory_Pacific_Fair','inventory_Southport_Showroom','inventory_Southport_Warehouse'];
 
-    const rows = products.map(p => [
-      slugify(p.name),
-      uid(), 
-      p.name,
-      p.category,
-      p.retailPrice,
-      'GST',
-      p.brandName || '',
-      p.supplierCode || '',
-      1, // Active
-      1, // Track Inventory
-      0, 0, 0, 0 
-    ]);
+    const rows = products.map(p => {
+      const code = genCode();
+      const fullName = `${p.name} - ${code}`;
+      return [
+        slugify(fullName),
+        uid(), 
+        fullName,
+        p.category,
+        p.retailPrice,
+        'GST',
+        p.brandName || '',
+        p.supplierCode || '',
+        1, // Active
+        1, // Track Inventory
+        0, 0, 0, 0 
+      ];
+    });
 
     const csv = [headers, ...rows].map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });

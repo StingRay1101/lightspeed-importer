@@ -774,6 +774,8 @@
             supply_price: parseFloat(p.supplyPrice) || 0,
             retail_price: parseFloat(p.retailPrice) || 0,
             tax_name: tax,
+            type: p.category || '',
+            brand_name: p.brandName || '',
             ...(p.supplierName ? { supplier_name: p.supplierName } : {}),
             ...(p.supplierCode ? { supplier_code: p.supplierCode } : {}),
             track_inventory: true,
@@ -794,9 +796,7 @@
           product_id,
           payload: {
             common: {
-              track_inventory: true,
-              ...(p.brandName ? { brand_name: p.brandName } : {}),
-              ...(p.category  ? { type: p.category }         : {})
+              track_inventory: true
             },
             details: {
               inventory: [

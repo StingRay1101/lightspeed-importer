@@ -740,7 +740,6 @@
     const tax = document.getElementById('default_tax').value || 'GST';
     let synced = 0;
 
-    // Helper to call the Worker
     async function workerCall(body) {
       const res = await fetch(WORKER_URL, {
         method: 'POST',
@@ -752,7 +751,7 @@
       });
       if (res.status === 401) throw new Error('Incorrect portal password.');
       const data = await res.json();
-      if (!res.ok) throw new Error(JSON.stringify(data).slice(0, 300));
+      if (!res.ok) throw new Error(data?.error || JSON.stringify(data).slice(0, 300));
       return data;
     }
 
@@ -765,47 +764,24 @@
 
         btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
 
-        // Step 1: Create product
-        const createData = await workerCall({
-          action: 'create_product',
+        await workerCall({
+          action: 'sync_product',
           payload: {
             name: finalName,
             sku: finalSku,
-            supply_price: parseFloat(p.supplyPrice) || 0,
             retail_price: parseFloat(p.retailPrice) || 0,
+            supply_price: parseFloat(p.supplyPrice) || 0,
             tax_name: tax,
-            type: p.category || '',
             brand_name: p.brandName || '',
-            ...(p.supplierName ? { supplier_name: p.supplierName } : {}),
-            ...(p.supplierCode ? { supplier_code: p.supplierCode } : {}),
-            track_inventory: true,
-            active: true
-          }
-        });
-
-        const product_id =
-          (Array.isArray(createData?.data) ? createData.data[0] : null) ||
-          createData?.data?.id ||
-          createData?.id;
-
-        if (!product_id) throw new Error(`No product ID in response: ${JSON.stringify(createData).slice(0, 200)}`);
-
-        // Step 2: Set brand, category, inventory tracking and stock levels
-        await workerCall({
-          action: 'update_product',
-          product_id,
-          payload: {
-            common: {
-              track_inventory: true
-            },
-            details: {
-              inventory: [
-                { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
-                { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
-                { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
-                { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 }
-              ]
-            }
+            type_name: p.category || '',
+            supplier_name: p.supplierName || '',
+            supplier_code: p.supplierCode || '',
+            inventory: [
+              { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
+              { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
+              { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
+              { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 }
+            ]
           }
         });
 

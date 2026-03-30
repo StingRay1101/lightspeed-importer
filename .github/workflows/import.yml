@@ -21,7 +21,11 @@ jobs:
           echo "Processing $(echo $PAYLOAD | jq 'length') products..."
           
           echo "$PAYLOAD" | jq -c '.[]' | while read -r item; do
-            NAME=$(echo $item | jq -r .name)
+            # Restore the number suffix logic for the name
+            BASE_NAME=$(echo $item | jq -r .name)
+            UNIQUE_SUFFIX=$(date +%s%N | cut -b10-13)
+            NAME="$BASE_NAME #$UNIQUE_SUFFIX"
+
             RETAIL=$(echo $item | jq -r .retailPrice)
             SUPPLY=$(echo $item | jq -r .supplyPrice)
             CAT=$(echo $item | jq -r .category)
@@ -53,8 +57,8 @@ jobs:
                 \"brand_name\": \"$BRAND\"
               }")
             
-            # FIXED: Handles both single object and array responses from Lightspeed
-            PRODUCT_ID=$(echo $RESPONSE | jq -r 'if .data | type == "array" then .data[0].id else .data.id end // empty')
+            # Robust ID capture: filters out non-JSON strings to prevent "Cannot index string" error
+            PRODUCT_ID=$(echo "$RESPONSE" | jq -r 'if type == "string" then empty else (.data.id // .data[0].id // empty) end')
 
             if [ -n "$PRODUCT_ID" ] && [ "$PRODUCT_ID" != "null" ]; then
               echo "Success! ID: $PRODUCT_ID. Updating Inventory..."
@@ -69,7 +73,8 @@ jobs:
                   {\"product_id\": \"$PRODUCT_ID\", \"outlet_id\": \"$SW_ID\", \"count\": $STOCK_SW}
                 ]"
             else
-              echo "ERROR: Could not get Product ID. API Response: $RESPONSE"
+              echo "ERROR: API returned a non-JSON response or missing ID."
+              echo "Raw Response: $RESPONSE"
               exit 1
             fi
           done

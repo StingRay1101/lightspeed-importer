@@ -3,17 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Lightspeed Product Importer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #FAFAFA;
     --surface: #ffffff;
-    --border: #cccccc;
+    --border: #000000;
     --text: #1a1a1a;
     --accent: #b07878;
-    --radius: 4px;
+    --radius: 2px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,107 +21,90 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'DM Mono', monospace;
-    min-height: 100vh;
     padding: 40px 20px;
   }
 
   header {
     max-width: 820px;
-    margin: 0 auto 48px;
+    margin: 0 auto 40px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
     border-bottom: 2px solid var(--text);
     padding-bottom: 20px;
   }
 
-  .if-logo { height: 48px; width: auto; filter: brightness(0); }
-
-  .logo-block p {
-    font-size: 11px;
-    color: var(--text);
-    margin-top: 6px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    font-weight: 700;
-  }
+  .if-logo { height: 65px; width: auto; }
 
   .container { max-width: 820px; margin: 0 auto; }
 
-  #product-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+  #product-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
 
   .product-card {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid #ccc;
     border-radius: var(--radius);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    overflow: hidden;
   }
 
   .card-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
+    padding: 15px;
     cursor: pointer;
   }
 
   .card-num {
-    background: #1a1a1a;
-    color: #fff;
-    width: 28px; height: 28px;
+    background: #000; color: #fff;
+    width: 24px; height: 24px;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 11px;
+    font-size: 10px; font-weight: 800; margin-right: 15px;
   }
 
-  .card-preview { flex: 1; font-size: 14px; font-weight: 600; }
-  .card-preview.empty { color: #999; font-style: italic; }
-
-  .card-price-badge { font-weight: 700; color: var(--accent); margin-right: 10px; }
+  .card-preview { flex: 1; font-weight: 600; font-size: 14px; }
+  .card-preview.empty { color: #aaa; font-style: italic; }
 
   /* Red Flash Animation */
   @keyframes flash-red-field {
     0% { border-color: #ff0000; background: #fff; }
-    50% { border-color: #ff0000; background: #ffebeb; box-shadow: 0 0 10px rgba(255,0,0,0.2); }
-    100% { border-color: #999; background: #fff; }
+    50% { border-color: #ff0000; background: #ffebeb; }
+    100% { border-color: #000; background: #fff; }
   }
-  .flash-red { animation: flash-red-field 0.8s ease 2; }
+  .flash-red { animation: flash-red-field 0.7s ease 3; border-width: 2px !important; }
 
   .card-duplicate {
-    background: #f2f9fd; border: 1px solid #cce5fa; color: #2a6ca3;
-    padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;
+    background: #f0f7ff; border: 1px solid #bcd8f5; color: #0056b3;
+    padding: 5px 10px; font-size: 10px; cursor: pointer; font-weight: 700; text-transform: uppercase;
   }
 
   .card-remove {
-    background: #fdf2f2; border: 1px solid #facccc; color: #a32a2a;
-    padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 5px;
+    background: #fff0f0; border: 1px solid #f5c6c6; color: #b30000;
+    padding: 5px 10px; cursor: pointer; margin-left: 8px;
   }
 
-  .card-body { display: none; padding: 20px; border-top: 1px solid var(--border); background: #fafafa; }
+  .card-body { display: none; padding: 20px; border-top: 1px solid #eee; background: #fff; }
   .card-body.open { display: block; }
 
-  .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
   .field-full { grid-column: 1 / -1; }
 
-  label { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; display: block; }
+  label { font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
   input, select {
-    background: #fff; border: 1px solid #999; border-radius: 4px;
-    padding: 10px; width: 100%; font-family: 'DM Mono'; font-size: 13px; outline: none;
+    border: 1px solid #000; border-radius: 0;
+    padding: 10px; width: 100%; font-family: 'DM Mono'; font-size: 13px;
   }
 
   .add-btn {
-    width: 100%; background: #fff; border: 2px dashed #999; padding: 14px;
-    font-weight: 700; cursor: pointer; margin-bottom: 20px;
+    width: 100%; background: #fff; border: 2px dashed #000; padding: 15px;
+    font-weight: 700; cursor: pointer; margin-bottom: 30px; font-family: 'DM Mono';
   }
 
-  .export-section { background: #fff; border: 1px solid var(--border); padding: 20px; border-radius: 4px; }
-
-  .btn-accent { background: #1a1a1a; color: #fff; border: none; padding: 12px 20px; cursor: pointer; font-weight: 700; }
-  .btn-ghost { background: transparent; border: 1px solid #999; padding: 12px 20px; margin-left: 10px; cursor: pointer; }
+  .export-section { background: #000; color: #fff; padding: 25px; border-radius: 4px; }
+  .btn-accent { background: #fff; color: #000; border: none; padding: 12px 25px; cursor: pointer; font-weight: 800; font-family: 'DM Mono'; }
+  .btn-ghost { background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 25px; margin-left: 10px; cursor: pointer; font-family: 'DM Mono'; }
 
   #toast {
-    position: fixed; bottom: 20px; right: 20px; background: #000; color: #fff;
+    position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff;
     padding: 12px 20px; border-radius: 4px; opacity: 0; transition: 0.3s;
   }
   #toast.show { opacity: 1; }
@@ -131,23 +113,23 @@
 <body>
 
 <header>
-  <div class="logo-block">
-    <img src="https://www.imaginefashion.com.au/cdn/shop/files/White_Logo.png?v=1738727364&width=150" alt="Imagine Fashion" class="if-logo">
-    <p>Product Importer</p>
+  <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="if-logo">
+  <div style="text-align: right">
+    <p style="font-weight: 800; font-size: 12px; letter-spacing: 2px;">PRODUCT IMPORTER</p>
+    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.4</p>
   </div>
 </header>
 
 <div class="container">
   <div id="product-list"></div>
-
-  <button class="add-btn" onclick="addProduct()">+ Add Product</button>
+  <button class="add-btn" onclick="addProduct()">+ ADD NEW PRODUCT LINE</button>
 
   <div class="export-section">
-    <h2 style="font-family: 'Cormorant Garamond'; margin-bottom: 10px;">Export CSV</h2>
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <button class="btn-accent" onclick="exportCSV()">Download CSV</button>
-      <button class="btn-ghost" onclick="clearAll()">Clear All</button>
-      <div id="counter" style="margin-left: auto; font-size: 12px; font-weight: 700;">0 products</div>
+    <h2 style="margin-bottom: 10px; font-family: 'Syne'; text-transform: uppercase;">Finalize Export</h2>
+    <div style="display: flex; align-items: center;">
+      <button class="btn-accent" onclick="exportCSV()">DOWNLOAD CSV</button>
+      <button class="btn-ghost" onclick="clearAll()">CLEAR ALL</button>
+      <div id="counter" style="margin-left: auto; font-weight: 700;">0 PRODUCTS</div>
     </div>
   </div>
 </div>
@@ -159,11 +141,11 @@
   let nextId = 1;
 
   const CATEGORIES = ['', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt', 'Sample Jacket', 'Sample Knit', 'Jewellery', 'Accessories', 'Homewares', 'Belts', 'Bags', 'Scarves'];
-  const BRANDS = ['', 'Accessories', 'Imagine Fashion', 'Summer 24-25', 'Winter 2025', 'Winter 2026'];
+  const BRANDS = ['', 'Imagine Fashion', 'Summer 24-25', 'Winter 2025', 'Winter 2026'];
 
   function uid() { return Math.random().toString(36).slice(2, 10).toUpperCase(); }
   function slugify(str) { return (str || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'product'; }
-  function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
+  function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
 
   function addProduct(data = null) {
     const p = {
@@ -172,34 +154,31 @@
       name: '',
       category: data ? data.category : '',
       retailPrice: data ? data.retailPrice : '',
-      supplyPrice: data ? data.supplyPrice : '',
-      supplierName: data ? data.supplierName : '',
-      supplierCode: data ? data.supplierCode : '',
       brandName: data ? data.brandName : '',
+      supplierCode: data ? data.supplierCode : '',
     };
     products.push(p);
     renderList();
-    document.getElementById('counter').innerHTML = `${products.length} products`;
+    document.getElementById('counter').innerHTML = `${products.length} PRODUCTS`;
 
     if (data) {
       setTimeout(() => {
         const input = document.querySelector(`[data-pid="${p._id}"] .name-input`);
         input.classList.add('flash-red');
         input.focus();
-        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
+      }, 50);
     }
   }
 
   function duplicateProduct(id) {
     const p = products.find(p => p._id === id);
-    if (p) { addProduct({...p}); showToast("Cloned! Enter new name."); }
+    if (p) { addProduct({...p}); showToast("CLONED DATA"); }
   }
 
   function removeProduct(id) {
     products = products.filter(p => p._id !== id);
     renderList();
-    document.getElementById('counter').innerHTML = `${products.length} products`;
+    document.getElementById('counter').innerHTML = `${products.length} PRODUCTS`;
   }
 
   function toggleCard(id) {
@@ -213,9 +192,8 @@
       p[field] = value;
       const card = document.querySelector(`[data-pid="${id}"]`);
       if (card) {
-        card.querySelector('.card-preview').textContent = p.name || 'Untitled product';
+        card.querySelector('.card-preview').textContent = p.name || 'UNTITLED PRODUCT';
         card.querySelector('.card-preview').classList.toggle('empty', !p.name);
-        card.querySelector('.card-price-badge').textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
       }
     }
   }
@@ -230,31 +208,30 @@
       card.innerHTML = `
         <div class="card-header" onclick="toggleCard(${p._id})">
           <div class="card-num">${idx + 1}</div>
-          <div class="card-preview ${!p.name ? 'empty' : ''}">${p.name || 'Untitled product'}</div>
-          <div class="card-price-badge">${p.retailPrice ? '$'+parseFloat(p.retailPrice).toFixed(2) : ''}</div>
-          <button class="card-duplicate" onclick="event.stopPropagation(); duplicateProduct(${p._id})">Duplicate</button>
+          <div class="card-preview ${!p.name ? 'empty' : ''}">${p.name || 'UNTITLED PRODUCT'}</div>
+          <button class="card-duplicate" onclick="event.stopPropagation(); duplicateProduct(${p._id})">DUPLICATE</button>
           <button class="card-remove" onclick="event.stopPropagation(); removeProduct(${p._id})">✕</button>
         </div>
         <div class="card-body ${p.open ? 'open' : ''}">
           <div class="fields-grid">
             <div class="field field-full">
-              <label>Product Name <span style="color:red">*</span></label>
+              <label>Product Name *</label>
               <input type="text" class="name-input" value="${p.name}" oninput="updateField(${p._id},'name',this.value)">
             </div>
             <div class="field">
-              <label>Category <span style="color:red">*</span></label>
+              <label>Category *</label>
               <select onchange="updateField(${p._id},'category',this.value)">
-                ${CATEGORIES.map(c => `<option value="${c}" ${p.category === c ? 'selected' : ''}>${c || '-- Select --'}</option>`).join('')}
+                ${CATEGORIES.map(c => `<option value="${c}" ${p.category === c ? 'selected' : ''}>${c || '-- SELECT --'}</option>`).join('')}
               </select>
             </div>
             <div class="field">
-              <label>Retail Price (AUD) <span style="color:red">*</span></label>
+              <label>Retail Price *</label>
               <input type="number" step="0.01" value="${p.retailPrice}" oninput="updateField(${p._id},'retailPrice',this.value)">
             </div>
             <div class="field">
-              <label>Brand Name</label>
+              <label>Brand</label>
               <select onchange="updateField(${p._id},'brandName',this.value)">
-                ${BRANDS.map(b => `<option value="${b}" ${p.brandName === b ? 'selected' : ''}>${b || '-- Select Brand --'}</option>`).join('')}
+                ${BRANDS.map(b => `<option value="${b}" ${p.brandName === b ? 'selected' : ''}>${b || '-- SELECT --'}</option>`).join('')}
               </select>
             </div>
             <div class="field">
@@ -271,39 +248,39 @@
   function exportCSV() {
     const invalid = products.filter(p => !p.name || !p.retailPrice || !p.category);
     if (invalid.length > 0) {
-      showToast("Missing required fields!");
+      showToast("MISSING REQUIRED FIELDS");
       invalid.forEach(p => {
         const el = document.querySelector(`[data-pid="${p._id}"] .name-input`);
-        if(el) { el.classList.add('flash-red'); setTimeout(() => el.classList.remove('flash-red'), 2000); }
+        if(el) el.classList.add('flash-red');
       });
       return;
     }
 
-    const headers = ['handle','sku','name','product_category','supply_price','retail_price','tax_name','brand_name','supplier_code','active','track_inventory','inventory_Harbour_Town_Premium_Outlets','inventory_Pacific_Fair','inventory_Southport_Showroom','inventory_Southport_Warehouse'];
+    const headers = ['handle','sku','name','product_category','retail_price','tax_name','brand_name','supplier_code','active','track_inventory','inventory_Harbour_Town','inventory_Pacific_Fair','inventory_Southport_Showroom','inventory_Southport_Warehouse'];
 
     const rows = products.map(p => [
       slugify(p.name),
-      uid(), // No SKU- prefix
+      uid(), 
       p.name,
       p.category,
-      p.supplyPrice || '',
       p.retailPrice,
-      'GST', // Tax is always GST
+      'GST',
       p.brandName || '',
       p.supplierCode || '',
-      1, // Active as 1 (numeric)
-      1, // Track Inventory as 1 (no decimals)
-      0, 0, 0, 0 // Locations
+      1, // Active
+      1, // Track Inventory
+      0, 0, 0, 0 
     ]);
 
     const csv = [headers, ...rows].map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `import-${Date.now()}.csv`; a.click();
+    a.href = url; a.download = `IMAGINE-IMPORT-${Date.now()}.csv`; a.click();
+    showToast("EXPORTED TO DOWNLOADS");
   }
 
-  function clearAll() { if(confirm("Clear all?")) { products = []; renderList(); document.getElementById('counter').innerHTML = "0 products"; } }
+  function clearAll() { if(confirm("CLEAR ALL ENTRIES?")) { products = []; renderList(); document.getElementById('counter').innerHTML = "0 PRODUCTS"; } }
 
   addProduct();
 </script>

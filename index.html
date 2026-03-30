@@ -17,105 +17,66 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    padding: 40px 20px;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; padding: 40px 20px; overflow-x: hidden; }
 
-  header {
-    max-width: 820px;
-    margin: 0 auto 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 2px solid var(--text);
-    padding-bottom: 20px;
-  }
-
+  header { max-width: 820px; margin: 0 auto 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--text); padding-bottom: 20px; }
   .if-logo { height: 65px; width: auto; }
 
   .container { max-width: 820px; margin: 0 auto; }
-
   #product-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
 
-  .product-card {
-    background: var(--surface);
-    border: 1px solid #ccc;
-    border-radius: var(--radius);
-  }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    cursor: pointer;
-  }
-
-  .card-num {
-    background: #000; color: #fff;
-    width: 24px; height: 24px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 800; margin-right: 15px;
-  }
-
+  .product-card { background: var(--surface); border: 1px solid #ccc; border-radius: var(--radius); position: relative; }
+  .card-header { display: flex; align-items: center; padding: 15px; cursor: pointer; }
+  .card-num { background: #000; color: #fff; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; margin-right: 15px; }
   .card-preview { flex: 1; font-weight: 600; font-size: 14px; }
   .card-preview.empty { color: #aaa; font-style: italic; }
 
-  @keyframes flash-red-field {
-    0% { border-color: #ff0000; background: #fff; }
-    50% { border-color: #ff0000; background: #ffebeb; }
-    100% { border-color: #000; background: #fff; }
-  }
+  @keyframes flash-red-field { 0% { border-color: #ff0000; } 50% { border-color: #ff0000; background: #ffebeb; } 100% { border-color: #000; } }
   .flash-red { animation: flash-red-field 0.7s ease 3; border-width: 2px !important; }
 
-  .card-duplicate {
-    background: #f0f7ff; border: 1px solid #bcd8f5; color: #0056b3;
-    padding: 5px 10px; font-size: 10px; cursor: pointer; font-weight: 700; text-transform: uppercase;
-  }
-
-  .card-remove {
-    background: #fff0f0; border: 1px solid #f5c6c6; color: #b30000;
-    padding: 5px 10px; cursor: pointer; margin-left: 8px;
-  }
+  .card-actions { display: flex; gap: 8px; }
+  .btn-stock { background: #000; color: #fff; border: none; padding: 5px 12px; font-size: 10px; cursor: pointer; font-weight: 700; }
+  .card-duplicate { background: #f0f7ff; border: 1px solid #bcd8f5; color: #0056b3; padding: 5px 10px; font-size: 10px; cursor: pointer; font-weight: 700; }
+  .card-remove { background: #fff0f0; border: 1px solid #f5c6c6; color: #b30000; padding: 5px 10px; cursor: pointer; font-weight: 700; }
 
   .card-body { display: none; padding: 20px; border-top: 1px solid #eee; background: #fff; }
   .card-body.open { display: block; }
 
+  /* Drawer / Slider CSS */
+  .drawer { position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background: #fff; border-left: 2px solid #000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.3s ease; z-index: 2000; padding: 40px 30px; }
+  .drawer.active { right: 0; }
+  .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); display: none; z-index: 1999; }
+  .drawer-overlay.active { display: block; }
+  .drawer h3 { font-family: 'Syne'; text-transform: uppercase; margin-bottom: 20px; font-size: 18px; border-bottom: 1px solid #000; padding-bottom: 10px; }
+  
   .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
   .field-full { grid-column: 1 / -1; }
-
   label { font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
+  input, select { border: 1px solid #000; padding: 10px; width: 100%; font-family: 'DM Mono'; font-size: 13px; }
 
-  input, select {
-    border: 1px solid #000; border-radius: 0;
-    padding: 10px; width: 100%; font-family: 'DM Mono'; font-size: 13px;
-  }
-
-  .add-btn {
-    width: 100%; background: #fff; border: 2px dashed #000; padding: 15px;
-    font-weight: 700; cursor: pointer; margin-bottom: 30px; font-family: 'DM Mono';
-  }
-
+  .add-btn { width: 100%; background: #fff; border: 2px dashed #000; padding: 15px; font-weight: 700; cursor: pointer; margin-bottom: 30px; font-family: 'DM Mono'; }
   .export-section { background: #000; color: #fff; padding: 25px; border-radius: 4px; }
   .btn-accent { background: #fff; color: #000; border: none; padding: 12px 25px; cursor: pointer; font-weight: 800; font-family: 'DM Mono'; }
   .btn-ghost { background: transparent; border: 1px solid #fff; color: #fff; padding: 12px 25px; margin-left: 10px; cursor: pointer; font-family: 'DM Mono'; }
 
-  #toast {
-    position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff;
-    padding: 12px 20px; border-radius: 4px; opacity: 0; transition: 0.3s;
-  }
+  #toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: #fff; padding: 12px 20px; border-radius: 4px; opacity: 0; transition: 0.3s; z-index: 3000; }
   #toast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <h3 id="drawer-title">Inventory</h3>
+  <div id="drawer-content"></div>
+  <button class="btn-accent" style="width:100%; margin-top:30px;" onclick="closeDrawer()">SAVE & CLOSE</button>
+</div>
+
 <header>
   <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="if-logo">
   <div style="text-align: right">
     <p style="font-weight: 800; font-size: 12px; letter-spacing: 2px;">PRODUCT IMPORTER</p>
-    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.6</p>
+    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.7</p>
   </div>
 </header>
 
@@ -138,19 +99,10 @@
 <script>
   let products = [];
   let nextId = 1;
+  let activeProductId = null;
 
   const CATEGORIES = ['', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt', 'Sample Jacket', 'Sample Knit', 'Jewellery', 'Accessories', 'Homewares', 'Belts', 'Bags', 'Scarves'];
-  
-  const BRANDS = [
-    '', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display', 
-    'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion', 
-    'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery', 
-    'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22', 
-    'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26', 
-    'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021', 
-    'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 
-    'Winter 2026', 'Wrapped Gift Cards'
-  ];
+  const BRANDS = ['', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display', 'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion', 'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery', 'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22', 'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26', 'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021', 'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 'Winter 2026', 'Wrapped Gift Cards'];
 
   function uid() { return Math.random().toString(36).slice(2, 10).toUpperCase(); }
   function genCode() { return Math.floor(Math.random() * 900) + 100; }
@@ -166,17 +118,48 @@
       retailPrice: data ? data.retailPrice : '',
       brandName: data ? data.brandName : '',
       supplierCode: data ? data.supplierCode : '',
+      stock: data ? {...data.stock} : { ht: 0, pf: 0, ss: 0, sw: 0 }
     };
     products.push(p);
     renderList();
     document.getElementById('counter').innerHTML = `${products.length} PRODUCTS`;
+  }
 
-    if (data) {
-      setTimeout(() => {
-        const input = document.querySelector(`[data-pid="${p._id}"] .name-input`);
-        input.classList.add('flash-red');
-        input.focus();
-      }, 50);
+  function openDrawer(id) {
+    activeProductId = id;
+    const p = products.find(x => x._id === id);
+    document.getElementById('drawer-title').innerText = p.name || 'Set Stock Levels';
+    document.getElementById('drawer-content').innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:20px;">
+        <div><label>Harbour Town</label><input type="number" value="${p.stock.ht}" oninput="updateStock(${id}, 'ht', this.value)"></div>
+        <div><label>Pacific Fair</label><input type="number" value="${p.stock.pf}" oninput="updateStock(${id}, 'pf', this.value)"></div>
+        <div><label>Southport Showroom</label><input type="number" value="${p.stock.ss}" oninput="updateStock(${id}, 'ss', this.value)"></div>
+        <div><label>Southport Warehouse</label><input type="number" value="${p.stock.sw}" oninput="updateStock(${id}, 'sw', this.value)"></div>
+      </div>
+    `;
+    document.getElementById('drawer').classList.add('active');
+    document.getElementById('overlay').classList.add('active');
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('active');
+    document.getElementById('overlay').classList.remove('active');
+  }
+
+  function updateStock(id, loc, val) {
+    const p = products.find(x => x._id === id);
+    if(p) p.stock[loc] = val || 0;
+  }
+
+  function updateField(id, field, value) {
+    const p = products.find(p => p._id === id);
+    if (p) {
+      p[field] = value;
+      const card = document.querySelector(`[data-pid="${id}"]`);
+      if (card) {
+        card.querySelector('.card-preview').textContent = p.name || 'UNTITLED PRODUCT';
+        card.querySelector('.card-preview').classList.toggle('empty', !p.name);
+      }
     }
   }
 
@@ -196,18 +179,6 @@
     if (p) { p.open = !p.open; renderList(); }
   }
 
-  function updateField(id, field, value) {
-    const p = products.find(p => p._id === id);
-    if (p) {
-      p[field] = value;
-      const card = document.querySelector(`[data-pid="${id}"]`);
-      if (card) {
-        card.querySelector('.card-preview').textContent = p.name || 'UNTITLED PRODUCT';
-        card.querySelector('.card-preview').classList.toggle('empty', !p.name);
-      }
-    }
-  }
-
   function renderList() {
     const list = document.getElementById('product-list');
     list.innerHTML = '';
@@ -219,8 +190,11 @@
         <div class="card-header" onclick="toggleCard(${p._id})">
           <div class="card-num">${idx + 1}</div>
           <div class="card-preview ${!p.name ? 'empty' : ''}">${p.name || 'UNTITLED PRODUCT'}</div>
-          <button class="card-duplicate" onclick="event.stopPropagation(); duplicateProduct(${p._id})">DUPLICATE</button>
-          <button class="card-remove" onclick="event.stopPropagation(); removeProduct(${p._id})">✕</button>
+          <div class="card-actions">
+            <button class="btn-stock" onclick="event.stopPropagation(); openDrawer(${p._id})">STOCK LEVELS</button>
+            <button class="card-duplicate" onclick="event.stopPropagation(); duplicateProduct(${p._id})">DUPLICATE</button>
+            <button class="card-remove" onclick="event.stopPropagation(); removeProduct(${p._id})">✕</button>
+          </div>
         </div>
         <div class="card-body ${p.open ? 'open' : ''}">
           <div class="fields-grid">
@@ -228,24 +202,20 @@
               <label>Product Name *</label>
               <input type="text" class="name-input" value="${p.name}" oninput="updateField(${p._id},'name',this.value)">
             </div>
-            <div class="field">
-              <label>Category *</label>
+            <div class="field"><label>Category *</label>
               <select onchange="updateField(${p._id},'category',this.value)">
                 ${CATEGORIES.map(c => `<option value="${c}" ${p.category === c ? 'selected' : ''}>${c || '-- SELECT --'}</option>`).join('')}
               </select>
             </div>
-            <div class="field">
-              <label>Retail Price *</label>
+            <div class="field"><label>Retail Price *</label>
               <input type="number" step="0.01" value="${p.retailPrice}" oninput="updateField(${p._id},'retailPrice',this.value)">
             </div>
-            <div class="field">
-              <label>Brand</label>
+            <div class="field"><label>Brand</label>
               <select onchange="updateField(${p._id},'brandName',this.value)">
                 ${BRANDS.map(b => `<option value="${b}" ${p.brandName === b ? 'selected' : ''}>${b || '-- SELECT --'}</option>`).join('')}
               </select>
             </div>
-            <div class="field">
-              <label>Supplier Code</label>
+            <div class="field"><label>Supplier Code</label>
               <input type="text" value="${p.supplierCode}" oninput="updateField(${p._id},'supplierCode',this.value)">
             </div>
           </div>
@@ -267,35 +237,19 @@
     }
 
     const headers = ['handle','sku','name','product_category','retail_price','tax_name','brand_name','supplier_code','active','track_inventory','inventory_Harbour_Town','inventory_Pacific_Fair','inventory_Southport_Showroom','inventory_Southport_Warehouse'];
-
     const rows = products.map(p => {
-      const code = genCode();
-      const fullName = `${p.name} - ${code}`;
-      return [
-        slugify(fullName),
-        uid(), 
-        fullName,
-        p.category,
-        p.retailPrice,
-        'GST',
-        p.brandName || '',
-        p.supplierCode || '',
-        1, 
-        1, 
-        0, 0, 0, 0 
-      ];
+      const fullName = `${p.name} - ${genCode()}`;
+      return [slugify(fullName), uid(), fullName, p.category, p.retailPrice, 'GST', p.brandName || '', p.supplierCode || '', 1, 1, p.stock.ht, p.stock.pf, p.stock.ss, p.stock.sw];
     });
 
     const csv = [headers, ...rows].map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `IMAGINE-IMPORT-${Date.now()}.csv`; a.click();
-    showToast("EXPORTED TO DOWNLOADS");
+    a.href = url; a.download = `IMAGINE-EXPORT-${Date.now()}.csv`; a.click();
   }
 
-  function clearAll() { if(confirm("CLEAR ALL ENTRIES?")) { products = []; renderList(); document.getElementById('counter').innerHTML = "0 PRODUCTS"; } }
-
+  function clearAll() { if(confirm("CLEAR ALL?")) { products = []; renderList(); document.getElementById('counter').innerHTML = "0 PRODUCTS"; } }
   addProduct();
 </script>
 </body>

@@ -186,7 +186,7 @@
   function updateStock(id, loc, val) { products.find(x=>x._id===id).stock[loc] = parseInt(val) || 0; }
   function closeDrawer() { document.getElementById('drawer').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); renderList(); }
 
- async function startDirectSync() {
+async function startDirectSync() {
     const token = document.getElementById('api_token').value.trim();
     const domain = document.getElementById('api_domain').value.trim();
     if(!token || !domain) { alert("Please ensure Token and Domain are filled."); return; }
@@ -197,11 +197,11 @@
 
     for (let p of products) {
         try {
-            // Generates a random 8-digit SKU if the field is empty
+            // Generate 8-digit SKU if the field is empty
             const autoSku = Math.floor(10000000 + Math.random() * 90000000).toString();
             const finalSku = p.sku.trim() || autoSku;
             
-            // Replaced # with - in the name suffix
+            // Product Name suffix using "-"
             const finalName = `${p.name} - ${Math.floor(1000 + Math.random() * 9000)}`;
             
             const productUrl = `${proxy}https://${domain}.retail.lightspeed.app/api/2.0/products`;
@@ -220,14 +220,13 @@
                     retail_price: parseFloat(p.retailPrice) || 0,
                     type: p.category, 
                     brand_name: p.brand,
-                    track_inventory: true // Enables inventory tracking automatically
+                    track_inventory: 1 // Changed from true to 1 for system compatibility
                 })
             });
 
             if (!res.ok) throw new Error(`Lightspeed Error: ${res.status}`);
             const data = await res.json();
             
-            // Handle both single object and array responses from X-Series API
             const product_id = data.data?.id || (Array.isArray(data.data) ? data.data[0]?.id : null);
 
             if (product_id) {
@@ -248,13 +247,13 @@
             }
         } catch (err) { 
           console.error(err);
-          alert(`Sync Failed for ${p.name || 'Product'}. Check console for details.`);
+          alert(`Sync Failed for ${p.name || 'Product'}.`);
           break;
         }
     }
     
     document.getElementById('sync_btn').innerText = "🚀 SYNC COMPLETE";
-    showToast("Products synced and inventory tracking enabled.");
+    showToast("Sync Successful (Inventory Tracking: 1)");
     
     setTimeout(() => { 
         document.getElementById('sync_btn').innerText = "🚀 SYNC TO LIGHTSPEED";

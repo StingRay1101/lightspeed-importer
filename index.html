@@ -44,13 +44,11 @@
   .card-body { display: none; padding: 20px; border-top: 1px solid #eee; background: #fff; }
   .card-body.open { display: block; }
 
-  /* Drawer / Slider CSS */
   .drawer { position: fixed; top: 0; right: -450px; width: 380px; height: 100%; background: #fff; border-left: 2px solid #000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); z-index: 2000; padding: 40px 30px; }
   .drawer.active { right: 0; }
   .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: none; z-index: 1999; backdrop-filter: blur(2px); }
   .drawer-overlay.active { display: block; }
   .drawer h3 { font-family: 'Syne'; text-transform: uppercase; margin-bottom: 10px; font-size: 18px; border-bottom: 2px solid #000; padding-bottom: 10px; }
-  .drawer p { font-size: 11px; margin-bottom: 30px; color: #666; }
   
   .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
   .field-full { grid-column: 1 / -1; }
@@ -71,7 +69,7 @@
 <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <h3 id="drawer-title">Inventory</h3>
-  <p id="drawer-subtitle">Allocate stock across physical locations.</p>
+  <p style="font-size: 11px; margin-bottom: 30px; color: #666;">Allocate stock across physical locations.</p>
   <div id="drawer-content"></div>
   <button class="btn-accent" style="width:100%; margin-top:30px;" onclick="closeDrawer()">CONFIRM & CLOSE</button>
 </div>
@@ -80,7 +78,7 @@
   <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="if-logo">
   <div style="text-align: right">
     <p style="font-weight: 800; font-size: 12px; letter-spacing: 2px;">PRODUCT IMPORTER</p>
-    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.8</p>
+    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.9</p>
   </div>
 </header>
 
@@ -118,6 +116,7 @@
       open: true,
       name: '',
       category: data ? data.category : '',
+      supplyPrice: data ? data.supplyPrice : '',
       retailPrice: data ? data.retailPrice : '',
       brandName: data ? data.brandName : '',
       supplierCode: data ? data.supplierCode : '',
@@ -152,7 +151,6 @@
     const p = products.find(x => x._id === id);
     if(p) {
       p.stock[loc] = parseInt(val) || 0;
-      // Update badge in real-time
       const total = Object.values(p.stock).reduce((a, b) => a + b, 0);
       const badge = document.querySelector(`[data-pid="${id}"] .stock-badge`);
       if(badge) badge.innerText = total;
@@ -161,14 +159,7 @@
 
   function updateField(id, field, value) {
     const p = products.find(p => p._id === id);
-    if (p) {
-      p[field] = value;
-      const card = document.querySelector(`[data-pid="${id}"]`);
-      if (card) {
-        card.querySelector('.card-preview').textContent = p.name || 'UNTITLED PRODUCT';
-        card.querySelector('.card-preview').classList.toggle('empty', !p.name);
-      }
-    }
+    if (p) p[field] = value;
   }
 
   function duplicateProduct(id) {
@@ -220,14 +211,16 @@
         </div>
         <div class="card-body ${p.open ? 'open' : ''}">
           <div class="fields-grid">
-            <div class="field field-full">
-              <label>Product Name *</label>
-              <input type="text" class="name-input" value="${p.name}" oninput="updateField(${p._id},'name',this.value)">
+            <div class="field field-full"><label>Product Name *</label>
+              <input type="text" class="name-input" value="${p.name}" oninput="updateField(${p._id},'name',this.value); this.parentElement.parentElement.parentElement.previousElementSibling.querySelector('.card-preview').textContent = this.value || 'UNTITLED PRODUCT';">
             </div>
             <div class="field"><label>Category *</label>
               <select onchange="updateField(${p._id},'category',this.value)">
                 ${CATEGORIES.map(c => `<option value="${c}" ${p.category === c ? 'selected' : ''}>${c || '-- SELECT --'}</option>`).join('')}
               </select>
+            </div>
+            <div class="field"><label>Supply Price</label>
+              <input type="number" step="0.01" value="${p.supplyPrice}" oninput="updateField(${p._id},'supplyPrice',this.value)">
             </div>
             <div class="field"><label>Retail Price *</label>
               <input type="number" step="0.01" value="${p.retailPrice}" oninput="updateField(${p._id},'retailPrice',this.value)">
@@ -258,10 +251,10 @@
       return;
     }
 
-    const headers = ['handle','sku','name','product_category','retail_price','tax_name','brand_name','supplier_code','active','track_inventory','inventory_Harbour_Town','inventory_Pacific_Fair','inventory_Southport_Showroom','inventory_Southport_Warehouse'];
+    const headers = ['handle','sku','name','product_category','supply_price','retail_price','tax_name','brand_name','supplier_code','active','track_inventory','inventory_Harbour_Town','inventory_Pacific_Fair','inventory_Southport_Showroom','inventory_Southport_Warehouse'];
     const rows = products.map(p => {
       const fullName = `${p.name} - ${genCode()}`;
-      return [slugify(fullName), uid(), fullName, p.category, p.retailPrice, 'GST', p.brandName || '', p.supplierCode || '', 1, 1, p.stock.ht, p.stock.pf, p.stock.ss, p.stock.sw];
+      return [slugify(fullName), uid(), fullName, p.category, p.supplyPrice || 0, p.retailPrice, 'GST', p.brandName || '', p.supplierCode || '', 1, 1, p.stock.ht, p.stock.pf, p.stock.ss, p.stock.sw];
     });
 
     const csv = [headers, ...rows].map(row => row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');

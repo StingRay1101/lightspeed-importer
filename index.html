@@ -115,7 +115,7 @@
   <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="if-logo">
   <div style="text-align: right">
     <p style="font-weight: 800; font-size: 12px; letter-spacing: 2px;">PRODUCT IMPORTER</p>
-    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.5</p>
+    <p style="font-size: 10px; color: #666;">LIGHTSPEED V1.6</p>
   </div>
 </header>
 
@@ -140,10 +140,20 @@
   let nextId = 1;
 
   const CATEGORIES = ['', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt', 'Sample Jacket', 'Sample Knit', 'Jewellery', 'Accessories', 'Homewares', 'Belts', 'Bags', 'Scarves'];
-  const BRANDS = ['', 'Imagine Fashion', 'Summer 24-25', 'Winter 2025', 'Winter 2026'];
+  
+  const BRANDS = [
+    '', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display', 
+    'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion', 
+    'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery', 
+    'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22', 
+    'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26', 
+    'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021', 
+    'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 
+    'Winter 2026', 'Wrapped Gift Cards'
+  ];
 
   function uid() { return Math.random().toString(36).slice(2, 10).toUpperCase(); }
-  function genCode() { return Math.floor(Math.random() * 900) + 100; } // Generates 3-digit code
+  function genCode() { return Math.floor(Math.random() * 900) + 100; }
   function slugify(str) { return (str || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'product'; }
   function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
 
@@ -270,8 +280,8 @@
         'GST',
         p.brandName || '',
         p.supplierCode || '',
-        1, // Active
-        1, // Track Inventory
+        1, 
+        1, 
         0, 0, 0, 0 
       ];
     });

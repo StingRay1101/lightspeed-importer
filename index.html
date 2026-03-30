@@ -799,15 +799,16 @@
           throw new Error(`No product ID found in Lightspeed response.\n\nResponse: ${JSON.stringify(data).slice(0, 300)}`);
         }
 
-        // Step 2: PATCH the product to enable inventory tracking
-        await fetch(`${proxy}https://${domain}.retail.lightspeed.app/api/2.0/products/${product_id}`, {
+        // Step 2: Enable inventory tracking via v0.9 API (v2.0 does not support PUT on products)
+        const putRes = await fetch(`${proxy}https://${domain}.retail.lightspeed.app/api/0.9/Product/${product_id}`, {
           method: 'PUT',
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ track_inventory: true })
+          body: JSON.stringify({ trackInventory: true })
         });
+        console.log('Track inventory PUT status:', putRes.status);
 
         const hasStock = Object.values(p.stock).some(v => v > 0);
         if (hasStock) {

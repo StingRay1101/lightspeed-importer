@@ -27,20 +27,18 @@ jobs:
             CAT=$(echo $item | jq -r .category)
             BRAND=$(echo $item | jq -r .brand)
             
-            # Stock Levels
             STOCK_HT=$(echo $item | jq -r '.stock.ht // 0')
             STOCK_PF=$(echo $item | jq -r '.stock.pf // 0')
             STOCK_SS=$(echo $item | jq -r '.stock.ss // 0')
             STOCK_SW=$(echo $item | jq -r '.stock.sw // 0')
 
-            # SKU processing (Strip spaces for X-Series)
             RAW_SKU=$(echo $item | jq -r .supplierCode)
             SKU=$(echo $RAW_SKU | sed 's/ /-/g')
             if [ "$SKU" == "null" ] || [ "$SKU" == "" ]; then
               SKU="IF-$(date +%s%N | cut -b10-15)"
             fi
 
-            echo "Syncing: $NAME (SKU: $SKU) | Brand: $BRAND"
+            echo "Syncing: $NAME (SKU: $SKU)"
 
             # STEP 1: Create Product
             RESPONSE=$(curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/products" \
@@ -55,12 +53,12 @@ jobs:
                 \"brand_name\": \"$BRAND\"
               }")
             
-            PRODUCT_ID=$(echo $RESPONSE | jq -r '.data.id')
+            # IMPROVED ID CAPTURE: Handles both object and array responses
+            PRODUCT_ID=$(echo $RESPONSE | jq -r '.data.id // .data[0].id // empty')
 
-            if [ "$PRODUCT_ID" != "null" ]; then
-              echo "Product Created. Updating Inventory for $PRODUCT_ID..."
+            if [ -n "$PRODUCT_ID" ] && [ "$PRODUCT_ID" != "null" ]; then
+              echo "Success! ID: $PRODUCT_ID. Updating Inventory..."
               
-              # STEP 2: Set Inventory (This also turns on 'Track Inventory')
               curl -s -X POST "https://$DOMAIN.retail.lightspeed.app/api/2.0/inventory" \
                 -H "Authorization: Bearer $TOKEN" \
                 -H "Content-Type: application/json" \
@@ -71,6 +69,7 @@ jobs:
                   {\"product_id\": \"$PRODUCT_ID\", \"outlet_id\": \"$SW_ID\", \"count\": $STOCK_SW}
                 ]"
             else
-              echo "Error creating $NAME: $RESPONSE"
+              echo "ERROR: Could not get Product ID. API Response was: $RESPONSE"
+              exit 1
             fi
           done

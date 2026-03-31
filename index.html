@@ -451,10 +451,6 @@
       <label>Portal Password <span class="required">*</span></label>
       <input type="password" id="portal_password" oninput="saveConfig()" placeholder="Enter portal password">
     </div>
-    <div class="field">
-      <label>Tax Name</label>
-      <input type="text" id="default_tax" value="GST" placeholder="GST">
-    </div>
     <div class="field" style="justify-content:flex-end; padding-bottom:2px;">
       <div><span class="status-dot"></span><span class="status-text">READY</span></div>
     </div>
@@ -752,7 +748,7 @@
     btn.disabled = true;
     btn.textContent = 'SYNCING...';
 
-    const tax = document.getElementById('default_tax').value || 'GST';
+    const tax = 'GST';
     let synced = 0;
 
     async function workerCall(body) {

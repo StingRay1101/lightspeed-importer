@@ -416,6 +416,97 @@
 
   #toast.show { opacity: 1; transform: translateY(0); }
 
+  /* Login screen */
+  .login-screen {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .login-screen.hidden { display: none; }
+
+  .login-box {
+    text-align: center;
+    width: 320px;
+  }
+
+  .login-box img {
+    height: 52px;
+    width: auto;
+    margin-bottom: 32px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    filter: invert(1);
+  }
+
+  .login-box h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+
+  .login-box p {
+    font-size: 11px;
+    color: rgba(0,0,0,0.4);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+    margin-bottom: 24px;
+  }
+
+  .login-box input {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 4px;
+    color: #1a1a1a;
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    padding: 12px 16px;
+    width: 100%;
+    outline: none;
+    text-align: center;
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .login-box input:focus {
+    border-color: rgba(0,0,0,0.4);
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+  }
+
+  .login-box button {
+    width: 100%;
+    background: #1a1a1a;
+    color: #ffffff;
+    border: none;
+    padding: 13px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .login-box button:hover { background: #333; }
+
+  .login-error {
+    font-size: 11px;
+    color: #c0392b;
+    font-family: 'DM Mono', monospace;
+    margin-top: 10px;
+    min-height: 16px;
+    letter-spacing: 0.04em;
+  }
+
   /* Shopify reminder modal */
   .modal-overlay {
     position: fixed; top: 0; left: 0;
@@ -509,6 +600,19 @@
 </head>
 <body>
 
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion">
+    <h2>Product Importer</h2>
+    <p>Enter your portal password to continue</p>
+    <input type="password" id="login-password" placeholder="••••••" onkeydown="if(event.key==='Enter') attemptLogin()">
+    <button id="login-btn" onclick="attemptLogin()">ENTER</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<div id="main-content" style="display:none;">
+
 <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
 
 <div class="drawer" id="drawer">
@@ -561,6 +665,8 @@
 
 </div>
 
+</div><!-- end main-content -->
+
 <!-- Shopify reminder modal -->
 <div class="modal-overlay" id="shopify-modal">
   <div class="modal-box">
@@ -605,9 +711,109 @@
   // ---- Worker URL - paste your Cloudflare Worker URL here ----
   const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
 
+  // ---- Login ----
+  const MAX_ATTEMPTS = 5;
+  const LOCKOUT_DURATION = 30 * 60 * 1000; // 30 minutes
+
+  function checkLockout() {
+    const lockoutUntil = parseInt(localStorage.getItem('lockout_until') || '0');
+    if (Date.now() < lockoutUntil) {
+      const mins = Math.ceil((lockoutUntil - Date.now()) / 60000);
+      return `Too many failed attempts. Try again in ${mins} minute${mins !== 1 ? 's' : ''}.`;
+    }
+    return null;
+  }
+
+  function recordFailedAttempt() {
+    const attempts = parseInt(localStorage.getItem('failed_attempts') || '0') + 1;
+    localStorage.setItem('failed_attempts', attempts);
+    if (attempts >= MAX_ATTEMPTS) {
+      localStorage.setItem('lockout_until', Date.now() + LOCKOUT_DURATION);
+      localStorage.setItem('failed_attempts', '0');
+      return true; // locked out
+    }
+    return false;
+  }
+
+  function attemptLogin() {
+    const entered = document.getElementById('login-password').value.trim();
+    if (!entered) return;
+
+    // Check lockout first
+    const lockoutMsg = checkLockout();
+    if (lockoutMsg) {
+      document.getElementById('login-error').textContent = lockoutMsg;
+      document.getElementById('login-password').disabled = true;
+      document.getElementById('login-btn').disabled = true;
+      return;
+    }
+
+    // Verify against the worker
+    fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Portal-Password': entered },
+      body: JSON.stringify({ action: 'ping' })
+    }).then(res => {
+      if (res.status === 401) {
+        const lockedOut = recordFailedAttempt();
+        const attempts = parseInt(localStorage.getItem('failed_attempts') || '0');
+        const remaining = MAX_ATTEMPTS - attempts;
+        if (lockedOut) {
+          document.getElementById('login-error').textContent = 'Too many failed attempts. This device is locked out for 30 minutes.';
+          document.getElementById('login-password').disabled = true;
+          document.getElementById('login-btn').disabled = true;
+        } else {
+          document.getElementById('login-error').textContent = `Incorrect password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`;
+        }
+        document.getElementById('login-password').value = '';
+        document.getElementById('login-password').focus();
+      } else {
+        // Success — clear failed attempts and unlock
+        localStorage.removeItem('failed_attempts');
+        localStorage.removeItem('lockout_until');
+        localStorage.setItem('portal_password', entered);
+        document.getElementById('portal_password').value = entered;
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('main-content').style.display = 'block';
+        document.getElementById('login-error').textContent = '';
+      }
+    }).catch(() => {
+      document.getElementById('login-error').textContent = 'Connection error. Please try again.';
+    });
+  }
+
   // ---- Init ----
   window.onload = () => {
-    document.getElementById('portal_password').value = localStorage.getItem('portal_password') || '';
+    // Check if device is locked out
+    const lockoutMsg = checkLockout();
+    if (lockoutMsg) {
+      document.getElementById('login-error').textContent = lockoutMsg;
+      document.getElementById('login-password').disabled = true;
+      document.getElementById('login-btn').disabled = true;
+    }
+
+    const saved = localStorage.getItem('portal_password');
+
+    // If we have a saved password, verify it's still valid then unlock
+    if (saved) {
+      document.getElementById('portal_password').value = saved;
+      fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Portal-Password': saved },
+        body: JSON.stringify({ action: 'ping' })
+      }).then(res => {
+        if (res.status !== 401) {
+          document.getElementById('login-screen').classList.add('hidden');
+          document.getElementById('main-content').style.display = 'block';
+        } else {
+          localStorage.removeItem('portal_password');
+        }
+      }).catch(() => {
+        // If offline just let them through if password was saved
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('main-content').style.display = 'block';
+      });
+    }
 
     CATEGORIES.filter(c => c).forEach(cat => {
       const btn = document.createElement('button');

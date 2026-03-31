@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<link rel="icon" type="image/png" href="Retina Favicon Grey.png">
 <title>Imagine Fashion | Lightspeed Importer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -523,8 +523,9 @@
     CATEGORIES.filter(c => c).forEach(cat => {
       const btn = document.createElement('button');
       btn.className = 'btn-temp';
-      btn.textContent = '+ ' + cat.replace('Sample ', '');
-      btn.onclick = () => addProduct(cat);
+      const label = cat.replace('Sample ', '');
+      btn.textContent = '+ ' + label;
+      btn.onclick = () => addProduct(cat, label + ' Sample');
       document.getElementById('templates').appendChild(btn);
     });
 
@@ -532,8 +533,7 @@
   };
 
   function saveConfig() {
-    localStorage.setItem('portal_password', document.getElementById('portal_password').value);
-  }
+    localStorage.setItem('portal_password', document.getElementById('portal_password').value);  }
 
   // ---- Helpers ----
   function uid() {
@@ -558,14 +558,29 @@
   }
 
   // ---- Product management ----
-  function addProduct(cat) {
+  function addProduct(cat, name) {
     if (cat === undefined) cat = '';
+
+    // If there's exactly one product and it's completely empty, fill it instead of adding a new one
+    if (
+      products.length === 1 &&
+      !products[0].name &&
+      !products[0].category &&
+      !products[0].retailPrice &&
+      (cat || name)
+    ) {
+      products[0].name = name || '';
+      products[0].category = cat;
+      renderList();
+      return;
+    }
+
     products.push({
       _id: nextId++,
       open: true,
-      name: '',
+      name: name || '',
       category: cat,
-      brandName: 'Imagine Fashion',
+      brandName: '',
       retailPrice: '',
       supplyPrice: '',
       supplierName: '',
@@ -665,8 +680,8 @@
           <div class="card-preview${isEmpty ? ' empty' : ''}">${esc(displayName)}</div>
           <div class="card-actions">
             <div class="card-price-badge">${priceLabel}</div>
-            <button class="btn-card" onclick="event.stopPropagation(); openDrawer(${p._id})">STOCK [${total}]</button>
-            <button class="btn-card" onclick="event.stopPropagation(); duplicate(${p._id})">DUP</button>
+            <button class="btn-card" onclick="event.stopPropagation(); openDrawer(${p._id})" style="${total > 0 ? 'border-color:rgba(46,204,113,0.6);color:#27ae60;background:rgba(46,204,113,0.08);' : 'border-color:rgba(200,0,0,0.3);color:#c0392b;background:rgba(200,0,0,0.06);'}">STOCK [${total}]</button>
+            <button class="btn-card" onclick="event.stopPropagation(); duplicate(${p._id})">DUPLICATE</button>
             <button class="btn-card danger" onclick="event.stopPropagation(); removeProduct(${p._id})">&#x2715;</button>
           </div>
           <div class="card-toggle${p.open ? ' open' : ''}">&#x25BE;</div>
@@ -685,7 +700,7 @@
               </select>
             </div>
             <div class="field">
-              <label>Brand <span class="optional">(optional)</span></label>
+              <label>Brand <span class="required">*</span></label>
               <select onchange="updateField(${p._id},'brandName',this.value)">
                 ${BRANDS.map(b => `<option value="${b}"${p.brandName === b ? ' selected' : ''}>${b || '-- Select brand --'}</option>`).join('')}
               </select>
@@ -727,7 +742,7 @@
       return;
     }
 
-    const invalid = products.filter(p => !p.name || !p.retailPrice || !p.category);
+    const invalid = products.filter(p => !p.name || !p.retailPrice || !p.category || !p.brandName);
     if (invalid.length > 0) {
       showToast(`${invalid.length} product(s) missing required fields.`);
       return;

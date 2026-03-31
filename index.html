@@ -416,6 +416,88 @@
 
   #toast.show { opacity: 1; transform: translateY(0); }
 
+  /* Shopify reminder modal */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 4000;
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal-box {
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 40px 36px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  }
+
+  .modal-logo {
+    height: 36px;
+    width: auto;
+    margin-bottom: 20px;
+    filter: invert(1);
+  }
+
+  .modal-box h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+  }
+
+  .modal-box p {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 24px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .modal-box p strong { color: #1a1a1a; }
+
+  .modal-btn {
+    display: block;
+    background: #1a1a1a;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 13px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    transition: background 0.15s;
+  }
+
+  .modal-btn:hover { background: #333; }
+
+  .modal-close {
+    background: none;
+    border: 1px solid rgba(0,0,0,0.15);
+    color: rgba(0,0,0,0.45);
+    padding: 11px 20px;
+    width: 100%;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .modal-close:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
+
   @media (max-width: 600px) {
     .fields-grid { grid-template-columns: 1fr; }
     .config-panel { grid-template-columns: 1fr; }
@@ -477,6 +559,17 @@
     </div>
   </div>
 
+</div>
+
+<!-- Shopify reminder modal -->
+<div class="modal-overlay" id="shopify-modal">
+  <div class="modal-box">
+    <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="modal-logo">
+    <h2>Don't forget Shopify!</h2>
+    <p>For each product you just created, open it in Lightspeed and click the <strong>"Sell on Shopify"</strong> button to publish it to your online store.</p>
+    <a href="https://imaginefashionretail.retail.lightspeed.app/products?active=true&direction=DESC&field=CREATED_AT" target="_blank" class="modal-btn">Open Recently Created Products</a>
+    <button class="modal-close" onclick="document.getElementById('shopify-modal').classList.remove('active')">I've done this</button>
+  </div>
 </div>
 
 <div id="toast"></div>
@@ -809,6 +902,9 @@
 
     btn.textContent = 'SYNC COMPLETE';
     showToast(`${synced} product${synced !== 1 ? 's' : ''} synced successfully!`);
+
+    // Show Shopify reminder popup
+    document.getElementById('shopify-modal').classList.add('active');
 
     setTimeout(() => {
       btn.textContent = 'SYNC PRODUCTS';

@@ -781,7 +781,6 @@
         localStorage.removeItem('failed_attempts');
         localStorage.removeItem('lockout_until');
         localStorage.setItem('portal_password', entered);
-        document.getElementById('portal_password').value = entered;
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('main-content').style.display = 'block';
         document.getElementById('login-error').textContent = '';

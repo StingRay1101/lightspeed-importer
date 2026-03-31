@@ -805,7 +805,6 @@
 
     // If we have a saved password, verify it's still valid then unlock
     if (saved) {
-      document.getElementById('portal_password').value = saved;
       fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Portal-Password': saved },

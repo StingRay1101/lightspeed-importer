@@ -786,8 +786,9 @@
         document.getElementById('main-content').style.display = 'block';
         document.getElementById('login-error').textContent = '';
       }
-    }).catch(() => {
-      document.getElementById('login-error').textContent = 'Connection error. Please try again.';
+    }).catch((err) => {
+      console.error('Login error:', err);
+      document.getElementById('login-error').textContent = 'Could not reach server. Check your internet connection.';
     });
   }
 

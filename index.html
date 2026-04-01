@@ -633,6 +633,8 @@ const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
 let products = [];
 let nextId = 1;
 let LIVE_PRODUCT_CATEGORIES = [];
+let CATEGORIES_LOADED = false;
+let CATEGORIES_ERROR = '';
 let _stockModalId = null;
 
 const MAX_ATTEMPTS = 5;
@@ -687,9 +689,10 @@ function blankStock() {
 }
 
 function categorySelectPlaceholder() {
-  return LIVE_PRODUCT_CATEGORIES.length
-    ? '-- Select category --'
-    : '-- Loading categories from Lightspeed --';
+  if (LIVE_PRODUCT_CATEGORIES.length) return '-- Select category --';
+  if (CATEGORIES_ERROR) return '-- Could not load categories --';
+  if (CATEGORIES_LOADED) return '-- No categories found in Lightspeed --';
+  return '-- Loading categories from Lightspeed --';
 }
 
 function getLiveCategoryValues() {
@@ -720,6 +723,8 @@ function categoryOpts(current) {
 
 async function loadProductCategories(password = localStorage.getItem('portal_password') || '') {
   if (!password) return;
+  CATEGORIES_ERROR = '';
+  CATEGORIES_LOADED = false;
 
   const res = await fetch(WORKER_URL, {
     method: 'POST',
@@ -736,10 +741,16 @@ async function loadProductCategories(password = localStorage.getItem('portal_pas
 
   const data = await res.json();
   if (!res.ok) {
+    CATEGORIES_ERROR = data?.error || 'Could not load product categories.';
+    CATEGORIES_LOADED = true;
+    LIVE_PRODUCT_CATEGORIES = [];
+    renderList();
     throw new Error(data?.error || 'Could not load product categories.');
   }
 
   LIVE_PRODUCT_CATEGORIES = Array.isArray(data.categories) ? data.categories : [];
+  CATEGORIES_LOADED = true;
+  CATEGORIES_ERROR = '';
   renderList();
 }
 
@@ -838,6 +849,8 @@ window.onload = async () => {
 function logout() {
   localStorage.removeItem('portal_password');
   LIVE_PRODUCT_CATEGORIES = [];
+  CATEGORIES_LOADED = false;
+  CATEGORIES_ERROR = '';
   document.getElementById('main-content').style.display = 'none';
   document.getElementById('login-screen').classList.remove('hidden');
   document.getElementById('login-password').value = '';
@@ -1304,8 +1317,12 @@ function renderList() {
 async function startSync() {
   const password = localStorage.getItem('portal_password') || '';
   if (!password) { alert('Please log in first.'); return; }
-  if (!LIVE_PRODUCT_CATEGORIES.length) {
+  if (!CATEGORIES_LOADED) {
     showToast('Product categories have not loaded yet. Please wait a moment and try again.');
+    return;
+  }
+  if (!LIVE_PRODUCT_CATEGORIES.length) {
+    showToast(CATEGORIES_ERROR || 'No product categories were returned from Lightspeed.');
     return;
   }
 

@@ -447,8 +447,14 @@
     display: flex; align-items: center; justify-content: center; z-index: 9999;
   }
   .login-screen.hidden { display: none; }
-  .login-box { text-align: center; width: 320px; }
-  .login-box img { height: 52px; width: auto; margin: 0 auto 32px; display: block; filter: invert(1); }
+  .login-box {
+    text-align: center;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .login-box img { height: 52px; width: auto; margin: 0 0 32px; display: block; filter: invert(1); align-self: center; }
   .login-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
   .login-box p { font-size: 11px; color: rgba(0,0,0,0.4); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; margin-bottom: 24px; }
   .login-box input {

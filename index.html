@@ -558,32 +558,6 @@
 <div id="toast"></div>
 
 <script>
-const BRANDS = [
-  '', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display',
-  'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion',
-  'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery',
-  'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22',
-  'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26',
-  'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021',
-  'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 'Winter 2026',
-  'Wrapped Gift Cards'
-];
-
-const SUPPLIERS = [
-  '', '3D Denim', 'Alise SRL', 'Alyssa', 'Aster', 'Cos Moda',
-  'Cotton SRL', 'Devon Style SRL', 'Dory SRLS', 'Freight',
-  'G&K Group', 'GI Studio', 'Girasole S.R.L.', 'Good Friends',
-  'Hanun Creations', 'JT Moda', 'Kos Pure Linen SRL', 'Lamiar SRL',
-  'Last Lady', 'Lina', 'Luna', 'Lux Luna', 'M1', 'Melly & Co',
-  'MG Design', 'MIYA', 'Mooi', 'My Dress', 'Nan Yu Jewelry',
-  'Sexy Woman', 'Shanghai Passion',
-  'Shenzhen Rymanc Industrial Co Ltd', 'Soonie',
-  'Stella Milani Fashion', 'Vanis SRL', 'Weiteng', 'WI & CO',
-  'Yiwu Anyi Jewelery Factory', 'Yiwu Mica Jewellery',
-  'Yiwu Yoby Trading Co. LTD', 'YIWU YONGER BELT CO. LTD',
-  'Zelante', 'ZERO&ELAINE'
-];
-
 const SAMPLE_QUICK = [
   { label: 'Top', name: 'Top Sample' },
   { label: 'Pant', name: 'Pant Sample' },
@@ -633,8 +607,10 @@ const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
 let products = [];
 let nextId = 1;
 let LIVE_PRODUCT_CATEGORIES = [];
-let CATEGORIES_LOADED = false;
-let CATEGORIES_ERROR = '';
+let LIVE_BRANDS = [];
+let LIVE_SUPPLIERS = [];
+let REFERENCE_DATA_LOADED = false;
+let REFERENCE_DATA_ERROR = '';
 let _stockModalId = null;
 
 const MAX_ATTEMPTS = 5;
@@ -690,9 +666,23 @@ function blankStock() {
 
 function categorySelectPlaceholder() {
   if (LIVE_PRODUCT_CATEGORIES.length) return '-- Select category --';
-  if (CATEGORIES_ERROR) return '-- Could not load categories --';
-  if (CATEGORIES_LOADED) return '-- No categories found in Lightspeed --';
+  if (REFERENCE_DATA_ERROR) return '-- Could not load categories --';
+  if (REFERENCE_DATA_LOADED) return '-- No categories found in Lightspeed --';
   return '-- Loading categories from Lightspeed --';
+}
+
+function brandSelectPlaceholder() {
+  if (LIVE_BRANDS.length) return '-- Select brand --';
+  if (REFERENCE_DATA_ERROR) return '-- Could not load brands --';
+  if (REFERENCE_DATA_LOADED) return '-- No brands found in Lightspeed --';
+  return '-- Loading brands from Lightspeed --';
+}
+
+function supplierSelectPlaceholder() {
+  if (LIVE_SUPPLIERS.length) return '-- Select supplier --';
+  if (REFERENCE_DATA_ERROR) return '-- Could not load suppliers --';
+  if (REFERENCE_DATA_LOADED) return '-- No suppliers found in Lightspeed --';
+  return '-- Loading suppliers from Lightspeed --';
 }
 
 function getLiveCategoryValues() {
@@ -721,10 +711,10 @@ function categoryOpts(current) {
   ).join('');
 }
 
-async function loadProductCategories(password = localStorage.getItem('portal_password') || '') {
+async function loadReferenceData(password = localStorage.getItem('portal_password') || '') {
   if (!password) return;
-  CATEGORIES_ERROR = '';
-  CATEGORIES_LOADED = false;
+  REFERENCE_DATA_ERROR = '';
+  REFERENCE_DATA_LOADED = false;
 
   const res = await fetch(WORKER_URL, {
     method: 'POST',
@@ -732,7 +722,7 @@ async function loadProductCategories(password = localStorage.getItem('portal_pas
       'Content-Type': 'application/json',
       'X-Portal-Password': password
     },
-    body: JSON.stringify({ action: 'get_product_categories' })
+    body: JSON.stringify({ action: 'get_reference_data' })
   });
 
   if (res.status === 401) {
@@ -741,16 +731,20 @@ async function loadProductCategories(password = localStorage.getItem('portal_pas
 
   const data = await res.json();
   if (!res.ok) {
-    CATEGORIES_ERROR = data?.error || 'Could not load product categories.';
-    CATEGORIES_LOADED = true;
+    REFERENCE_DATA_ERROR = data?.error || 'Could not load reference data.';
+    REFERENCE_DATA_LOADED = true;
     LIVE_PRODUCT_CATEGORIES = [];
+    LIVE_BRANDS = [];
+    LIVE_SUPPLIERS = [];
     renderList();
-    throw new Error(data?.error || 'Could not load product categories.');
+    throw new Error(data?.error || 'Could not load reference data.');
   }
 
   LIVE_PRODUCT_CATEGORIES = Array.isArray(data.categories) ? data.categories : [];
-  CATEGORIES_LOADED = true;
-  CATEGORIES_ERROR = '';
+  LIVE_BRANDS = Array.isArray(data.brands) ? data.brands : [];
+  LIVE_SUPPLIERS = Array.isArray(data.suppliers) ? data.suppliers : [];
+  REFERENCE_DATA_LOADED = true;
+  REFERENCE_DATA_ERROR = '';
   renderList();
 }
 
@@ -798,10 +792,10 @@ async function attemptLogin() {
     document.getElementById('main-content').style.display = 'block';
 
     try {
-      await loadProductCategories(entered);
+      await loadReferenceData(entered);
     } catch (err) {
       console.error(err);
-      showToast('Could not load live product categories from Lightspeed.');
+      showToast('Could not load brands, suppliers, and categories from Lightspeed.');
     }
   } catch {
     document.getElementById('login-error').textContent = 'Could not reach server. Check your internet connection.';
@@ -829,10 +823,10 @@ window.onload = async () => {
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('main-content').style.display = 'block';
         try {
-          await loadProductCategories(saved);
+          await loadReferenceData(saved);
         } catch (err) {
           console.error(err);
-          showToast('Could not load live product categories from Lightspeed.');
+          showToast('Could not load brands, suppliers, and categories from Lightspeed.');
         }
       } else {
         localStorage.removeItem('portal_password');
@@ -849,8 +843,10 @@ window.onload = async () => {
 function logout() {
   localStorage.removeItem('portal_password');
   LIVE_PRODUCT_CATEGORIES = [];
-  CATEGORIES_LOADED = false;
-  CATEGORIES_ERROR = '';
+  LIVE_BRANDS = [];
+  LIVE_SUPPLIERS = [];
+  REFERENCE_DATA_LOADED = false;
+  REFERENCE_DATA_ERROR = '';
   document.getElementById('main-content').style.display = 'none';
   document.getElementById('login-screen').classList.remove('hidden');
   document.getElementById('login-password').value = '';
@@ -1119,14 +1115,18 @@ function closeStockModal() {
 }
 
 function brandOpts(current) {
-  return BRANDS.map(b =>
-    `<option value="${esc(b)}"${current === b ? ' selected' : ''}>${b || '-- Select brand --'}</option>`
+  const values = [''].concat(LIVE_BRANDS.map(b => b.name));
+  if (current && !values.includes(current)) values.push(current);
+  return values.map(b =>
+    `<option value="${esc(b)}"${current === b ? ' selected' : ''}>${b || brandSelectPlaceholder()}</option>`
   ).join('');
 }
 
 function supplierOpts(current) {
-  return SUPPLIERS.map(s =>
-    `<option value="${esc(s)}"${current === s ? ' selected' : ''}>${s || '-- Select supplier --'}</option>`
+  const values = [''].concat(LIVE_SUPPLIERS.map(s => s.name));
+  if (current && !values.includes(current)) values.push(current);
+  return values.map(s =>
+    `<option value="${esc(s)}"${current === s ? ' selected' : ''}>${s || supplierSelectPlaceholder()}</option>`
   ).join('');
 }
 
@@ -1317,12 +1317,12 @@ function renderList() {
 async function startSync() {
   const password = localStorage.getItem('portal_password') || '';
   if (!password) { alert('Please log in first.'); return; }
-  if (!CATEGORIES_LOADED) {
-    showToast('Product categories have not loaded yet. Please wait a moment and try again.');
+  if (!REFERENCE_DATA_LOADED) {
+    showToast('Brands, suppliers, and categories have not loaded yet. Please wait a moment and try again.');
     return;
   }
-  if (!LIVE_PRODUCT_CATEGORIES.length) {
-    showToast(CATEGORIES_ERROR || 'No product categories were returned from Lightspeed.');
+  if (!LIVE_PRODUCT_CATEGORIES.length || !LIVE_BRANDS.length) {
+    showToast(REFERENCE_DATA_ERROR || 'Reference data was not returned from Lightspeed.');
     return;
   }
 

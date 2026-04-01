@@ -38,13 +38,7 @@
 
   .if-logo { height: 52px; width: auto; display: block; }
 
-  .header-right p {
-    font-size: 11px;
-    color: #6b6259;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-align: right;
-  }
+  .header-right p { font-size: 11px; color: #6b6259; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
   .header-right p + p { margin-top: 3px; color: rgba(0,0,0,0.3); }
 
   .container { max-width: 860px; margin: 0 auto; }
@@ -73,27 +67,16 @@
 
   .card-num {
     font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    color: #fff;
-    background: #1a1a1a;
-    width: 28px; height: 28px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+    font-size: 11px; font-weight: 700; color: #fff;
+    background: #1a1a1a; width: 28px; height: 28px;
+    border-radius: 2px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
   }
 
   .card-type-badge {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    padding: 3px 8px;
-    border-radius: 2px;
-    text-transform: uppercase;
-    flex-shrink: 0;
-    white-space: nowrap;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.07em;
+    padding: 3px 8px; border-radius: 2px; text-transform: uppercase;
+    flex-shrink: 0; white-space: nowrap;
   }
   .badge-unset     { background: rgba(200,140,0,0.12); color: rgba(150,100,0,0.9); }
   .badge-sample    { background: rgba(0,0,0,0.08);     color: rgba(0,0,0,0.5); }
@@ -101,46 +84,20 @@
   .badge-stocked   { background: rgba(46,204,113,0.12); color: #1e9450; }
 
   .card-preview {
-    flex: 1;
-    font-size: 13px;
-    color: #1a1a1a;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    font-weight: 600;
-    min-width: 0;
+    flex: 1; font-size: 13px; color: #1a1a1a;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    text-transform: uppercase; font-weight: 600; min-width: 0;
   }
-  .card-preview.empty {
-    color: rgba(0,0,0,0.28);
-    font-style: italic;
-    font-weight: 400;
-    text-transform: none;
-  }
+  .card-preview.empty { color: rgba(0,0,0,0.28); font-style: italic; font-weight: 400; text-transform: none; }
 
   .card-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-
-  .card-price-badge {
-    font-size: 12px;
-    color: rgba(0,0,0,0.5);
-    font-weight: 500;
-    min-width: 50px;
-    text-align: right;
-  }
+  .card-price-badge { font-size: 12px; color: rgba(0,0,0,0.5); font-weight: 500; min-width: 50px; text-align: right; }
 
   .btn-card {
-    background: rgba(0,0,0,0.05);
-    border: 1px solid rgba(0,0,0,0.15);
-    color: #1a1a1a;
-    padding: 5px 10px;
-    font-size: 10px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
+    background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.15);
+    color: #1a1a1a; padding: 5px 10px; font-size: 10px; font-weight: 700;
+    font-family: 'DM Mono', monospace; cursor: pointer; border-radius: 2px;
+    transition: all 0.15s; letter-spacing: 0.05em; white-space: nowrap;
   }
   .btn-card:hover { background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.3); }
   .btn-card.danger:hover { background: rgba(200,0,0,0.08); border-color: rgba(200,0,0,0.3); color: #c00; }
@@ -149,12 +106,7 @@
   .card-toggle.open { transform: rotate(180deg); }
 
   /* ---- Card body ---- */
-  .card-body {
-    display: none;
-    padding: 0 18px 22px;
-    border-top: 1px solid var(--border);
-    animation: slideDown 0.15s ease;
-  }
+  .card-body { display: none; padding: 0 18px 22px; border-top: 1px solid var(--border); animation: slideDown 0.15s ease; }
   .card-body.open { display: block; }
 
   @keyframes slideDown {
@@ -164,337 +116,203 @@
 
   /* ---- Type selector ---- */
   .type-selector { padding: 18px 0 4px; }
-
-  .type-prompt {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(0,0,0,0.38);
-    margin-bottom: 10px;
-  }
-
+  .type-prompt { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.38); margin-bottom: 10px; }
   .type-buttons { display: flex; flex-direction: column; gap: 8px; }
 
   .btn-type {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.12);
-    border-radius: var(--radius);
-    padding: 14px 18px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #1a1a1a;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
+    background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: var(--radius);
+    padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 12px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #1a1a1a; cursor: pointer; transition: all 0.15s;
+    text-align: left; display: flex; align-items: center;
+    justify-content: space-between; width: 100%;
   }
   .btn-type:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-  .btn-type-sub {
-    font-size: 10px;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    opacity: 0.5;
-    text-transform: none;
-    margin-top: 2px;
-  }
-  .btn-type-left { display: flex; flex-direction: column; }
+  .btn-type-left { display: flex; flex-direction: column; gap: 3px; }
+  .btn-type-sub { font-size: 10px; font-weight: 400; letter-spacing: 0.04em; opacity: 0.5; text-transform: none; }
+  .btn-type:hover .btn-type-sub { opacity: 0.7; }
   .btn-type-arrow { font-size: 14px; opacity: 0.4; }
   .btn-type:hover .btn-type-arrow { opacity: 1; }
 
   /* ---- Change type link ---- */
-  .change-type-row { margin: 14px 0 16px; }
-
+  .change-type-row { margin: 14px 0 0; }
   .change-type-link {
-    font-size: 10px;
-    color: rgba(0,0,0,0.33);
-    cursor: pointer;
-    letter-spacing: 0.06em;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    background: none;
-    border: none;
-    font-family: 'DM Mono', monospace;
-    padding: 0;
-    transition: color 0.15s;
+    font-size: 10px; color: rgba(0,0,0,0.33); cursor: pointer;
+    letter-spacing: 0.06em; text-decoration: underline; text-underline-offset: 2px;
+    background: none; border: none; font-family: 'DM Mono', monospace;
+    padding: 0; transition: color 0.15s;
   }
   .change-type-link:hover { color: rgba(0,0,0,0.7); }
 
+  /* ---- Sold online toggle ---- */
+  .online-section {
+    margin: 14px 0 16px; padding: 14px 16px;
+    background: rgba(0,0,0,0.025); border: 1px solid rgba(0,0,0,0.08);
+    border-radius: var(--radius);
+  }
+  .online-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.45); display: block; margin-bottom: 10px; }
+  .online-btns { display: flex; gap: 8px; }
+  .btn-online {
+    flex: 1; background: #fff; border: 1px solid rgba(0,0,0,0.15);
+    border-radius: var(--radius); padding: 9px; font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: rgba(0,0,0,0.45); cursor: pointer;
+    transition: all 0.15s; text-align: center;
+  }
+  .btn-online:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
+  .btn-online.is-yes { background: #1a5e2a; color: #fff; border-color: #1a5e2a; }
+  .btn-online.is-no  { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .online-note { font-size: 10px; color: rgba(0,0,0,0.35); margin-top: 8px; letter-spacing: 0.02em; }
+
   /* ---- Quick-add row ---- */
-  .card-quick-wrap {
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 16px;
-  }
-  .card-quick-label {
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(0,0,0,0.35);
-    margin-bottom: 8px;
-  }
+  .card-quick-wrap { padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .card-quick-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(0,0,0,0.35); margin-bottom: 8px; }
   .card-quick-row { display: flex; flex-wrap: wrap; gap: 6px; }
 
   .btn-quick {
-    background: rgba(0,0,0,0.05);
-    border: 1px solid rgba(0,0,0,0.14);
-    color: #1a1a1a;
-    padding: 5px 12px;
-    font-size: 10px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: all 0.15s;
-    text-transform: uppercase;
+    background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.14);
+    color: #1a1a1a; padding: 5px 12px; font-size: 10px; font-weight: 700;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.05em; cursor: pointer;
+    border-radius: var(--radius); transition: all 0.15s; text-transform: uppercase;
   }
   .btn-quick:hover { background: rgba(0,0,0,0.12); border-color: rgba(0,0,0,0.3); }
 
   /* ---- Fields grid ---- */
   .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .field-full { grid-column: 1 / -1; }
-
   .field { display: flex; flex-direction: column; gap: 6px; }
 
-  label {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(0,0,0,0.55);
-    font-weight: 600;
-  }
+  label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.55); font-weight: 600; }
   label .optional { color: rgba(0,0,0,0.35); font-size: 9px; text-transform: none; letter-spacing: 0; font-weight: 400; }
   label .required { color: #1a1a1a; }
 
   input, select {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: var(--radius);
-    color: #1a1a1a;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    padding: 10px 12px;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    width: 100%;
-    outline: none;
+    background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: var(--radius);
+    color: #1a1a1a; font-family: 'DM Mono', monospace; font-size: 13px;
+    padding: 10px 12px; transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%; outline: none;
   }
   input:focus, select:focus { border-color: rgba(0,0,0,0.4); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
   select option { background: #fff; color: #1a1a1a; }
   input::placeholder { color: rgba(0,0,0,0.3); }
   input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
 
-  /* ---- Sizes section (stocked) ---- */
-  .sizes-section { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; }
-
-  .sizes-preset-label {
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(0,0,0,0.35);
-    margin-bottom: 2px;
-  }
-
+  /* ---- Sizes section ---- */
+  .sizes-block { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; margin-top: 2px; }
+  .sizes-block-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.55); font-weight: 600; }
+  .sizes-preset-hint { font-size: 9px; color: rgba(0,0,0,0.35); letter-spacing: 0.04em; }
   .sizes-presets { display: flex; flex-wrap: wrap; gap: 6px; }
 
   .btn-size-preset {
-    background: rgba(0,0,0,0.04);
-    border: 1px dashed rgba(0,0,0,0.2);
-    color: rgba(0,0,0,0.6);
-    padding: 5px 12px;
-    font-size: 10px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: all 0.15s;
-    text-transform: uppercase;
+    background: rgba(0,0,0,0.04); border: 1px dashed rgba(0,0,0,0.2);
+    color: rgba(0,0,0,0.6); padding: 5px 12px; font-size: 10px; font-weight: 700;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.05em; cursor: pointer;
+    border-radius: var(--radius); transition: all 0.15s; text-transform: uppercase;
   }
   .btn-size-preset:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; border-style: solid; }
 
   .size-chips-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    min-height: 44px;
-    padding: 8px;
-    background: rgba(0,0,0,0.02);
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: var(--radius);
-    align-items: flex-start;
-    align-content: flex-start;
+    display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px; padding: 8px;
+    background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.1);
+    border-radius: var(--radius); align-items: flex-start; align-content: flex-start;
   }
-
   .size-chip {
-    background: #1a1a1a;
-    color: #fff;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    padding: 5px 10px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
+    background: #1a1a1a; color: #fff; font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+    padding: 5px 10px; border-radius: 2px; display: flex; align-items: center; gap: 7px;
   }
   .size-chip-remove {
-    background: none;
-    border: none;
-    color: rgba(255,255,255,0.4);
-    cursor: pointer;
-    font-size: 12px;
-    padding: 0;
-    line-height: 1;
-    font-family: inherit;
-    transition: color 0.1s;
+    background: none; border: none; color: rgba(255,255,255,0.4);
+    cursor: pointer; font-size: 12px; padding: 0; line-height: 1;
+    font-family: inherit; transition: color 0.1s;
   }
   .size-chip-remove:hover { color: #ff8080; }
   .size-chips-empty { font-size: 11px; color: rgba(0,0,0,0.26); font-style: italic; align-self: center; }
 
   .size-manual-row { display: flex; gap: 8px; }
   .size-manual-row input { flex: 1; }
-
   .btn-size-add {
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    padding: 10px 18px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    border-radius: var(--radius);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s;
-    text-transform: uppercase;
+    background: #1a1a1a; color: #fff; border: none; padding: 10px 18px;
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; border-radius: var(--radius); cursor: pointer;
+    white-space: nowrap; transition: background 0.15s; text-transform: uppercase;
   }
   .btn-size-add:hover { background: #333; }
 
   /* ---- Stock drawer ---- */
-  .drawer-overlay {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.35);
-    display: none; z-index: 1999;
-  }
+  .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); display: none; z-index: 1999; }
   .drawer-overlay.active { display: block; }
 
   .drawer {
-    position: fixed; top: 0; right: -440px;
-    width: 380px; height: 100%;
-    background: #f0eeeb;
+    position: fixed; top: 0; right: -480px;
+    width: 420px; height: 100%; background: #f0eeeb;
     border-left: 1px solid rgba(0,0,0,0.1);
     transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
-    z-index: 2000;
-    padding: 36px 28px;
-    display: flex;
-    flex-direction: column;
+    z-index: 2000; padding: 36px 28px 28px;
+    display: flex; flex-direction: column;
   }
   .drawer.active { right: 0; }
 
   .drawer h3 {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: #1a1a1a;
-    letter-spacing: 0.04em;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding-bottom: 14px;
-    margin-bottom: 24px;
+    font-size: 22px; font-weight: 600; color: #1a1a1a;
+    letter-spacing: 0.04em; border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 14px; margin-bottom: 20px;
   }
 
-  .drawer-fields { display: flex; flex-direction: column; gap: 16px; flex: 1; }
+  .drawer-fields { display: flex; flex-direction: column; gap: 14px; flex: 1; overflow-y: auto; padding-right: 4px; }
+
+  .drawer-size-block { border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius); overflow: hidden; }
+  .drawer-size-header {
+    background: rgba(0,0,0,0.06); padding: 8px 14px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #1a1a1a;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .drawer-size-outlets { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
 
   .drawer-save {
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    padding: 14px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    margin-top: 28px;
-    transition: all 0.15s;
+    background: #1a1a1a; color: #fff; border: none; padding: 14px;
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; cursor: pointer; border-radius: var(--radius);
+    margin-top: 20px; transition: all 0.15s; flex-shrink: 0;
   }
   .drawer-save:hover { background: #333; }
 
   /* ---- Add button ---- */
   .add-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    background: rgba(0,0,0,0.03);
-    border: 1px dashed rgba(0,0,0,0.2);
-    border-radius: var(--radius);
-    padding: 14px 18px;
-    color: rgba(0,0,0,0.45);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-    letter-spacing: 0.06em;
-    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    background: rgba(0,0,0,0.03); border: 1px dashed rgba(0,0,0,0.2);
+    border-radius: var(--radius); padding: 14px 18px; color: rgba(0,0,0,0.45);
+    font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer;
+    transition: all 0.15s; letter-spacing: 0.06em; margin-bottom: 16px;
   }
   .add-btn:hover { border-color: rgba(0,0,0,0.4); color: #1a1a1a; background: rgba(0,0,0,0.07); }
 
   /* ---- Sync section ---- */
   .export-section {
-    background: #1a1a1a;
-    border: 1px solid #111;
-    border-radius: var(--radius);
-    padding: 22px;
-    margin-top: 8px;
+    background: #1a1a1a; border: 1px solid #111;
+    border-radius: var(--radius); padding: 22px; margin-top: 8px;
   }
   .export-section h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: 0.04em;
-    margin-bottom: 16px;
+    font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600;
+    color: #fff; letter-spacing: 0.04em; margin-bottom: 16px;
   }
   .export-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
   .btn-sync {
-    background: #fff;
-    color: #1a1a1a;
-    border: none;
-    padding: 12px 28px;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: all 0.15s;
+    background: #fff; color: #1a1a1a; border: none; padding: 12px 28px;
+    font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.1em; cursor: pointer; border-radius: var(--radius); transition: all 0.15s;
   }
   .btn-sync:hover { background: #f0f0f0; box-shadow: 0 2px 16px rgba(0,0,0,0.2); }
   .btn-sync:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 
   .btn-clear {
-    background: transparent;
-    border: 1px solid rgba(255,100,100,0.4);
-    color: rgba(255,150,150,0.9);
-    padding: 12px 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: all 0.15s;
+    background: transparent; border: 1px solid rgba(255,100,100,0.4);
+    color: rgba(255,150,150,0.9); padding: 12px 20px;
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.08em; cursor: pointer; border-radius: var(--radius); transition: all 0.15s;
   }
   .btn-clear:hover { border-color: #ff8080; color: #ffb0b0; background: rgba(255,80,80,0.1); }
 
@@ -504,187 +322,62 @@
   /* ---- Toast ---- */
   #toast {
     position: fixed; bottom: 28px; right: 28px;
-    background: #1a1a1a;
-    color: #fff;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 12px 22px;
-    border-radius: var(--radius);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.25s;
-    pointer-events: none;
-    z-index: 3000;
-    letter-spacing: 0.05em;
+    background: #1a1a1a; color: #fff;
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+    padding: 12px 22px; border-radius: var(--radius);
+    opacity: 0; transform: translateY(10px); transition: all 0.25s;
+    pointer-events: none; z-index: 3000; letter-spacing: 0.05em;
   }
   #toast.show { opacity: 1; transform: translateY(0); }
 
   /* ---- Login ---- */
   .logout-btn {
-    background: none;
-    border: 1px solid rgba(0,0,0,0.15);
-    color: rgba(0,0,0,0.4);
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    padding: 4px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-top: 6px;
-    transition: all 0.15s;
-    text-transform: uppercase;
+    background: none; border: 1px solid rgba(0,0,0,0.15); color: rgba(0,0,0,0.4);
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.08em; padding: 4px 10px; border-radius: 3px;
+    cursor: pointer; margin-top: 6px; transition: all 0.15s; text-transform: uppercase;
   }
   .logout-btn:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
 
   .login-screen {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: #fafafa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #fafafa; display: flex; align-items: center; justify-content: center; z-index: 9999;
   }
   .login-screen.hidden { display: none; }
-
   .login-box { text-align: center; width: 320px; }
-
-  .login-box img {
-    height: 52px; width: auto;
-    margin: 0 auto 32px;
-    display: block;
-    filter: invert(1);
-  }
-
-  .login-box h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 6px;
-  }
-
-  .login-box p {
-    font-size: 11px;
-    color: rgba(0,0,0,0.4);
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.06em;
-    margin-bottom: 24px;
-  }
-
+  .login-box img { height: 52px; width: auto; margin: 0 auto 32px; display: block; filter: invert(1); }
+  .login-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+  .login-box p { font-size: 11px; color: rgba(0,0,0,0.4); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; margin-bottom: 24px; }
   .login-box input {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 4px;
-    color: #1a1a1a;
-    font-family: 'DM Mono', monospace;
-    font-size: 16px;
-    padding: 12px 16px;
-    width: 100%;
-    outline: none;
-    text-align: center;
-    letter-spacing: 0.2em;
-    margin-bottom: 10px;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: 4px; color: #1a1a1a;
+    font-family: 'DM Mono', monospace; font-size: 16px; padding: 12px 16px;
+    width: 100%; outline: none; text-align: center; letter-spacing: 0.2em;
+    margin-bottom: 10px; transition: border-color 0.15s, box-shadow 0.15s;
   }
   .login-box input:focus { border-color: rgba(0,0,0,0.4); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
-
   .login-box button {
-    width: 100%;
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    padding: 13px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.15s;
+    width: 100%; background: #1a1a1a; color: #fff; border: none; padding: 13px;
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; border-radius: 4px; cursor: pointer; transition: background 0.15s;
   }
   .login-box button:hover { background: #333; }
-
-  .login-error {
-    font-size: 11px;
-    color: #c0392b;
-    font-family: 'DM Mono', monospace;
-    margin-top: 10px;
-    min-height: 16px;
-    letter-spacing: 0.04em;
-  }
+  .login-error { font-size: 11px; color: #c0392b; font-family: 'DM Mono', monospace; margin-top: 10px; min-height: 16px; letter-spacing: 0.04em; }
 
   /* ---- Shopify modal ---- */
   .modal-overlay {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.45);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 4000;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.45); display: none; align-items: center;
+    justify-content: center; z-index: 4000;
   }
   .modal-overlay.active { display: flex; }
-
-  .modal-box {
-    background: #fff;
-    border-radius: 6px;
-    padding: 40px 36px;
-    max-width: 440px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
-  }
+  .modal-box { background: #fff; border-radius: 6px; padding: 40px 36px; max-width: 440px; width: 90%; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
   .modal-logo { height: 36px; width: auto; margin-bottom: 20px; filter: invert(1); }
-
-  .modal-box h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 12px;
-  }
-  .modal-box p {
-    font-size: 12px;
-    color: #555;
-    line-height: 1.7;
-    margin-bottom: 24px;
-    font-family: 'DM Mono', monospace;
-  }
+  .modal-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #1a1a1a; margin-bottom: 12px; }
+  .modal-box p { font-size: 12px; color: #555; line-height: 1.7; margin-bottom: 24px; font-family: 'DM Mono', monospace; }
   .modal-box p strong { color: #1a1a1a; }
-
-  .modal-btn {
-    display: block;
-    background: #1a1a1a;
-    color: #fff;
-    text-decoration: none;
-    padding: 13px 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    transition: background 0.15s;
-  }
+  .modal-btn { display: block; background: #1a1a1a; color: #fff; text-decoration: none; padding: 13px 20px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; border-radius: 4px; margin-bottom: 10px; transition: background 0.15s; }
   .modal-btn:hover { background: #333; }
-
-  .modal-close {
-    background: none;
-    border: 1px solid rgba(0,0,0,0.15);
-    color: rgba(0,0,0,0.45);
-    padding: 11px 20px;
-    width: 100%;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
+  .modal-close { background: none; border: 1px solid rgba(0,0,0,0.15); color: rgba(0,0,0,0.45); padding: 11px 20px; width: 100%; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
   .modal-close:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
 
   @media (max-width: 600px) {
@@ -696,7 +389,7 @@
 </head>
 <body>
 
-<!-- ========== LOGIN ========== -->
+<!-- ===== LOGIN ===== -->
 <div class="login-screen" id="login-screen">
   <div class="login-box">
     <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion">
@@ -708,13 +401,13 @@
   </div>
 </div>
 
-<!-- ========== MAIN ========== -->
+<!-- ===== MAIN ===== -->
 <div id="main-content" style="display:none;">
 
   <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
 
   <div class="drawer" id="drawer">
-    <h3>Stock Levels</h3>
+    <h3 id="drawer-title">Stock Levels</h3>
     <div class="drawer-fields" id="drawer-content"></div>
     <button class="drawer-save" onclick="closeDrawer()">SAVE &amp; CLOSE</button>
   </div>
@@ -729,13 +422,10 @@
   </header>
 
   <div class="container">
-
     <div id="product-list"></div>
-
     <button class="add-btn" onclick="addProduct()">
       <span style="font-size:18px;line-height:1;">+</span> Add Product
     </button>
-
     <div class="export-section">
       <h2>Sync to Lightspeed</h2>
       <div class="export-row">
@@ -744,7 +434,6 @@
         <div class="counter" id="counter"><span>0</span> products</div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -763,11 +452,8 @@
 
 <script>
 /* ============================================================
-   DATA
+   CONSTANTS
    ============================================================ */
-let products = [];
-let nextId   = 1;
-
 const BRANDS = [
   '', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display',
   'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion',
@@ -779,11 +465,10 @@ const BRANDS = [
   'Wrapped Gift Cards'
 ];
 
-// Sample Clothing
-const SAMPLE_CATS = [
-  '', 'Sample Top', 'Sample Pant', 'Sample Dress',
-  'Sample Skirt', 'Sample Jacket', 'Sample Knit'
-];
+const SAMPLE_CATS  = ['', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt', 'Sample Jacket', 'Sample Knit'];
+const JEWEL_CATS   = ['', 'Jewellery', 'Accessories', 'Homewares', 'Belts', 'Bags', 'Scarves'];
+const STOCKED_CATS = ['', 'Top', 'Pant', 'Dress', 'Skirt', 'Jacket', 'Knit'];
+
 const SAMPLE_QUICK = [
   { label: 'Top',    cat: 'Sample Top',    name: 'Top Sample' },
   { label: 'Pant',   cat: 'Sample Pant',   name: 'Pant Sample' },
@@ -792,11 +477,6 @@ const SAMPLE_QUICK = [
   { label: 'Jacket', cat: 'Sample Jacket', name: 'Jacket Sample' },
   { label: 'Knit',   cat: 'Sample Knit',   name: 'Knit Sample' },
 ];
-
-// Jewellery / Homewares / Accessories / Scarves
-const JEWEL_CATS = [
-  '', 'Jewellery', 'Accessories', 'Homewares', 'Belts', 'Bags', 'Scarves'
-];
 const JEWEL_QUICK = [
   { label: 'Jewellery',   cat: 'Jewellery',   name: 'Jewellery' },
   { label: 'Accessories', cat: 'Accessories', name: 'Accessories' },
@@ -804,11 +484,6 @@ const JEWEL_QUICK = [
   { label: 'Belts',       cat: 'Belts',       name: 'Belts' },
   { label: 'Bags',        cat: 'Bags',        name: 'Bags' },
   { label: 'Scarves',     cat: 'Scarves',     name: 'Scarves' },
-];
-
-// Stocked Clothing
-const STOCKED_CATS = [
-  '', 'Top', 'Pant', 'Dress', 'Skirt', 'Jacket', 'Knit'
 ];
 const STOCKED_QUICK = [
   { label: 'Top',    cat: 'Top',    name: 'Top' },
@@ -819,13 +494,15 @@ const STOCKED_QUICK = [
   { label: 'Knit',   cat: 'Knit',   name: 'Knit' },
 ];
 
-// Size presets
+// Selecting a preset REPLACES all current sizes — it does not append.
 const SIZE_PRESETS = {
-  'OS':       ['OS'],
-  'SM-ML':    ['S/M', 'M/L'],
-  'SM-ML-XL': ['S/M', 'M/L', 'XL'],
-  'S-M-L':    ['S', 'M', 'L'],
-  'S-M-L-XL': ['S', 'M', 'L', 'XL'],
+  'OS':           ['OS'],
+  'XS-S-M-L':    ['XS', 'S', 'M', 'L'],
+  'XS-S-M-L-XL': ['XS', 'S', 'M', 'L', 'XL'],
+  'S-M-L':        ['S', 'M', 'L'],
+  'S-M-L-XL':     ['S', 'M', 'L', 'XL'],
+  'SM-ML':        ['S/M', 'M/L'],
+  'SM-ML-XL':     ['S/M', 'M/L', 'XL'],
 };
 
 const OUTLET_IDS = {
@@ -836,6 +513,12 @@ const OUTLET_IDS = {
 };
 
 const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let products = [];
+let nextId   = 1;
 
 /* ============================================================
    LOGIN
@@ -883,8 +566,7 @@ function attemptLogin() {
       const attempts  = parseInt(localStorage.getItem('failed_attempts') || '0');
       const remaining = MAX_ATTEMPTS - attempts;
       if (locked) {
-        document.getElementById('login-error').textContent =
-          'Too many failed attempts. This device is locked out for 30 minutes.';
+        document.getElementById('login-error').textContent = 'Too many failed attempts. This device is locked out for 30 minutes.';
         document.getElementById('login-password').disabled = true;
         document.getElementById('login-btn').disabled = true;
       } else {
@@ -901,8 +583,7 @@ function attemptLogin() {
       document.getElementById('main-content').style.display = 'block';
     }
   }).catch(() => {
-    document.getElementById('login-error').textContent =
-      'Could not reach server. Check your internet connection.';
+    document.getElementById('login-error').textContent = 'Could not reach server. Check your internet connection.';
   });
 }
 
@@ -956,8 +637,7 @@ function showToast(msg) {
 
 function updateCounter() {
   const n = products.length;
-  document.getElementById('counter').innerHTML =
-    `<span>${n}</span> product${n !== 1 ? 's' : ''}`;
+  document.getElementById('counter').innerHTML = `<span>${n}</span> product${n !== 1 ? 's' : ''}`;
 }
 
 function esc(s) {
@@ -972,6 +652,8 @@ function genSku() {
   return s;
 }
 
+function blankStock() { return { ht: 0, pf: 0, ss: 0, sw: 0 }; }
+
 /* ============================================================
    PRODUCT MANAGEMENT
    ============================================================ */
@@ -980,18 +662,19 @@ function newProductObj() {
     _id:          nextId++,
     open:         true,
     productType:  null,       // 'sample' | 'jewellery' | 'stocked'
+    sellOnline:   false,
     name:         '',
     category:     '',
     brandName:    '',
     retailPrice:  '',
     supplyPrice:  '',
+    customSku:    '',
     supplierName: '',
     supplierCode: '',
-    customSku:    '',
-    stock:        { ht: 0, pf: 0, ss: 0, sw: 0 },
-    // stocked only
+    stock:        blankStock(),   // used for sample + jewellery
     colour:       '',
     sizes:        [],
+    sizeStock:    {},             // { [size]: { ht, pf, ss, sw } } for stocked clothing
   };
 }
 
@@ -1026,12 +709,14 @@ function toggleCard(id) {
   if (p) { p.open = !p.open; renderList(); }
 }
 
+/* ---- Type ---- */
 function setType(id, type) {
   const p = products.find(p => p._id === id);
   if (!p) return;
   p.productType = type;
   p.category    = '';
   p.sizes       = [];
+  p.sizeStock   = {};
   renderList();
 }
 
@@ -1042,95 +727,148 @@ function clearType(id) {
   p.name        = '';
   p.category    = '';
   p.sizes       = [];
+  p.sizeStock   = {};
   renderList();
 }
 
+/* ---- Online toggle ---- */
+function setSellOnline(id, val) {
+  const p = products.find(p => p._id === id);
+  if (!p) return;
+  p.sellOnline = val;
+  // Lightweight DOM update — no full re-render needed
+  const card = document.querySelector(`[data-pid="${id}"]`);
+  if (!card) return;
+  card.querySelector('.btn-online-yes').className = 'btn-online btn-online-yes' + (val ? ' is-yes' : '');
+  card.querySelector('.btn-online-no').className  = 'btn-online btn-online-no'  + (!val ? ' is-no' : '');
+  card.querySelector('.online-note').textContent  = val
+    ? 'Product name will be used as-is for a clean Shopify listing.'
+    : 'A 4-digit code will be appended to keep the name unique in Lightspeed.';
+}
+
+/* ---- Quick-add ---- */
 function applyQuick(id, cat, name) {
   const p = products.find(p => p._id === id);
   if (!p) return;
   p.category = cat;
   p.name     = name;
   renderList();
-  // Focus the product name input after a tick
   setTimeout(() => {
     const card = document.querySelector(`[data-pid="${id}"]`);
-    if (card) {
-      const inp = card.querySelector('.js-name-input');
-      if (inp) inp.focus();
-    }
+    if (card) { const inp = card.querySelector('.js-name-input'); if (inp) inp.focus(); }
   }, 30);
 }
 
+/* ---- Field updates ---- */
 function updateField(id, field, value) {
   const p = products.find(p => p._id === id);
   if (!p) return;
   p[field] = value;
-  // Update header preview without full re-render
   const card = document.querySelector(`[data-pid="${id}"]`);
-  if (card) {
-    const preview = card.querySelector('.card-preview');
-    const badge   = card.querySelector('.card-price-badge');
-    if (preview) {
-      preview.textContent  = p.name || 'New Product';
-      preview.className    = 'card-preview' + (p.name ? '' : ' empty');
-    }
-    if (badge) badge.textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
-  }
+  if (!card) return;
+  const preview = card.querySelector('.card-preview');
+  const badge   = card.querySelector('.card-price-badge');
+  if (preview) { preview.textContent = p.name || 'New Product'; preview.className = 'card-preview' + (p.name ? '' : ' empty'); }
+  if (badge)   badge.textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
 }
 
-/* ---- Sizes (stocked) ---- */
+/* ---- Sizes ---- */
 function applySizePreset(id, key) {
   const p = products.find(p => p._id === id);
   if (!p) return;
-  SIZE_PRESETS[key].forEach(s => {
-    if (!p.sizes.includes(s)) p.sizes.push(s);
-  });
+  const newSizes  = SIZE_PRESETS[key];
+  const newStock  = {};
+  // Preserve any stock already entered for sizes that exist in the preset
+  newSizes.forEach(s => { newStock[s] = p.sizeStock[s] || blankStock(); });
+  p.sizes     = [...newSizes];
+  p.sizeStock = newStock;
   renderList();
 }
 
 function addManualSize(id) {
-  const input = document.getElementById(`size-input-${id}`);
+  const input = document.getElementById(`size-inp-${id}`);
   if (!input) return;
   const val = input.value.trim().toUpperCase();
   if (!val) return;
   const p = products.find(p => p._id === id);
-  if (!p) return;
-  if (!p.sizes.includes(val)) p.sizes.push(val);
+  if (!p || p.sizes.includes(val)) { input.value = ''; return; }
+  p.sizes.push(val);
+  p.sizeStock[val] = blankStock();
   input.value = '';
   renderList();
-  setTimeout(() => {
-    const inp = document.getElementById(`size-input-${id}`);
-    if (inp) inp.focus();
-  }, 20);
+  setTimeout(() => { const i = document.getElementById(`size-inp-${id}`); if (i) i.focus(); }, 20);
 }
 
 function removeSize(id, size) {
   const p = products.find(p => p._id === id);
   if (!p) return;
   p.sizes = p.sizes.filter(s => s !== size);
+  delete p.sizeStock[size];
   renderList();
 }
 
-/* ---- Stock drawer ---- */
-function openDrawer(id) {
-  const p = products.find(p => p._id === id);
-  document.getElementById('drawer-content').innerHTML = `
-    <div class="field"><label>Harbour Town</label>
-      <input type="number" value="${p.stock.ht}" oninput="updateStock(${id},'ht',this.value)"></div>
-    <div class="field"><label>Pacific Fair</label>
-      <input type="number" value="${p.stock.pf}" oninput="updateStock(${id},'pf',this.value)"></div>
-    <div class="field"><label>Southport Showroom</label>
-      <input type="number" value="${p.stock.ss}" oninput="updateStock(${id},'ss',this.value)"></div>
-    <div class="field"><label>Southport Warehouse</label>
-      <input type="number" value="${p.stock.sw}" oninput="updateStock(${id},'sw',this.value)"></div>
-  `;
-  document.getElementById('drawer').classList.add('active');
-  document.getElementById('overlay').classList.add('active');
-}
-
+/* ---- Stock ---- */
 function updateStock(id, loc, val) {
   const p = products.find(p => p._id === id);
   if (p) p.stock[loc] = parseInt(val) || 0;
+}
+
+function updateSizeStock(id, size, loc, val) {
+  const p = products.find(p => p._id === id);
+  if (p && p.sizeStock[size]) p.sizeStock[size][loc] = parseInt(val) || 0;
+}
+
+function getTotalStock(p) {
+  if (p.productType === 'stocked' && p.sizes.length > 0) {
+    return p.sizes.reduce((total, size) => {
+      const s = p.sizeStock[size] || blankStock();
+      return total + s.ht + s.pf + s.ss + s.sw;
+    }, 0);
+  }
+  return Object.values(p.stock).reduce((a, b) => a + b, 0);
+}
+
+/* ---- Drawer ---- */
+function openDrawer(id) {
+  const p = products.find(p => p._id === id);
+  const isVariant = p.productType === 'stocked' && p.sizes.length > 0;
+  document.getElementById('drawer-title').textContent = isVariant ? 'Stock by Size' : 'Stock Levels';
+
+  let html = '';
+  if (isVariant) {
+    p.sizes.forEach(size => {
+      const s = p.sizeStock[size] || blankStock();
+      html += `
+        <div class="drawer-size-block">
+          <div class="drawer-size-header">Size: ${esc(size)}</div>
+          <div class="drawer-size-outlets">
+            <div class="field"><label>Harbour Town</label>
+              <input type="number" value="${s.ht}" oninput="updateSizeStock(${id},'${esc(size)}','ht',this.value)"></div>
+            <div class="field"><label>Pacific Fair</label>
+              <input type="number" value="${s.pf}" oninput="updateSizeStock(${id},'${esc(size)}','pf',this.value)"></div>
+            <div class="field"><label>Southport Showroom</label>
+              <input type="number" value="${s.ss}" oninput="updateSizeStock(${id},'${esc(size)}','ss',this.value)"></div>
+            <div class="field"><label>Southport Warehouse</label>
+              <input type="number" value="${s.sw}" oninput="updateSizeStock(${id},'${esc(size)}','sw',this.value)"></div>
+          </div>
+        </div>`;
+    });
+  } else {
+    const s = p.stock;
+    html = `
+      <div class="field"><label>Harbour Town</label>
+        <input type="number" value="${s.ht}" oninput="updateStock(${id},'ht',this.value)"></div>
+      <div class="field"><label>Pacific Fair</label>
+        <input type="number" value="${s.pf}" oninput="updateStock(${id},'pf',this.value)"></div>
+      <div class="field"><label>Southport Showroom</label>
+        <input type="number" value="${s.ss}" oninput="updateStock(${id},'ss',this.value)"></div>
+      <div class="field"><label>Southport Warehouse</label>
+        <input type="number" value="${s.sw}" oninput="updateStock(${id},'sw',this.value)"></div>`;
+  }
+
+  document.getElementById('drawer-content').innerHTML = html;
+  document.getElementById('drawer').classList.add('active');
+  document.getElementById('overlay').classList.add('active');
 }
 
 function closeDrawer() {
@@ -1142,13 +880,13 @@ function closeDrawer() {
 /* ============================================================
    RENDER
    ============================================================ */
-function catOptions(cats, current) {
+function catOpts(cats, current) {
   return cats.map(c =>
     `<option value="${esc(c)}"${current === c ? ' selected' : ''}>${c || '-- Select category --'}</option>`
   ).join('');
 }
 
-function brandOptions(current) {
+function brandOpts(current) {
   return BRANDS.map(b =>
     `<option value="${esc(b)}"${current === b ? ' selected' : ''}>${b || '-- Select brand --'}</option>`
   ).join('');
@@ -1176,7 +914,7 @@ function renderTypeSelector(p) {
         <button class="btn-type" onclick="setType(${p._id},'stocked')">
           <div class="btn-type-left">
             <span>Stocked Clothing</span>
-            <span class="btn-type-sub">Full inventory items with colour and size options</span>
+            <span class="btn-type-sub">Full inventory items with colour and size variants</span>
           </div>
           <span class="btn-type-arrow">&#x203A;</span>
         </button>
@@ -1184,12 +922,25 @@ function renderTypeSelector(p) {
     </div>`;
 }
 
+function renderOnlineToggle(p) {
+  const note = p.sellOnline
+    ? 'Product name will be used as-is for a clean Shopify listing.'
+    : 'A 4-digit code will be appended to keep the name unique in Lightspeed.';
+  return `
+    <div class="online-section">
+      <span class="online-label">Will this product be sold online?</span>
+      <div class="online-btns">
+        <button class="btn-online btn-online-yes${p.sellOnline ? ' is-yes' : ''}" onclick="setSellOnline(${p._id},true)">Yes</button>
+        <button class="btn-online btn-online-no${!p.sellOnline ? ' is-no' : ''}" onclick="setSellOnline(${p._id},false)">No</button>
+      </div>
+      <div class="online-note">${note}</div>
+    </div>`;
+}
+
 function renderQuickRow(p) {
-  let items = [];
-  if (p.productType === 'sample')    items = SAMPLE_QUICK;
-  if (p.productType === 'jewellery') items = JEWEL_QUICK;
-  if (p.productType === 'stocked')   items = STOCKED_QUICK;
-  if (!items.length) return '';
+  const items = p.productType === 'sample' ? SAMPLE_QUICK
+              : p.productType === 'jewellery' ? JEWEL_QUICK
+              : STOCKED_QUICK;
   const btns = items.map(item =>
     `<button class="btn-quick" onclick="applyQuick(${p._id},'${esc(item.cat)}','${esc(item.name)}')">+ ${item.label}</button>`
   ).join('');
@@ -1200,9 +951,9 @@ function renderQuickRow(p) {
     </div>`;
 }
 
-function renderSizesSection(p) {
+function renderSizesBlock(p) {
   const presetBtns = Object.keys(SIZE_PRESETS).map(key =>
-    `<button class="btn-size-preset" onclick="applySizePreset(${p._id},'${key}')">${key}</button>`
+    `<button class="btn-size-preset" onclick="applySizePreset(${p._id},'${key}')" title="Replaces all current sizes">${key}</button>`
   ).join('');
 
   const chips = p.sizes.length
@@ -1213,17 +964,13 @@ function renderSizesSection(p) {
     : `<span class="size-chips-empty">No sizes added yet</span>`;
 
   return `
-    <div class="sizes-section">
-      <div class="field">
-        <div class="sizes-preset-label">Size Presets</div>
-        <div class="sizes-presets">${presetBtns}</div>
-      </div>
+    <div class="sizes-block">
+      <label class="sizes-block-label">Sizes <span class="required">*</span></label>
+      <div class="sizes-preset-hint">Selecting a preset replaces all current sizes.</div>
+      <div class="sizes-presets">${presetBtns}</div>
       <div class="size-chips-wrap">${chips}</div>
       <div class="size-manual-row">
-        <input
-          type="text"
-          id="size-input-${p._id}"
-          placeholder="Type a size and press Add"
+        <input type="text" id="size-inp-${p._id}" placeholder="Type a size and press Add"
           onkeydown="if(event.key==='Enter'){event.preventDefault();addManualSize(${p._id});}">
         <button class="btn-size-add" onclick="addManualSize(${p._id})">Add</button>
       </div>
@@ -1231,22 +978,16 @@ function renderSizesSection(p) {
 }
 
 function renderFields(p) {
-  let cats = [];
-  if (p.productType === 'sample')    cats = SAMPLE_CATS;
-  if (p.productType === 'jewellery') cats = JEWEL_CATS;
-  if (p.productType === 'stocked')   cats = STOCKED_CATS;
+  const cats = p.productType === 'sample' ? SAMPLE_CATS
+             : p.productType === 'jewellery' ? JEWEL_CATS
+             : STOCKED_CATS;
 
-  const colourField = p.productType === 'stocked' ? `
+  const colourRow = p.productType === 'stocked' ? `
     <div class="field">
       <label>Colour <span class="required">*</span></label>
       <input type="text" placeholder="e.g. Navy" value="${esc(p.colour)}"
         oninput="updateField(${p._id},'colour',this.value)">
     </div>` : '';
-
-  const sizesField = p.productType === 'stocked'
-    ? `<div class="field field-full"><label>Sizes <span class="required">*</span></label></div>
-       ${renderSizesSection(p)}`
-    : '';
 
   return `
     <div class="fields-grid">
@@ -1257,17 +998,13 @@ function renderFields(p) {
       </div>
       <div class="field">
         <label>Category <span class="required">*</span></label>
-        <select onchange="updateField(${p._id},'category',this.value)">
-          ${catOptions(cats, p.category)}
-        </select>
+        <select onchange="updateField(${p._id},'category',this.value)">${catOpts(cats, p.category)}</select>
       </div>
       <div class="field">
         <label>Brand <span class="required">*</span></label>
-        <select onchange="updateField(${p._id},'brandName',this.value)">
-          ${brandOptions(p.brandName)}
-        </select>
+        <select onchange="updateField(${p._id},'brandName',this.value)">${brandOpts(p.brandName)}</select>
       </div>
-      ${colourField}
+      ${colourRow}
       <div class="field">
         <label>Retail Price (AUD) <span class="required">*</span></label>
         <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.retailPrice)}"
@@ -1280,7 +1017,7 @@ function renderFields(p) {
       </div>
       <div class="field">
         <label>Custom SKU <span class="optional">(optional — auto-generated if blank)</span></label>
-        <input type="text" placeholder="e.g. 10MM2272T" value="${esc(p.customSku)}"
+        <input type="text" placeholder="e.g. IF-TOP-001" value="${esc(p.customSku)}"
           oninput="updateField(${p._id},'customSku',this.value)">
       </div>
       <div class="field">
@@ -1293,16 +1030,15 @@ function renderFields(p) {
         <input type="text" placeholder="e.g. SUP-001" value="${esc(p.supplierCode)}"
           oninput="updateField(${p._id},'supplierCode',this.value)">
       </div>
-      ${sizesField}
+      ${p.productType === 'stocked' ? renderSizesBlock(p) : ''}
     </div>`;
 }
 
-function typeBadgeHtml(p) {
+function typeBadge(p) {
   if (!p.productType) return `<span class="card-type-badge badge-unset">Select type</span>`;
   if (p.productType === 'sample')    return `<span class="card-type-badge badge-sample">Sample</span>`;
   if (p.productType === 'jewellery') return `<span class="card-type-badge badge-jewellery">Jewellery / Acc</span>`;
-  if (p.productType === 'stocked')   return `<span class="card-type-badge badge-stocked">Stocked</span>`;
-  return '';
+  return `<span class="card-type-badge badge-stocked">Stocked</span>`;
 }
 
 function renderList() {
@@ -1310,37 +1046,29 @@ function renderList() {
   list.innerHTML = '';
 
   products.forEach((p, idx) => {
-    const total      = Object.values(p.stock).reduce((a, b) => a + b, 0);
-    const displayName = p.name || 'New Product';
-    const isEmpty     = !p.name;
-    const priceLabel  = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
-
+    const total      = getTotalStock(p);
+    const priceLabel = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
     const stockStyle = total > 0
       ? 'border-color:rgba(46,204,113,0.6);color:#27ae60;background:rgba(46,204,113,0.08);'
       : 'border-color:rgba(200,0,0,0.3);color:#c0392b;background:rgba(200,0,0,0.06);';
 
+    const bodyContent = !p.productType
+      ? renderTypeSelector(p)
+      : `<div class="change-type-row">
+           <button class="change-type-link" onclick="clearType(${p._id})">&#x2190; Change product type</button>
+         </div>
+         ${renderOnlineToggle(p)}
+         ${renderQuickRow(p)}
+         ${renderFields(p)}`;
+
     const card = document.createElement('div');
     card.className = 'product-card';
     card.setAttribute('data-pid', p._id);
-
-    // Card body content
-    let bodyContent = '';
-    if (!p.productType) {
-      bodyContent = renderTypeSelector(p);
-    } else {
-      bodyContent = `
-        <div class="change-type-row">
-          <button class="change-type-link" onclick="clearType(${p._id})">&#x2190; Change product type</button>
-        </div>
-        ${renderQuickRow(p)}
-        ${renderFields(p)}`;
-    }
-
     card.innerHTML = `
       <div class="card-header" onclick="toggleCard(${p._id})">
         <div class="card-num">${idx + 1}</div>
-        ${typeBadgeHtml(p)}
-        <div class="card-preview${isEmpty ? ' empty' : ''}">${esc(displayName)}</div>
+        ${typeBadge(p)}
+        <div class="card-preview${p.name ? '' : ' empty'}">${esc(p.name || 'New Product')}</div>
         <div class="card-actions">
           <div class="card-price-badge">${priceLabel}</div>
           <button class="btn-card" onclick="event.stopPropagation();openDrawer(${p._id})"
@@ -1350,9 +1078,7 @@ function renderList() {
         </div>
         <div class="card-toggle${p.open ? ' open' : ''}">&#x25BE;</div>
       </div>
-      <div class="card-body${p.open ? ' open' : ''}">
-        ${bodyContent}
-      </div>`;
+      <div class="card-body${p.open ? ' open' : ''}">${bodyContent}</div>`;
 
     list.appendChild(card);
   });
@@ -1360,24 +1086,50 @@ function renderList() {
 
 /* ============================================================
    SYNC
+   ============================================================
+   Cloudflare Worker actions required:
+
+   EXISTING:
+     ping            - health check
+     sync_product    - creates a standard product + sets inventory
+
+   NEW (need to be added to the worker):
+
+     create_variant_attribute
+       Proxies: POST /api/2026-01/variant_attributes
+       Payload:  { name: string }
+       Returns:  { data: { id: string, name: string } }
+
+     sync_variant_product
+       Proxies:
+         1. POST /api/2.0/products  (creates the variant family)
+         2. For each returned variant ID, updates inventory via the inventory API
+       Payload: {
+         name, brand_name, type_name, tax_name, supply_price,
+         supplier_name, supplier_code,
+         colour_attr_id: string,
+         size_attr_id:   string,
+         variants: [{
+           colour:       string,
+           size:         string,
+           sku:          string,
+           retail_price: number,
+           inventory:    [{ outlet_id, current_amount }]
+         }]
+       }
    ============================================================ */
 async function startSync() {
   const password = localStorage.getItem('portal_password') || '';
   if (!password) { alert('Please log in first.'); return; }
 
-  // Validate
   for (const p of products) {
-    if (!p.productType) {
-      showToast('Please select a product type for all products.');
-      return;
-    }
+    if (!p.productType) { showToast('Please select a product type for all products.'); return; }
     if (!p.name || !p.retailPrice || !p.category || !p.brandName) {
-      showToast('One or more products are missing required fields.');
-      return;
+      showToast(`"${p.name || 'Unnamed product'}" is missing required fields.`); return;
     }
-    if (p.productType === 'stocked' && (!p.colour || p.sizes.length === 0)) {
-      showToast('Stocked clothing requires a colour and at least one size.');
-      return;
+    if (p.productType === 'stocked') {
+      if (!p.colour) { showToast(`"${p.name}" needs a colour.`); return; }
+      if (p.sizes.length === 0) { showToast(`"${p.name}" needs at least one size.`); return; }
     }
   }
 
@@ -1401,47 +1153,69 @@ async function startSync() {
 
   for (const p of products) {
     try {
-      const suffix   = String(Math.floor(1000 + Math.random() * 9000));
-      const finalName = `${p.name} - ${suffix}`;
-      const finalSku  = p.customSku.trim() || genSku();
-
       btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
 
-      // For stocked clothing we send one call per size (each size is a separate variant)
-      if (p.productType === 'stocked') {
-        for (const size of p.sizes) {
-          const variantName = `${finalName} | ${p.colour} | ${size}`;
-          const variantSku  = p.customSku.trim()
-            ? `${p.customSku.trim()}-${p.colour.replace(/\s+/g, '')}-${size}`
-            : genSku();
+      const suffix    = String(Math.floor(1000 + Math.random() * 9000));
+      const finalName = p.sellOnline ? p.name : `${p.name} - ${suffix}`;
 
-          await workerCall({
-            action: 'sync_product',
-            payload: {
-              name:          variantName,
-              sku:           variantSku,
-              retail_price:  parseFloat(p.retailPrice) || 0,
-              supply_price:  parseFloat(p.supplyPrice) || 0,
-              tax_name:      'GST',
-              brand_name:    p.brandName,
-              type_name:     p.category,
-              supplier_name: p.supplierName,
-              supplier_code: p.supplierCode,
-              inventory: [
-                { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
-                { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
-                { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
-                { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 },
-              ]
-            }
-          });
-        }
+      if (p.productType === 'stocked') {
+        // --- Step 1: Create the Colour variant attribute ---
+        const colourAttr = await workerCall({
+          action:  'create_variant_attribute',
+          payload: { name: 'Colour' }
+        });
+        const colourAttrId = colourAttr.data.id;
+
+        // --- Step 2: Create the Size variant attribute ---
+        const sizeAttr = await workerCall({
+          action:  'create_variant_attribute',
+          payload: { name: 'Size' }
+        });
+        const sizeAttrId = sizeAttr.data.id;
+
+        // --- Step 3: Create the full variant family in a single call.
+        // The worker POSTs to /api/2.0/products then sets inventory per variant ID. ---
+        await workerCall({
+          action: 'sync_variant_product',
+          payload: {
+            name:          finalName,
+            brand_name:    p.brandName,
+            type_name:     p.category,
+            tax_name:      'GST',
+            supply_price:  parseFloat(p.supplyPrice) || 0,
+            supplier_name: p.supplierName,
+            supplier_code: p.supplierCode,
+            colour_attr_id: colourAttrId,
+            size_attr_id:   sizeAttrId,
+            variants: p.sizes.map(size => {
+              const base = p.customSku.trim();
+              const sku  = base
+                ? `${base}-${p.colour.replace(/\s+/g, '')}-${size.replace(/\//g, '')}`
+                : genSku();
+              const s = p.sizeStock[size] || blankStock();
+              return {
+                colour:       p.colour,
+                size,
+                sku,
+                retail_price: parseFloat(p.retailPrice) || 0,
+                inventory: [
+                  { outlet_id: OUTLET_IDS.ht, current_amount: s.ht },
+                  { outlet_id: OUTLET_IDS.pf, current_amount: s.pf },
+                  { outlet_id: OUTLET_IDS.ss, current_amount: s.ss },
+                  { outlet_id: OUTLET_IDS.sw, current_amount: s.sw },
+                ]
+              };
+            })
+          }
+        });
+
       } else {
+        // Sample or Jewellery: single standard product
         await workerCall({
           action: 'sync_product',
           payload: {
             name:          finalName,
-            sku:           finalSku,
+            sku:           p.customSku.trim() || genSku(),
             retail_price:  parseFloat(p.retailPrice) || 0,
             supply_price:  parseFloat(p.supplyPrice) || 0,
             tax_name:      'GST',
@@ -1450,16 +1224,17 @@ async function startSync() {
             supplier_name: p.supplierName,
             supplier_code: p.supplierCode,
             inventory: [
-              { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
-              { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
-              { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
-              { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 },
+              { outlet_id: OUTLET_IDS.ht, current_amount: p.stock.ht },
+              { outlet_id: OUTLET_IDS.pf, current_amount: p.stock.pf },
+              { outlet_id: OUTLET_IDS.ss, current_amount: p.stock.ss },
+              { outlet_id: OUTLET_IDS.sw, current_amount: p.stock.sw },
             ]
           }
         });
       }
 
       synced++;
+
     } catch (err) {
       console.error(err);
       btn.disabled    = false;
@@ -1472,11 +1247,7 @@ async function startSync() {
   btn.textContent = 'SYNC COMPLETE';
   showToast(`${synced} product${synced !== 1 ? 's' : ''} synced successfully!`);
   document.getElementById('shopify-modal').classList.add('active');
-
-  setTimeout(() => {
-    btn.textContent = 'SYNC PRODUCTS';
-    btn.disabled    = false;
-  }, 3000);
+  setTimeout(() => { btn.textContent = 'SYNC PRODUCTS'; btn.disabled = false; }, 3000);
 }
 
 function clearAll() {

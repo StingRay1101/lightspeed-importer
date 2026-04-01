@@ -57,18 +57,13 @@
 
   /* ---- Card header ---- */
   .card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
-    cursor: pointer;
-    user-select: none;
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 18px; cursor: pointer; user-select: none;
   }
 
   .card-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px; font-weight: 700; color: #fff;
-    background: #1a1a1a; width: 28px; height: 28px;
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    color: #fff; background: #1a1a1a; width: 28px; height: 28px;
     border-radius: 2px; display: flex; align-items: center;
     justify-content: center; flex-shrink: 0;
   }
@@ -84,9 +79,9 @@
   .badge-stocked   { background: rgba(46,204,113,0.12); color: #1e9450; }
 
   .card-preview {
-    flex: 1; font-size: 13px; color: #1a1a1a;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    text-transform: uppercase; font-weight: 600; min-width: 0;
+    flex: 1; font-size: 13px; color: #1a1a1a; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;
+    font-weight: 600; min-width: 0;
   }
   .card-preview.empty { color: rgba(0,0,0,0.28); font-style: italic; font-weight: 400; text-transform: none; }
 
@@ -155,9 +150,8 @@
   .btn-online {
     flex: 1; background: #fff; border: 1px solid rgba(0,0,0,0.15);
     border-radius: var(--radius); padding: 9px; font-family: 'DM Mono', monospace;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: rgba(0,0,0,0.45); cursor: pointer;
-    transition: all 0.15s; text-align: center;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(0,0,0,0.45); cursor: pointer; transition: all 0.15s; text-align: center;
   }
   .btn-online:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
   .btn-online.is-yes { background: #1a5e2a; color: #fff; border-color: #1a5e2a; }
@@ -239,45 +233,176 @@
   }
   .btn-size-add:hover { background: #333; }
 
-  /* ---- Stock drawer ---- */
-  .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); display: none; z-index: 1999; }
-  .drawer-overlay.active { display: block; }
-
-  .drawer {
-    position: fixed; top: 0; right: -480px;
-    width: 420px; height: 100%; background: #f0eeeb;
-    border-left: 1px solid rgba(0,0,0,0.1);
-    transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
-    z-index: 2000; padding: 36px 28px 28px;
-    display: flex; flex-direction: column;
+  /* ================================================================
+     FULL-SCREEN STOCK MODAL
+     ================================================================ */
+  .stock-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 2000;
+    padding: 0;
+    overflow-y: auto;
   }
-  .drawer.active { right: 0; }
+  .stock-modal-overlay.active { display: flex; }
 
-  .drawer h3 {
+  .stock-modal {
+    background: #f5f3f0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stock-modal-header {
+    background: #1a1a1a;
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .stock-modal-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; font-weight: 600; color: #1a1a1a;
-    letter-spacing: 0.04em; border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding-bottom: 14px; margin-bottom: 20px;
+    font-size: 26px; font-weight: 600; color: #fff;
+    letter-spacing: 0.04em;
   }
 
-  .drawer-fields { display: flex; flex-direction: column; gap: 14px; flex: 1; overflow-y: auto; padding-right: 4px; }
-
-  .drawer-size-block { border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius); overflow: hidden; }
-  .drawer-size-header {
-    background: rgba(0,0,0,0.06); padding: 8px 14px;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: #1a1a1a;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
+  .stock-modal-subtitle {
+    font-size: 11px; color: rgba(255,255,255,0.45);
+    letter-spacing: 0.08em; margin-top: 3px; text-transform: uppercase;
   }
-  .drawer-size-outlets { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
 
-  .drawer-save {
-    background: #1a1a1a; color: #fff; border: none; padding: 14px;
+  .stock-modal-close {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; font-family: 'DM Mono', monospace; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.1em; padding: 10px 20px;
+    border-radius: var(--radius); cursor: pointer; transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .stock-modal-close:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4); }
+
+  .stock-modal-body { flex: 1; padding: 40px; overflow-x: auto; }
+
+  /* Standard product (no sizes) — simple 2x2 grid */
+  .stock-simple-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 700px;
+  }
+
+  .stock-simple-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+  }
+
+  .stock-simple-card-label {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(0,0,0,0.4); margin-bottom: 10px;
+  }
+
+  .stock-simple-card input {
+    font-size: 22px; font-weight: 700; text-align: center;
+    border: 1px solid rgba(0,0,0,0.15); border-radius: var(--radius);
+    padding: 12px; width: 100%;
+  }
+
+  /* Variant product — size rows x location columns */
+  .stock-grid-wrap { min-width: 640px; }
+
+  .stock-grid-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .stock-grid-table thead th {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(0,0,0,0.45); font-weight: 700; padding: 10px 16px 14px;
+    text-align: center; border-bottom: 2px solid rgba(0,0,0,0.1);
+  }
+
+  .stock-grid-table thead th:first-child {
+    text-align: left; width: 100px;
+  }
+
+  .stock-grid-table tbody tr { background: #fff; }
+
+  .stock-grid-table tbody tr + tr td { border-top: 1px solid rgba(0,0,0,0.06); }
+
+  .stock-grid-table td {
+    padding: 10px 10px;
+    vertical-align: middle;
+  }
+
+  .stock-grid-table td:first-child {
+    padding-left: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #1a1a1a;
+    white-space: nowrap;
+    border-right: 2px solid rgba(0,0,0,0.08);
+  }
+
+  .stock-grid-table td input[type="number"] {
+    width: 100%;
+    min-width: 80px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 8px;
+    border: 1px solid rgba(0,0,0,0.14);
+    border-radius: var(--radius);
+  }
+
+  .stock-grid-table tfoot td {
+    padding: 12px 10px;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(0,0,0,0.4); text-align: center; border-top: 2px solid rgba(0,0,0,0.1);
+  }
+  .stock-grid-table tfoot td:first-child { text-align: left; padding-left: 16px; }
+
+  .col-total {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #1a1a1a !important;
+  }
+
+  .stock-modal-footer {
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+
+  .stock-total-summary {
+    font-size: 12px; color: rgba(0,0,0,0.4); letter-spacing: 0.06em;
+  }
+  .stock-total-summary strong { color: #1a1a1a; font-size: 14px; }
+
+  .stock-modal-save {
+    background: #1a1a1a; color: #fff; border: none; padding: 14px 36px;
     font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
     letter-spacing: 0.1em; cursor: pointer; border-radius: var(--radius);
-    margin-top: 20px; transition: all 0.15s; flex-shrink: 0;
+    transition: background 0.15s; text-transform: uppercase;
   }
-  .drawer-save:hover { background: #333; }
+  .stock-modal-save:hover { background: #333; }
 
   /* ---- Add button ---- */
   .add-btn {
@@ -322,11 +447,10 @@
   /* ---- Toast ---- */
   #toast {
     position: fixed; bottom: 28px; right: 28px;
-    background: #1a1a1a; color: #fff;
-    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
-    padding: 12px 22px; border-radius: var(--radius);
+    background: #1a1a1a; color: #fff; font-family: 'DM Mono', monospace;
+    font-size: 12px; font-weight: 700; padding: 12px 22px; border-radius: var(--radius);
     opacity: 0; transform: translateY(10px); transition: all 0.25s;
-    pointer-events: none; z-index: 3000; letter-spacing: 0.05em;
+    pointer-events: none; z-index: 9000; letter-spacing: 0.05em;
   }
   #toast.show { opacity: 1; transform: translateY(0); }
 
@@ -340,8 +464,8 @@
   .logout-btn:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
 
   .login-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #fafafa; display: flex; align-items: center; justify-content: center; z-index: 9999;
+    position: fixed; inset: 0; background: #fafafa;
+    display: flex; align-items: center; justify-content: center; z-index: 9999;
   }
   .login-screen.hidden { display: none; }
   .login-box { text-align: center; width: 320px; }
@@ -349,10 +473,10 @@
   .login-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
   .login-box p { font-size: 11px; color: rgba(0,0,0,0.4); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; margin-bottom: 24px; }
   .login-box input {
-    background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: 4px; color: #1a1a1a;
-    font-family: 'DM Mono', monospace; font-size: 16px; padding: 12px 16px;
-    width: 100%; outline: none; text-align: center; letter-spacing: 0.2em;
-    margin-bottom: 10px; transition: border-color 0.15s, box-shadow 0.15s;
+    background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: 4px;
+    color: #1a1a1a; font-family: 'DM Mono', monospace; font-size: 16px;
+    padding: 12px 16px; width: 100%; outline: none; text-align: center;
+    letter-spacing: 0.2em; margin-bottom: 10px; transition: border-color 0.15s, box-shadow 0.15s;
   }
   .login-box input:focus { border-color: rgba(0,0,0,0.4); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
   .login-box button {
@@ -365,9 +489,8 @@
 
   /* ---- Shopify modal ---- */
   .modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.45); display: none; align-items: center;
-    justify-content: center; z-index: 4000;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    display: none; align-items: center; justify-content: center; z-index: 4000;
   }
   .modal-overlay.active { display: flex; }
   .modal-box { background: #fff; border-radius: 6px; padding: 40px 36px; max-width: 440px; width: 90%; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
@@ -380,10 +503,11 @@
   .modal-close { background: none; border: 1px solid rgba(0,0,0,0.15); color: rgba(0,0,0,0.45); padding: 11px 20px; width: 100%; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
   .modal-close:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
 
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     .fields-grid { grid-template-columns: 1fr; }
     header { flex-direction: column; align-items: flex-start; gap: 14px; }
-    .drawer { width: 100%; right: -100%; }
+    .stock-simple-grid { grid-template-columns: 1fr; }
+    .stock-modal-header, .stock-modal-body, .stock-modal-footer { padding-left: 20px; padding-right: 20px; }
   }
 </style>
 </head>
@@ -404,12 +528,22 @@
 <!-- ===== MAIN ===== -->
 <div id="main-content" style="display:none;">
 
-  <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
-
-  <div class="drawer" id="drawer">
-    <h3 id="drawer-title">Stock Levels</h3>
-    <div class="drawer-fields" id="drawer-content"></div>
-    <button class="drawer-save" onclick="closeDrawer()">SAVE &amp; CLOSE</button>
+  <!-- ===== FULL-SCREEN STOCK MODAL ===== -->
+  <div class="stock-modal-overlay" id="stock-modal-overlay">
+    <div class="stock-modal">
+      <div class="stock-modal-header">
+        <div>
+          <div class="stock-modal-title" id="stock-modal-title">Stock Levels</div>
+          <div class="stock-modal-subtitle" id="stock-modal-subtitle"></div>
+        </div>
+        <button class="stock-modal-close" onclick="closeStockModal()">Save &amp; Close</button>
+      </div>
+      <div class="stock-modal-body" id="stock-modal-body"></div>
+      <div class="stock-modal-footer">
+        <div class="stock-total-summary" id="stock-modal-total"></div>
+        <button class="stock-modal-save" onclick="closeStockModal()">Save &amp; Close</button>
+      </div>
+    </div>
   </div>
 
   <header>
@@ -465,6 +599,22 @@ const BRANDS = [
   'Wrapped Gift Cards'
 ];
 
+// Supplier list from Lightspeed (alphabetical)
+const SUPPLIERS = [
+  '', '3D Denim', 'Alise SRL', 'Alyssa', 'Aster', 'Cos Moda',
+  'Cotton SRL', 'Devon Style SRL', 'Dory SRLS', 'Freight',
+  'G&K Group', 'GI Studio', 'Girasole S.R.L.', 'Good Friends',
+  'Hanun Creations', 'JT Moda', 'Kos Pure Linen SRL', 'Lamiar SRL',
+  'Last Lady', 'Lina', 'Luna', 'Lux Luna', 'M1', 'Melly & Co',
+  'MG Design', 'MIYA', 'Mooi', 'My Dress', 'Nan Yu Jewelry',
+  'Sexy Woman', 'Shanghai Passion',
+  'Shenzhen Rymanc Industrial Co Ltd', 'Soonie',
+  'Stella Milani Fashion', 'Vanis SRL', 'Weiteng', 'WI & CO',
+  'Yiwu Anyi Jewelery Factory', 'Yiwu Mica Jewellery',
+  'Yiwu Yoby Trading Co. LTD', 'YIWU YONGER BELT CO. LTD',
+  'Zelante', 'ZERO&ELAINE'
+];
+
 const SAMPLE_CATS  = ['', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt', 'Sample Jacket', 'Sample Knit'];
 const JEWEL_CATS   = ['', 'Jewellery', 'Accessories', 'Homewares', 'Belts', 'Bags', 'Scarves'];
 const STOCKED_CATS = ['', 'Top', 'Pant', 'Dress', 'Skirt', 'Jacket', 'Knit'];
@@ -494,7 +644,7 @@ const STOCKED_QUICK = [
   { label: 'Knit',   cat: 'Knit',   name: 'Knit' },
 ];
 
-// Selecting a preset REPLACES all current sizes — it does not append.
+// Selecting a preset REPLACES all current sizes
 const SIZE_PRESETS = {
   'OS':           ['OS'],
   'XS-S-M-L':    ['XS', 'S', 'M', 'L'],
@@ -505,12 +655,12 @@ const SIZE_PRESETS = {
   'SM-ML-XL':     ['S/M', 'M/L', 'XL'],
 };
 
-const OUTLET_IDS = {
-  ht: '06f24f8b-21a8-11ef-f4ca-d46876ffea7a',
-  pf: '06f24f8b-21a8-11ef-f4ca-d468a998f3bc',
-  ss: '06f24f8b-21fd-11ef-f4ca-d466e09040b3',
-  sw: '06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200'
-};
+const OUTLETS = [
+  { key: 'ht', label: 'Harbour Town',       id: '06f24f8b-21a8-11ef-f4ca-d46876ffea7a' },
+  { key: 'pf', label: 'Pacific Fair',       id: '06f24f8b-21a8-11ef-f4ca-d468a998f3bc' },
+  { key: 'ss', label: 'Southport Showroom', id: '06f24f8b-21fd-11ef-f4ca-d466e09040b3' },
+  { key: 'sw', label: 'Southport Warehouse',id: '06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200' },
+];
 
 const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
 
@@ -661,7 +811,7 @@ function newProductObj() {
   return {
     _id:          nextId++,
     open:         true,
-    productType:  null,       // 'sample' | 'jewellery' | 'stocked'
+    productType:  null,
     sellOnline:   false,
     name:         '',
     category:     '',
@@ -671,10 +821,10 @@ function newProductObj() {
     customSku:    '',
     supplierName: '',
     supplierCode: '',
-    stock:        blankStock(),   // used for sample + jewellery
+    stock:        blankStock(),
     colour:       '',
     sizes:        [],
-    sizeStock:    {},             // { [size]: { ht, pf, ss, sw } } for stocked clothing
+    sizeStock:    {},
   };
 }
 
@@ -709,7 +859,6 @@ function toggleCard(id) {
   if (p) { p.open = !p.open; renderList(); }
 }
 
-/* ---- Type ---- */
 function setType(id, type) {
   const p = products.find(p => p._id === id);
   if (!p) return;
@@ -731,12 +880,10 @@ function clearType(id) {
   renderList();
 }
 
-/* ---- Online toggle ---- */
 function setSellOnline(id, val) {
   const p = products.find(p => p._id === id);
   if (!p) return;
   p.sellOnline = val;
-  // Lightweight DOM update — no full re-render needed
   const card = document.querySelector(`[data-pid="${id}"]`);
   if (!card) return;
   card.querySelector('.btn-online-yes').className = 'btn-online btn-online-yes' + (val ? ' is-yes' : '');
@@ -746,7 +893,6 @@ function setSellOnline(id, val) {
     : 'A 4-digit code will be appended to keep the name unique in Lightspeed.';
 }
 
-/* ---- Quick-add ---- */
 function applyQuick(id, cat, name) {
   const p = products.find(p => p._id === id);
   if (!p) return;
@@ -759,7 +905,6 @@ function applyQuick(id, cat, name) {
   }, 30);
 }
 
-/* ---- Field updates ---- */
 function updateField(id, field, value) {
   const p = products.find(p => p._id === id);
   if (!p) return;
@@ -772,13 +917,11 @@ function updateField(id, field, value) {
   if (badge)   badge.textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
 }
 
-/* ---- Sizes ---- */
 function applySizePreset(id, key) {
   const p = products.find(p => p._id === id);
   if (!p) return;
-  const newSizes  = SIZE_PRESETS[key];
-  const newStock  = {};
-  // Preserve any stock already entered for sizes that exist in the preset
+  const newSizes = SIZE_PRESETS[key];
+  const newStock = {};
   newSizes.forEach(s => { newStock[s] = p.sizeStock[s] || blankStock(); });
   p.sizes     = [...newSizes];
   p.sizeStock = newStock;
@@ -807,15 +950,16 @@ function removeSize(id, size) {
   renderList();
 }
 
-/* ---- Stock ---- */
 function updateStock(id, loc, val) {
   const p = products.find(p => p._id === id);
   if (p) p.stock[loc] = parseInt(val) || 0;
+  refreshStockModalTotal(id);
 }
 
 function updateSizeStock(id, size, loc, val) {
   const p = products.find(p => p._id === id);
   if (p && p.sizeStock[size]) p.sizeStock[size][loc] = parseInt(val) || 0;
+  refreshStockModalTotal(id);
 }
 
 function getTotalStock(p) {
@@ -828,52 +972,102 @@ function getTotalStock(p) {
   return Object.values(p.stock).reduce((a, b) => a + b, 0);
 }
 
-/* ---- Drawer ---- */
-function openDrawer(id) {
+/* ============================================================
+   FULL-SCREEN STOCK MODAL
+   ============================================================ */
+let _stockModalId = null;
+
+function openStockModal(id) {
+  _stockModalId = id;
   const p = products.find(p => p._id === id);
   const isVariant = p.productType === 'stocked' && p.sizes.length > 0;
-  document.getElementById('drawer-title').textContent = isVariant ? 'Stock by Size' : 'Stock Levels';
 
-  let html = '';
-  if (isVariant) {
-    p.sizes.forEach(size => {
-      const s = p.sizeStock[size] || blankStock();
-      html += `
-        <div class="drawer-size-block">
-          <div class="drawer-size-header">Size: ${esc(size)}</div>
-          <div class="drawer-size-outlets">
-            <div class="field"><label>Harbour Town</label>
-              <input type="number" value="${s.ht}" oninput="updateSizeStock(${id},'${esc(size)}','ht',this.value)"></div>
-            <div class="field"><label>Pacific Fair</label>
-              <input type="number" value="${s.pf}" oninput="updateSizeStock(${id},'${esc(size)}','pf',this.value)"></div>
-            <div class="field"><label>Southport Showroom</label>
-              <input type="number" value="${s.ss}" oninput="updateSizeStock(${id},'${esc(size)}','ss',this.value)"></div>
-            <div class="field"><label>Southport Warehouse</label>
-              <input type="number" value="${s.sw}" oninput="updateSizeStock(${id},'${esc(size)}','sw',this.value)"></div>
-          </div>
-        </div>`;
-    });
-  } else {
-    const s = p.stock;
-    html = `
-      <div class="field"><label>Harbour Town</label>
-        <input type="number" value="${s.ht}" oninput="updateStock(${id},'ht',this.value)"></div>
-      <div class="field"><label>Pacific Fair</label>
-        <input type="number" value="${s.pf}" oninput="updateStock(${id},'pf',this.value)"></div>
-      <div class="field"><label>Southport Showroom</label>
-        <input type="number" value="${s.ss}" oninput="updateStock(${id},'ss',this.value)"></div>
-      <div class="field"><label>Southport Warehouse</label>
-        <input type="number" value="${s.sw}" oninput="updateStock(${id},'sw',this.value)"></div>`;
-  }
+  document.getElementById('stock-modal-title').textContent =
+    isVariant ? 'Stock by Size' : 'Stock Levels';
+  document.getElementById('stock-modal-subtitle').textContent =
+    esc(p.name || 'Unnamed product');
 
-  document.getElementById('drawer-content').innerHTML = html;
-  document.getElementById('drawer').classList.add('active');
-  document.getElementById('overlay').classList.add('active');
+  renderStockModalBody(p);
+  refreshStockModalTotal(id);
+  document.getElementById('stock-modal-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
-function closeDrawer() {
-  document.getElementById('drawer').classList.remove('active');
-  document.getElementById('overlay').classList.remove('active');
+function renderStockModalBody(p) {
+  const body = document.getElementById('stock-modal-body');
+  const isVariant = p.productType === 'stocked' && p.sizes.length > 0;
+
+  if (!isVariant) {
+    // Simple 2x2 grid for non-variant products
+    const html = `
+      <div class="stock-simple-grid">
+        ${OUTLETS.map(o => `
+          <div class="stock-simple-card">
+            <div class="stock-simple-card-label">${o.label}</div>
+            <input type="number" min="0" value="${p.stock[o.key]}"
+              oninput="updateStock(${p._id},'${o.key}',this.value)">
+          </div>`).join('')}
+      </div>`;
+    body.innerHTML = html;
+    return;
+  }
+
+  // Variant grid: sizes as rows, outlets as columns
+  const colTotals = {};
+  OUTLETS.forEach(o => { colTotals[o.key] = 0; });
+
+  const rows = p.sizes.map(size => {
+    const s        = p.sizeStock[size] || blankStock();
+    const rowTotal = OUTLETS.reduce((sum, o) => sum + (s[o.key] || 0), 0);
+    OUTLETS.forEach(o => { colTotals[o.key] += s[o.key] || 0; });
+    return `
+      <tr>
+        <td>${esc(size)}</td>
+        ${OUTLETS.map(o => `
+          <td>
+            <input type="number" min="0" value="${s[o.key]}"
+              oninput="updateSizeStock(${p._id},'${esc(size)}','${o.key}',this.value)">
+          </td>`).join('')}
+        <td style="font-weight:700;text-align:center;font-size:13px;" class="js-row-total-${esc(size).replace(/[^a-z0-9]/gi,'_')}">${rowTotal}</td>
+      </tr>`;
+  }).join('');
+
+  const grandTotal = OUTLETS.reduce((sum, o) => sum + colTotals[o.key], 0);
+
+  body.innerHTML = `
+    <div class="stock-grid-wrap">
+      <table class="stock-grid-table">
+        <thead>
+          <tr>
+            <th>Size</th>
+            ${OUTLETS.map(o => `<th>${o.label}</th>`).join('')}
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            ${OUTLETS.map(o => `<td class="col-total">${colTotals[o.key]}</td>`).join('')}
+            <td class="col-total">${grandTotal}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>`;
+}
+
+function refreshStockModalTotal(id) {
+  if (_stockModalId !== id) return;
+  const p     = products.find(p => p._id === id);
+  const total = getTotalStock(p);
+  const el    = document.getElementById('stock-modal-total');
+  if (el) el.innerHTML = `Total units across all locations: <strong>${total}</strong>`;
+}
+
+function closeStockModal() {
+  document.getElementById('stock-modal-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+  _stockModalId = null;
   renderList();
 }
 
@@ -889,6 +1083,12 @@ function catOpts(cats, current) {
 function brandOpts(current) {
   return BRANDS.map(b =>
     `<option value="${esc(b)}"${current === b ? ' selected' : ''}>${b || '-- Select brand --'}</option>`
+  ).join('');
+}
+
+function supplierOpts(current) {
+  return SUPPLIERS.map(s =>
+    `<option value="${esc(s)}"${current === s ? ' selected' : ''}>${s || '-- Select supplier --'}</option>`
   ).join('');
 }
 
@@ -941,13 +1141,14 @@ function renderQuickRow(p) {
   const items = p.productType === 'sample' ? SAMPLE_QUICK
               : p.productType === 'jewellery' ? JEWEL_QUICK
               : STOCKED_QUICK;
-  const btns = items.map(item =>
-    `<button class="btn-quick" onclick="applyQuick(${p._id},'${esc(item.cat)}','${esc(item.name)}')">+ ${item.label}</button>`
-  ).join('');
   return `
     <div class="card-quick-wrap">
       <div class="card-quick-label">Quick Add</div>
-      <div class="card-quick-row">${btns}</div>
+      <div class="card-quick-row">
+        ${items.map(item =>
+          `<button class="btn-quick" onclick="applyQuick(${p._id},'${esc(item.cat)}','${esc(item.name)}')">+ ${item.label}</button>`
+        ).join('')}
+      </div>
     </div>`;
 }
 
@@ -1021,9 +1222,10 @@ function renderFields(p) {
           oninput="updateField(${p._id},'customSku',this.value)">
       </div>
       <div class="field">
-        <label>Supplier Name <span class="optional">(optional)</span></label>
-        <input type="text" placeholder="e.g. Fulfilment Co." value="${esc(p.supplierName)}"
-          oninput="updateField(${p._id},'supplierName',this.value)">
+        <label>Supplier <span class="optional">(optional)</span></label>
+        <select onchange="updateField(${p._id},'supplierName',this.value)">
+          ${supplierOpts(p.supplierName)}
+        </select>
       </div>
       <div class="field">
         <label>Supplier Code <span class="optional">(optional)</span></label>
@@ -1071,7 +1273,7 @@ function renderList() {
         <div class="card-preview${p.name ? '' : ' empty'}">${esc(p.name || 'New Product')}</div>
         <div class="card-actions">
           <div class="card-price-badge">${priceLabel}</div>
-          <button class="btn-card" onclick="event.stopPropagation();openDrawer(${p._id})"
+          <button class="btn-card" onclick="event.stopPropagation();openStockModal(${p._id})"
             style="${stockStyle}">STOCK [${total}]</button>
           <button class="btn-card" onclick="event.stopPropagation();duplicate(${p._id})">DUPLICATE</button>
           <button class="btn-card danger" onclick="event.stopPropagation();removeProduct(${p._id})">&#x2715;</button>
@@ -1086,37 +1288,38 @@ function renderList() {
 
 /* ============================================================
    SYNC
-   ============================================================
-   Cloudflare Worker actions required:
 
-   EXISTING:
-     ping            - health check
-     sync_product    - creates a standard product + sets inventory
+   The "Unknown action" error occurs because the Cloudflare Worker
+   does not yet handle 'create_variant_attribute' or
+   'sync_variant_product'. Add the following two cases to your
+   Worker's switch/if block:
 
-   NEW (need to be added to the worker):
+   ── create_variant_attribute ────────────────────────────────
+   Proxy:  POST https://<<domain>>.retail.lightspeed.app/api/2026-01/variant_attributes
+   Body:   { "name": payload.name }
+   Return: the raw Lightspeed response ({ data: { id, name } })
 
-     create_variant_attribute
-       Proxies: POST /api/2026-01/variant_attributes
-       Payload:  { name: string }
-       Returns:  { data: { id: string, name: string } }
-
-     sync_variant_product
-       Proxies:
-         1. POST /api/2.0/products  (creates the variant family)
-         2. For each returned variant ID, updates inventory via the inventory API
-       Payload: {
-         name, brand_name, type_name, tax_name, supply_price,
-         supplier_name, supplier_code,
-         colour_attr_id: string,
-         size_attr_id:   string,
-         variants: [{
-           colour:       string,
-           size:         string,
-           sku:          string,
-           retail_price: number,
-           inventory:    [{ outlet_id, current_amount }]
-         }]
-       }
+   ── sync_variant_product ────────────────────────────────────
+   Step 1: POST https://<<domain>>.retail.lightspeed.app/api/2.0/products
+   Body:
+   {
+     "name": payload.name,
+     "type_id": <looked up from payload.type_name>,
+     "brand_id": <looked up from payload.brand_name>,
+     "variants": payload.variants.map(v => ({
+       "sku": v.sku,
+       "retail_price": v.retail_price,
+       "supply_price": payload.supply_price,
+       "tax_name": payload.tax_name,
+       "supplier_name": payload.supplier_name,
+       "supplier_code": payload.supplier_code,
+       "variant_definitions": [
+         { "attribute_id": payload.colour_attr_id, "value": v.colour },
+         { "attribute_id": payload.size_attr_id,   "value": v.size   }
+       ]
+     }))
+   }
+   Step 2: For each variant ID returned, POST inventory updates.
    ============================================================ */
 async function startSync() {
   const password = localStorage.getItem('portal_password') || '';
@@ -1159,34 +1362,31 @@ async function startSync() {
       const finalName = p.sellOnline ? p.name : `${p.name} - ${suffix}`;
 
       if (p.productType === 'stocked') {
-        // --- Step 1: Create the Colour variant attribute ---
+        // Step 1: Create Colour variant attribute
         const colourAttr = await workerCall({
           action:  'create_variant_attribute',
           payload: { name: 'Colour' }
         });
-        const colourAttrId = colourAttr.data.id;
 
-        // --- Step 2: Create the Size variant attribute ---
+        // Step 2: Create Size variant attribute
         const sizeAttr = await workerCall({
           action:  'create_variant_attribute',
           payload: { name: 'Size' }
         });
-        const sizeAttrId = sizeAttr.data.id;
 
-        // --- Step 3: Create the full variant family in a single call.
-        // The worker POSTs to /api/2.0/products then sets inventory per variant ID. ---
+        // Step 3: Create the full variant family + set inventory
         await workerCall({
           action: 'sync_variant_product',
           payload: {
-            name:          finalName,
-            brand_name:    p.brandName,
-            type_name:     p.category,
-            tax_name:      'GST',
-            supply_price:  parseFloat(p.supplyPrice) || 0,
-            supplier_name: p.supplierName,
-            supplier_code: p.supplierCode,
-            colour_attr_id: colourAttrId,
-            size_attr_id:   sizeAttrId,
+            name:           finalName,
+            brand_name:     p.brandName,
+            type_name:      p.category,
+            tax_name:       'GST',
+            supply_price:   parseFloat(p.supplyPrice) || 0,
+            supplier_name:  p.supplierName,
+            supplier_code:  p.supplierCode,
+            colour_attr_id: colourAttr.data.id,
+            size_attr_id:   sizeAttr.data.id,
             variants: p.sizes.map(size => {
               const base = p.customSku.trim();
               const sku  = base
@@ -1198,19 +1398,16 @@ async function startSync() {
                 size,
                 sku,
                 retail_price: parseFloat(p.retailPrice) || 0,
-                inventory: [
-                  { outlet_id: OUTLET_IDS.ht, current_amount: s.ht },
-                  { outlet_id: OUTLET_IDS.pf, current_amount: s.pf },
-                  { outlet_id: OUTLET_IDS.ss, current_amount: s.ss },
-                  { outlet_id: OUTLET_IDS.sw, current_amount: s.sw },
-                ]
+                inventory: OUTLETS.map(o => ({
+                  outlet_id:      o.id,
+                  current_amount: s[o.key] || 0
+                }))
               };
             })
           }
         });
 
       } else {
-        // Sample or Jewellery: single standard product
         await workerCall({
           action: 'sync_product',
           payload: {
@@ -1223,12 +1420,10 @@ async function startSync() {
             type_name:     p.category,
             supplier_name: p.supplierName,
             supplier_code: p.supplierCode,
-            inventory: [
-              { outlet_id: OUTLET_IDS.ht, current_amount: p.stock.ht },
-              { outlet_id: OUTLET_IDS.pf, current_amount: p.stock.pf },
-              { outlet_id: OUTLET_IDS.ss, current_amount: p.stock.ss },
-              { outlet_id: OUTLET_IDS.sw, current_amount: p.stock.sw },
-            ]
+            inventory: OUTLETS.map(o => ({
+              outlet_id:      o.id,
+              current_amount: p.stock[o.key] || 0
+            }))
           }
         });
       }
@@ -1239,7 +1434,7 @@ async function startSync() {
       console.error(err);
       btn.disabled    = false;
       btn.textContent = 'SYNC PRODUCTS';
-      alert(`Sync failed for "${p.name}".\n\n${err.message}`);
+      alert(`Sync failed for "${p.name}".\n\n${err.message}\n\nIf this says "Unknown action", the Cloudflare Worker needs to be updated to support variant products. See the code comments in startSync() for what to add.`);
       return;
     }
   }

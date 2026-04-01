@@ -10,7 +10,6 @@
   :root {
     --bg: #fafafa;
     --surface: rgba(0,0,0,0.04);
-    --surface2: rgba(0,0,0,0.06);
     --border: rgba(0,0,0,0.12);
     --text: #1a1a1a;
     --muted: rgba(0,0,0,0.45);
@@ -46,77 +45,12 @@
     text-transform: uppercase;
     text-align: right;
   }
-
   .header-right p + p { margin-top: 3px; color: rgba(0,0,0,0.3); }
 
   .container { max-width: 860px; margin: 0 auto; }
 
-  /* Config panel */
-  .config-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 24px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
-    align-items: end;
-  }
-
-  .config-panel .field-full { grid-column: 1 / -1; }
-
-  .status-dot {
-    display: inline-block;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #2ecc71;
-    margin-right: 6px;
-    box-shadow: 0 0 6px rgba(46,204,113,0.5);
-  }
-
-  .status-text { font-size: 11px; font-weight: 700; color: #27ae60; letter-spacing: 0.08em; }
-
-  /* Template bar */
-  .template-label {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-
-  .template-bar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .btn-temp {
-    background: rgba(0,0,0,0.05);
-    border: 1px solid rgba(0,0,0,0.15);
-    color: #1a1a1a;
-    padding: 6px 12px;
-    font-size: 10px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: all 0.15s;
-    text-transform: uppercase;
-  }
-
-  .btn-temp:hover { background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.3); }
-
-  /* Product list */
-  #product-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
+  /* ---- Product list ---- */
+  #product-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
 
   .product-card {
     background: var(--surface);
@@ -125,13 +59,13 @@
     overflow: hidden;
     transition: border-color 0.2s;
   }
+  .product-card:focus-within { border-color: rgba(0,0,0,0.28); }
 
-  .product-card:focus-within { border-color: rgba(255,255,255,0.7); }
-
+  /* ---- Card header ---- */
   .card-header {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding: 14px 18px;
     cursor: pointer;
     user-select: none;
@@ -141,7 +75,7 @@
     font-family: 'Syne', sans-serif;
     font-size: 11px;
     font-weight: 700;
-    color: #ffffff;
+    color: #fff;
     background: #1a1a1a;
     width: 28px; height: 28px;
     border-radius: 2px;
@@ -150,6 +84,21 @@
     justify-content: center;
     flex-shrink: 0;
   }
+
+  .card-type-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .badge-unset     { background: rgba(200,140,0,0.12); color: rgba(150,100,0,0.9); }
+  .badge-sample    { background: rgba(0,0,0,0.08);     color: rgba(0,0,0,0.5); }
+  .badge-jewellery { background: rgba(130,80,175,0.12); color: rgb(100,45,140); }
+  .badge-stocked   { background: rgba(46,204,113,0.12); color: #1e9450; }
 
   .card-preview {
     flex: 1;
@@ -160,14 +109,16 @@
     text-overflow: ellipsis;
     text-transform: uppercase;
     font-weight: 600;
+    min-width: 0;
   }
-
   .card-preview.empty {
-    color: rgba(0,0,0,0.3);
+    color: rgba(0,0,0,0.28);
     font-style: italic;
     font-weight: 400;
     text-transform: none;
   }
+
+  .card-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
   .card-price-badge {
     font-size: 12px;
@@ -189,48 +140,127 @@
     border-radius: 2px;
     transition: all 0.15s;
     letter-spacing: 0.05em;
+    white-space: nowrap;
   }
-
   .btn-card:hover { background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.3); }
   .btn-card.danger:hover { background: rgba(200,0,0,0.08); border-color: rgba(200,0,0,0.3); color: #c00; }
 
-  .card-toggle {
-    color: rgba(0,0,0,0.35);
-    font-size: 16px;
-    transition: transform 0.2s;
-    flex-shrink: 0;
-  }
-
+  .card-toggle { color: rgba(0,0,0,0.35); font-size: 16px; transition: transform 0.2s; flex-shrink: 0; }
   .card-toggle.open { transform: rotate(180deg); }
 
+  /* ---- Card body ---- */
   .card-body {
     display: none;
-    padding: 0 18px 20px;
+    padding: 0 18px 22px;
     border-top: 1px solid var(--border);
     animation: slideDown 0.15s ease;
   }
-
   .card-body.open { display: block; }
 
   @keyframes slideDown {
     from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  .fields-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-top: 16px;
+  /* ---- Type selector ---- */
+  .type-selector { padding: 18px 0 4px; }
+
+  .type-prompt {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.38);
+    margin-bottom: 10px;
   }
 
+  .type-buttons { display: flex; flex-direction: column; gap: 8px; }
+
+  .btn-type {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .btn-type:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .btn-type-sub {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    opacity: 0.5;
+    text-transform: none;
+    margin-top: 2px;
+  }
+  .btn-type-left { display: flex; flex-direction: column; }
+  .btn-type-arrow { font-size: 14px; opacity: 0.4; }
+  .btn-type:hover .btn-type-arrow { opacity: 1; }
+
+  /* ---- Change type link ---- */
+  .change-type-row { margin: 14px 0 16px; }
+
+  .change-type-link {
+    font-size: 10px;
+    color: rgba(0,0,0,0.33);
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    background: none;
+    border: none;
+    font-family: 'DM Mono', monospace;
+    padding: 0;
+    transition: color 0.15s;
+  }
+  .change-type-link:hover { color: rgba(0,0,0,0.7); }
+
+  /* ---- Quick-add row ---- */
+  .card-quick-wrap {
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .card-quick-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.35);
+    margin-bottom: 8px;
+  }
+  .card-quick-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .btn-quick {
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.14);
+    color: #1a1a1a;
+    padding: 5px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .btn-quick:hover { background: rgba(0,0,0,0.12); border-color: rgba(0,0,0,0.3); }
+
+  /* ---- Fields grid ---- */
+  .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .field-full { grid-column: 1 / -1; }
 
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
 
   label {
     font-size: 10px;
@@ -239,12 +269,11 @@
     color: rgba(0,0,0,0.55);
     font-weight: 600;
   }
-
   label .optional { color: rgba(0,0,0,0.35); font-size: 9px; text-transform: none; letter-spacing: 0; font-weight: 400; }
   label .required { color: #1a1a1a; }
 
   input, select {
-    background: #ffffff;
+    background: #fff;
     border: 1px solid rgba(0,0,0,0.15);
     border-radius: var(--radius);
     color: #1a1a1a;
@@ -255,24 +284,107 @@
     width: 100%;
     outline: none;
   }
-
-  input:focus, select:focus {
-    border-color: rgba(0,0,0,0.4);
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
-  }
-
-  select option { background: #ffffff; color: #1a1a1a; }
+  input:focus, select:focus { border-color: rgba(0,0,0,0.4); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+  select option { background: #fff; color: #1a1a1a; }
   input::placeholder { color: rgba(0,0,0,0.3); }
   input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
 
-  /* Stock drawer */
+  /* ---- Sizes section (stocked) ---- */
+  .sizes-section { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; }
+
+  .sizes-preset-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.35);
+    margin-bottom: 2px;
+  }
+
+  .sizes-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .btn-size-preset {
+    background: rgba(0,0,0,0.04);
+    border: 1px dashed rgba(0,0,0,0.2);
+    color: rgba(0,0,0,0.6);
+    padding: 5px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .btn-size-preset:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; border-style: solid; }
+
+  .size-chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 44px;
+    padding: 8px;
+    background: rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: var(--radius);
+    align-items: flex-start;
+    align-content: flex-start;
+  }
+
+  .size-chip {
+    background: #1a1a1a;
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 5px 10px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .size-chip-remove {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+    line-height: 1;
+    font-family: inherit;
+    transition: color 0.1s;
+  }
+  .size-chip-remove:hover { color: #ff8080; }
+  .size-chips-empty { font-size: 11px; color: rgba(0,0,0,0.26); font-style: italic; align-self: center; }
+
+  .size-manual-row { display: flex; gap: 8px; }
+  .size-manual-row input { flex: 1; }
+
+  .btn-size-add {
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    border-radius: var(--radius);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    text-transform: uppercase;
+  }
+  .btn-size-add:hover { background: #333; }
+
+  /* ---- Stock drawer ---- */
   .drawer-overlay {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     background: rgba(0,0,0,0.35);
     display: none; z-index: 1999;
   }
-
   .drawer-overlay.active { display: block; }
 
   .drawer {
@@ -286,7 +398,6 @@
     display: flex;
     flex-direction: column;
   }
-
   .drawer.active { right: 0; }
 
   .drawer h3 {
@@ -304,7 +415,7 @@
 
   .drawer-save {
     background: #1a1a1a;
-    color: #ffffff;
+    color: #fff;
     border: none;
     padding: 14px;
     font-family: 'DM Mono', monospace;
@@ -316,10 +427,9 @@
     margin-top: 28px;
     transition: all 0.15s;
   }
-
   .drawer-save:hover { background: #333; }
 
-  /* Add button */
+  /* ---- Add button ---- */
   .add-btn {
     display: flex;
     align-items: center;
@@ -337,10 +447,9 @@
     letter-spacing: 0.06em;
     margin-bottom: 16px;
   }
-
   .add-btn:hover { border-color: rgba(0,0,0,0.4); color: #1a1a1a; background: rgba(0,0,0,0.07); }
 
-  /* Sync section */
+  /* ---- Sync section ---- */
   .export-section {
     background: #1a1a1a;
     border: 1px solid #111;
@@ -348,20 +457,18 @@
     padding: 22px;
     margin-top: 8px;
   }
-
   .export-section h2 {
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px;
     font-weight: 600;
-    color: #ffffff;
+    color: #fff;
     letter-spacing: 0.04em;
     margin-bottom: 16px;
   }
-
   .export-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
   .btn-sync {
-    background: #ffffff;
+    background: #fff;
     color: #1a1a1a;
     border: none;
     padding: 12px 28px;
@@ -373,7 +480,6 @@
     border-radius: var(--radius);
     transition: all 0.15s;
   }
-
   .btn-sync:hover { background: #f0f0f0; box-shadow: 0 2px 16px rgba(0,0,0,0.2); }
   .btn-sync:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 
@@ -390,17 +496,16 @@
     border-radius: var(--radius);
     transition: all 0.15s;
   }
-
   .btn-clear:hover { border-color: #ff8080; color: #ffb0b0; background: rgba(255,80,80,0.1); }
 
   .counter { font-size: 11px; color: rgba(255,255,255,0.55); margin-left: auto; letter-spacing: 0.06em; }
-  .counter span { color: #ffffff; font-weight: 600; }
+  .counter span { color: #fff; font-weight: 600; }
 
-  /* Toast */
+  /* ---- Toast ---- */
   #toast {
     position: fixed; bottom: 28px; right: 28px;
     background: #1a1a1a;
-    color: #ffffff;
+    color: #fff;
     font-family: 'DM Mono', monospace;
     font-size: 12px;
     font-weight: 700;
@@ -413,9 +518,9 @@
     z-index: 3000;
     letter-spacing: 0.05em;
   }
-
   #toast.show { opacity: 1; transform: translateY(0); }
 
+  /* ---- Login ---- */
   .logout-btn {
     background: none;
     border: 1px solid rgba(0,0,0,0.15);
@@ -431,11 +536,8 @@
     transition: all 0.15s;
     text-transform: uppercase;
   }
+  .logout-btn:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
 
-  .logout-btn:hover {
-    border-color: rgba(0,0,0,0.3);
-    color: #1a1a1a;
-  }
   .login-screen {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
@@ -445,21 +547,14 @@
     justify-content: center;
     z-index: 9999;
   }
-
   .login-screen.hidden { display: none; }
 
-  .login-box {
-    text-align: center;
-    width: 320px;
-  }
+  .login-box { text-align: center; width: 320px; }
 
   .login-box img {
-    height: 52px;
-    width: auto;
-    margin-bottom: 32px;
+    height: 52px; width: auto;
+    margin: 0 auto 32px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
     filter: invert(1);
   }
 
@@ -480,7 +575,7 @@
   }
 
   .login-box input {
-    background: #ffffff;
+    background: #fff;
     border: 1px solid rgba(0,0,0,0.15);
     border-radius: 4px;
     color: #1a1a1a;
@@ -494,16 +589,12 @@
     margin-bottom: 10px;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
-
-  .login-box input:focus {
-    border-color: rgba(0,0,0,0.4);
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
-  }
+  .login-box input:focus { border-color: rgba(0,0,0,0.4); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
 
   .login-box button {
     width: 100%;
     background: #1a1a1a;
-    color: #ffffff;
+    color: #fff;
     border: none;
     padding: 13px;
     font-family: 'DM Mono', monospace;
@@ -514,7 +605,6 @@
     cursor: pointer;
     transition: background 0.15s;
   }
-
   .login-box button:hover { background: #333; }
 
   .login-error {
@@ -526,7 +616,7 @@
     letter-spacing: 0.04em;
   }
 
-  /* Shopify reminder modal */
+  /* ---- Shopify modal ---- */
   .modal-overlay {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
@@ -536,11 +626,10 @@
     justify-content: center;
     z-index: 4000;
   }
-
   .modal-overlay.active { display: flex; }
 
   .modal-box {
-    background: #ffffff;
+    background: #fff;
     border-radius: 6px;
     padding: 40px 36px;
     max-width: 440px;
@@ -548,13 +637,7 @@
     text-align: center;
     box-shadow: 0 8px 40px rgba(0,0,0,0.18);
   }
-
-  .modal-logo {
-    height: 36px;
-    width: auto;
-    margin-bottom: 20px;
-    filter: invert(1);
-  }
+  .modal-logo { height: 36px; width: auto; margin-bottom: 20px; filter: invert(1); }
 
   .modal-box h2 {
     font-family: 'Cormorant Garamond', serif;
@@ -563,7 +646,6 @@
     color: #1a1a1a;
     margin-bottom: 12px;
   }
-
   .modal-box p {
     font-size: 12px;
     color: #555;
@@ -571,13 +653,12 @@
     margin-bottom: 24px;
     font-family: 'DM Mono', monospace;
   }
-
   .modal-box p strong { color: #1a1a1a; }
 
   .modal-btn {
     display: block;
     background: #1a1a1a;
-    color: #ffffff;
+    color: #fff;
     text-decoration: none;
     padding: 13px 20px;
     font-family: 'DM Mono', monospace;
@@ -588,7 +669,6 @@
     margin-bottom: 10px;
     transition: background 0.15s;
   }
-
   .modal-btn:hover { background: #333; }
 
   .modal-close {
@@ -605,20 +685,18 @@
     cursor: pointer;
     transition: all 0.15s;
   }
-
   .modal-close:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
 
   @media (max-width: 600px) {
     .fields-grid { grid-template-columns: 1fr; }
-    .config-panel { grid-template-columns: 1fr; }
     header { flex-direction: column; align-items: flex-start; gap: 14px; }
     .drawer { width: 100%; right: -100%; }
-    .card-actions { gap: 5px; }
   }
 </style>
 </head>
 <body>
 
+<!-- ========== LOGIN ========== -->
 <div class="login-screen" id="login-screen">
   <div class="login-box">
     <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion">
@@ -630,51 +708,45 @@
   </div>
 </div>
 
+<!-- ========== MAIN ========== -->
 <div id="main-content" style="display:none;">
 
-<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+  <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
 
-<div class="drawer" id="drawer">
-  <h3>Stock Levels</h3>
-  <div class="drawer-fields" id="drawer-content"></div>
-  <button class="drawer-save" onclick="closeDrawer()">SAVE &amp; CLOSE</button>
-</div>
-
-<header>
-  <img src="Imagine Fashion Logo Transp.png" class="if-logo" alt="Imagine Fashion">
-  <div class="header-right">
-    <p>Lightspeed X-Series</p>
-    <p>Direct Product Sync</p>
-    <button onclick="logout()" class="logout-btn">Log Out</button>
+  <div class="drawer" id="drawer">
+    <h3>Stock Levels</h3>
+    <div class="drawer-fields" id="drawer-content"></div>
+    <button class="drawer-save" onclick="closeDrawer()">SAVE &amp; CLOSE</button>
   </div>
-</header>
 
-<div class="container">
-
-  <!-- Quick templates -->
-  <div class="template-label">Quick Add</div>
-  <div class="template-bar" id="templates"></div>
-
-  <!-- Product list -->
-  <div id="product-list"></div>
-
-  <button class="add-btn" onclick="addProduct()">
-    <span style="font-size:18px;line-height:1;">+</span> Add Product
-  </button>
-
-  <!-- Sync -->
-  <div class="export-section">
-    <h2>Sync to Lightspeed</h2>
-    <div class="export-row">
-      <button class="btn-sync" id="sync_btn" onclick="startSync()">SYNC PRODUCTS</button>
-      <button class="btn-clear" onclick="clearAll()">CLEAR ALL</button>
-      <div class="counter" id="counter"><span>0</span> products</div>
+  <header>
+    <img src="Imagine Fashion Logo Transp.png" class="if-logo" alt="Imagine Fashion">
+    <div class="header-right">
+      <p>Lightspeed X-Series</p>
+      <p>Direct Product Sync</p>
+      <button onclick="logout()" class="logout-btn">Log Out</button>
     </div>
+  </header>
+
+  <div class="container">
+
+    <div id="product-list"></div>
+
+    <button class="add-btn" onclick="addProduct()">
+      <span style="font-size:18px;line-height:1;">+</span> Add Product
+    </button>
+
+    <div class="export-section">
+      <h2>Sync to Lightspeed</h2>
+      <div class="export-row">
+        <button class="btn-sync" id="sync_btn" onclick="startSync()">SYNC PRODUCTS</button>
+        <button class="btn-clear" onclick="clearAll()">CLEAR ALL</button>
+        <div class="counter" id="counter"><span>0</span> products</div>
+      </div>
+    </div>
+
   </div>
-
 </div>
-
-</div><!-- end main-content -->
 
 <!-- Shopify reminder modal -->
 <div class="modal-overlay" id="shopify-modal">
@@ -690,462 +762,732 @@
 <div id="toast"></div>
 
 <script>
-  let products = [];
-  let nextId = 1;
+/* ============================================================
+   DATA
+   ============================================================ */
+let products = [];
+let nextId   = 1;
 
-  const CATEGORIES = [
-    '', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt',
-    'Sample Jacket', 'Sample Knit', 'Jewellery', 'Accessories',
-    'Homewares', 'Belts', 'Bags', 'Scarves'
-  ];
+const BRANDS = [
+  '', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display',
+  'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion',
+  'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery',
+  'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22',
+  'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26',
+  'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021',
+  'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 'Winter 2026',
+  'Wrapped Gift Cards'
+];
 
-  const BRANDS = [
-    '', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display',
-    'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion',
-    'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery',
-    'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22',
-    'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26',
-    'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021',
-    'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 'Winter 2026',
-    'Wrapped Gift Cards'
-  ];
+// Sample Clothing
+const SAMPLE_CATS = [
+  '', 'Sample Top', 'Sample Pant', 'Sample Dress',
+  'Sample Skirt', 'Sample Jacket', 'Sample Knit'
+];
+const SAMPLE_QUICK = [
+  { label: 'Top',    cat: 'Sample Top',    name: 'Top Sample' },
+  { label: 'Pant',   cat: 'Sample Pant',   name: 'Pant Sample' },
+  { label: 'Dress',  cat: 'Sample Dress',  name: 'Dress Sample' },
+  { label: 'Skirt',  cat: 'Sample Skirt',  name: 'Skirt Sample' },
+  { label: 'Jacket', cat: 'Sample Jacket', name: 'Jacket Sample' },
+  { label: 'Knit',   cat: 'Sample Knit',   name: 'Knit Sample' },
+];
 
-  const OUTLET_IDS = {
-    ht: '06f24f8b-21a8-11ef-f4ca-d46876ffea7a',
-    pf: '06f24f8b-21a8-11ef-f4ca-d468a998f3bc',
-    ss: '06f24f8b-21fd-11ef-f4ca-d466e09040b3',
-    sw: '06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200'
-  };
+// Jewellery / Homewares / Accessories / Scarves
+const JEWEL_CATS = [
+  '', 'Jewellery', 'Accessories', 'Homewares', 'Belts', 'Bags', 'Scarves'
+];
+const JEWEL_QUICK = [
+  { label: 'Jewellery',   cat: 'Jewellery',   name: 'Jewellery' },
+  { label: 'Accessories', cat: 'Accessories', name: 'Accessories' },
+  { label: 'Homewares',   cat: 'Homewares',   name: 'Homewares' },
+  { label: 'Belts',       cat: 'Belts',       name: 'Belts' },
+  { label: 'Bags',        cat: 'Bags',        name: 'Bags' },
+  { label: 'Scarves',     cat: 'Scarves',     name: 'Scarves' },
+];
 
-  // ---- Worker URL - paste your Cloudflare Worker URL here ----
-  const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
+// Stocked Clothing
+const STOCKED_CATS = [
+  '', 'Top', 'Pant', 'Dress', 'Skirt', 'Jacket', 'Knit'
+];
+const STOCKED_QUICK = [
+  { label: 'Top',    cat: 'Top',    name: 'Top' },
+  { label: 'Pant',   cat: 'Pant',   name: 'Pant' },
+  { label: 'Dress',  cat: 'Dress',  name: 'Dress' },
+  { label: 'Skirt',  cat: 'Skirt',  name: 'Skirt' },
+  { label: 'Jacket', cat: 'Jacket', name: 'Jacket' },
+  { label: 'Knit',   cat: 'Knit',   name: 'Knit' },
+];
 
-  // ---- Login ----
-  const MAX_ATTEMPTS = 5;
-  const LOCKOUT_DURATION = 30 * 60 * 1000; // 30 minutes
+// Size presets
+const SIZE_PRESETS = {
+  'OS':       ['OS'],
+  'SM-ML':    ['S/M', 'M/L'],
+  'SM-ML-XL': ['S/M', 'M/L', 'XL'],
+  'S-M-L':    ['S', 'M', 'L'],
+  'S-M-L-XL': ['S', 'M', 'L', 'XL'],
+};
 
-  function checkLockout() {
-    const lockoutUntil = parseInt(localStorage.getItem('lockout_until') || '0');
-    if (Date.now() < lockoutUntil) {
-      const mins = Math.ceil((lockoutUntil - Date.now()) / 60000);
-      return `Too many failed attempts. Try again in ${mins} minute${mins !== 1 ? 's' : ''}.`;
-    }
-    return null;
+const OUTLET_IDS = {
+  ht: '06f24f8b-21a8-11ef-f4ca-d46876ffea7a',
+  pf: '06f24f8b-21a8-11ef-f4ca-d468a998f3bc',
+  ss: '06f24f8b-21fd-11ef-f4ca-d466e09040b3',
+  sw: '06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200'
+};
+
+const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+const MAX_ATTEMPTS     = 5;
+const LOCKOUT_DURATION = 30 * 60 * 1000;
+
+function checkLockout() {
+  const until = parseInt(localStorage.getItem('lockout_until') || '0');
+  if (Date.now() < until) {
+    const mins = Math.ceil((until - Date.now()) / 60000);
+    return `Too many failed attempts. Try again in ${mins} minute${mins !== 1 ? 's' : ''}.`;
   }
+  return null;
+}
 
-  function recordFailedAttempt() {
-    const attempts = parseInt(localStorage.getItem('failed_attempts') || '0') + 1;
-    localStorage.setItem('failed_attempts', attempts);
-    if (attempts >= MAX_ATTEMPTS) {
-      localStorage.setItem('lockout_until', Date.now() + LOCKOUT_DURATION);
-      localStorage.setItem('failed_attempts', '0');
-      return true; // locked out
-    }
-    return false;
+function recordFailedAttempt() {
+  const n = parseInt(localStorage.getItem('failed_attempts') || '0') + 1;
+  localStorage.setItem('failed_attempts', n);
+  if (n >= MAX_ATTEMPTS) {
+    localStorage.setItem('lockout_until', Date.now() + LOCKOUT_DURATION);
+    localStorage.setItem('failed_attempts', '0');
+    return true;
   }
+  return false;
+}
 
-  function attemptLogin() {
-    const entered = document.getElementById('login-password').value.trim();
-    if (!entered) return;
-
-    // Check lockout first
-    const lockoutMsg = checkLockout();
-    if (lockoutMsg) {
-      document.getElementById('login-error').textContent = lockoutMsg;
-      document.getElementById('login-password').disabled = true;
-      document.getElementById('login-btn').disabled = true;
-      return;
+function attemptLogin() {
+  const entered = document.getElementById('login-password').value.trim();
+  if (!entered) return;
+  const lockoutMsg = checkLockout();
+  if (lockoutMsg) {
+    document.getElementById('login-error').textContent = lockoutMsg;
+    document.getElementById('login-password').disabled = true;
+    document.getElementById('login-btn').disabled = true;
+    return;
+  }
+  fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Portal-Password': entered },
+    body: JSON.stringify({ action: 'ping' })
+  }).then(res => {
+    if (res.status === 401) {
+      const locked    = recordFailedAttempt();
+      const attempts  = parseInt(localStorage.getItem('failed_attempts') || '0');
+      const remaining = MAX_ATTEMPTS - attempts;
+      if (locked) {
+        document.getElementById('login-error').textContent =
+          'Too many failed attempts. This device is locked out for 30 minutes.';
+        document.getElementById('login-password').disabled = true;
+        document.getElementById('login-btn').disabled = true;
+      } else {
+        document.getElementById('login-error').textContent =
+          `Incorrect password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`;
+      }
+      document.getElementById('login-password').value = '';
+      document.getElementById('login-password').focus();
+    } else {
+      localStorage.removeItem('failed_attempts');
+      localStorage.removeItem('lockout_until');
+      localStorage.setItem('portal_password', entered);
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main-content').style.display = 'block';
     }
+  }).catch(() => {
+    document.getElementById('login-error').textContent =
+      'Could not reach server. Check your internet connection.';
+  });
+}
 
-    // Verify against the worker
+window.onload = () => {
+  const lockoutMsg = checkLockout();
+  if (lockoutMsg) {
+    document.getElementById('login-error').textContent = lockoutMsg;
+    document.getElementById('login-password').disabled = true;
+    document.getElementById('login-btn').disabled = true;
+  }
+  const saved = localStorage.getItem('portal_password');
+  if (saved) {
     fetch(WORKER_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Portal-Password': entered },
+      headers: { 'Content-Type': 'application/json', 'X-Portal-Password': saved },
       body: JSON.stringify({ action: 'ping' })
     }).then(res => {
-      if (res.status === 401) {
-        const lockedOut = recordFailedAttempt();
-        const attempts = parseInt(localStorage.getItem('failed_attempts') || '0');
-        const remaining = MAX_ATTEMPTS - attempts;
-        if (lockedOut) {
-          document.getElementById('login-error').textContent = 'Too many failed attempts. This device is locked out for 30 minutes.';
-          document.getElementById('login-password').disabled = true;
-          document.getElementById('login-btn').disabled = true;
-        } else {
-          document.getElementById('login-error').textContent = `Incorrect password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`;
-        }
-        document.getElementById('login-password').value = '';
-        document.getElementById('login-password').focus();
+      if (res.status !== 401) {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('main-content').style.display = 'block';
       } else {
-        // Success — clear failed attempts and unlock
-        localStorage.removeItem('failed_attempts');
-        localStorage.removeItem('lockout_until');
-        localStorage.setItem('portal_password', entered);
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('main-content').style.display = 'block';
-        document.getElementById('login-error').textContent = '';
+        localStorage.removeItem('portal_password');
       }
-    }).catch((err) => {
-      console.error('Login error:', err);
-      document.getElementById('login-error').textContent = 'Could not reach server. Check your internet connection.';
+    }).catch(() => {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main-content').style.display = 'block';
     });
   }
+  addProduct();
+};
 
-  // ---- Init ----
-  window.onload = () => {
-    // Check if device is locked out
-    const lockoutMsg = checkLockout();
-    if (lockoutMsg) {
-      document.getElementById('login-error').textContent = lockoutMsg;
-      document.getElementById('login-password').disabled = true;
-      document.getElementById('login-btn').disabled = true;
-    }
+function logout() {
+  localStorage.removeItem('portal_password');
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-password').disabled = false;
+  document.getElementById('login-btn').disabled = false;
+  document.getElementById('login-error').textContent = '';
+}
 
-    const saved = localStorage.getItem('portal_password');
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
 
-    // If we have a saved password, verify it's still valid then unlock
-    if (saved) {
-      fetch(WORKER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Portal-Password': saved },
-        body: JSON.stringify({ action: 'ping' })
-      }).then(res => {
-        if (res.status !== 401) {
-          document.getElementById('login-screen').classList.add('hidden');
-          document.getElementById('main-content').style.display = 'block';
-        } else {
-          localStorage.removeItem('portal_password');
-        }
-      }).catch(() => {
-        // If offline just let them through if password was saved
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('main-content').style.display = 'block';
-      });
-    }
+function updateCounter() {
+  const n = products.length;
+  document.getElementById('counter').innerHTML =
+    `<span>${n}</span> product${n !== 1 ? 's' : ''}`;
+}
 
-    CATEGORIES.filter(c => c).forEach(cat => {
-      const btn = document.createElement('button');
-      btn.className = 'btn-temp';
-      const label = cat.replace('Sample ', '');
-      btn.textContent = '+ ' + label;
-      btn.onclick = () => addProduct(cat, label + ' Sample');
-      document.getElementById('templates').appendChild(btn);
-    });
+function esc(s) {
+  return (s || '').toString()
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 
-    addProduct();
+function genSku() {
+  let s = '';
+  for (let i = 0; i < 8; i++) s += Math.floor(Math.random() * 10);
+  return s;
+}
+
+/* ============================================================
+   PRODUCT MANAGEMENT
+   ============================================================ */
+function newProductObj() {
+  return {
+    _id:          nextId++,
+    open:         true,
+    productType:  null,       // 'sample' | 'jewellery' | 'stocked'
+    name:         '',
+    category:     '',
+    brandName:    '',
+    retailPrice:  '',
+    supplyPrice:  '',
+    supplierName: '',
+    supplierCode: '',
+    customSku:    '',
+    stock:        { ht: 0, pf: 0, ss: 0, sw: 0 },
+    // stocked only
+    colour:       '',
+    sizes:        [],
   };
+}
 
-  function logout() {
-    localStorage.removeItem('portal_password');
-    document.getElementById('main-content').style.display = 'none';
-    document.getElementById('login-screen').classList.remove('hidden');
-    document.getElementById('login-password').value = '';
-    document.getElementById('login-password').disabled = false;
-    document.getElementById('login-btn').disabled = false;
-    document.getElementById('login-error').textContent = '';
-  }
+function addProduct() {
+  products.push(newProductObj());
+  renderList();
+  updateCounter();
+  setTimeout(() => {
+    const cards = document.querySelectorAll('.product-card');
+    if (cards.length) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
+}
 
-  function saveConfig() {
-    // Password is managed via the login screen, nothing to save here
-  }
+function removeProduct(id) {
+  products = products.filter(p => p._id !== id);
+  renderList();
+  updateCounter();
+}
 
-  // ---- Helpers ----
-  function uid() {
-    return Math.random().toString(36).slice(2, 10).toUpperCase();
-  }
+function duplicate(id) {
+  const src  = products.find(p => p._id === id);
+  const copy = JSON.parse(JSON.stringify(src));
+  copy._id   = nextId++;
+  copy.open  = true;
+  products.push(copy);
+  renderList();
+  updateCounter();
+}
 
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
+function toggleCard(id) {
+  const p = products.find(p => p._id === id);
+  if (p) { p.open = !p.open; renderList(); }
+}
 
-  function updateCounter() {
-    document.getElementById('counter').innerHTML = `<span>${products.length}</span> product${products.length !== 1 ? 's' : ''}`;
-  }
+function setType(id, type) {
+  const p = products.find(p => p._id === id);
+  if (!p) return;
+  p.productType = type;
+  p.category    = '';
+  p.sizes       = [];
+  renderList();
+}
 
-  function esc(str) {
-    return (str || '').toString()
-      .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
-      .replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
+function clearType(id) {
+  const p = products.find(p => p._id === id);
+  if (!p) return;
+  p.productType = null;
+  p.name        = '';
+  p.category    = '';
+  p.sizes       = [];
+  renderList();
+}
 
-  // ---- Product management ----
-  function addProduct(cat, name) {
-    if (cat === undefined) cat = '';
-
-    // If there's exactly one product and it's completely empty, fill it instead of adding a new one
-    if (
-      products.length === 1 &&
-      !products[0].name &&
-      !products[0].category &&
-      !products[0].retailPrice &&
-      (cat || name)
-    ) {
-      products[0].name = name || '';
-      products[0].category = cat;
-      renderList();
-      return;
-    }
-
-    products.push({
-      _id: nextId++,
-      open: true,
-      name: name || '',
-      category: cat,
-      brandName: '',
-      retailPrice: '',
-      supplyPrice: '',
-      supplierName: '',
-      supplierCode: '',
-      stock: { ht: 0, pf: 0, ss: 0, sw: 0 }
-    });
-    renderList();
-    updateCounter();
-    setTimeout(() => {
-      const cards = document.querySelectorAll('.product-card');
-      if (cards.length) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 50);
-  }
-
-  function removeProduct(id) {
-    products = products.filter(p => p._id !== id);
-    renderList();
-    updateCounter();
-  }
-
-  function duplicate(id) {
-    const src = products.find(p => p._id === id);
-    const copy = JSON.parse(JSON.stringify(src));
-    copy._id = nextId++;
-    copy.open = true;
-    products.push(copy);
-    renderList();
-    updateCounter();
-  }
-
-  function toggleCard(id) {
-    const p = products.find(p => p._id === id);
-    if (p) p.open = !p.open;
-    renderList();
-  }
-
-  function updateField(id, field, value) {
-    const p = products.find(p => p._id === id);
-    if (!p) return;
-    p[field] = value;
+function applyQuick(id, cat, name) {
+  const p = products.find(p => p._id === id);
+  if (!p) return;
+  p.category = cat;
+  p.name     = name;
+  renderList();
+  // Focus the product name input after a tick
+  setTimeout(() => {
     const card = document.querySelector(`[data-pid="${id}"]`);
     if (card) {
-      const preview = card.querySelector('.card-preview');
-      const badge = card.querySelector('.card-price-badge');
-      preview.textContent = p.name || 'New Product';
-      preview.className = 'card-preview' + (p.name ? '' : ' empty');
-      badge.textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+      const inp = card.querySelector('.js-name-input');
+      if (inp) inp.focus();
+    }
+  }, 30);
+}
+
+function updateField(id, field, value) {
+  const p = products.find(p => p._id === id);
+  if (!p) return;
+  p[field] = value;
+  // Update header preview without full re-render
+  const card = document.querySelector(`[data-pid="${id}"]`);
+  if (card) {
+    const preview = card.querySelector('.card-preview');
+    const badge   = card.querySelector('.card-price-badge');
+    if (preview) {
+      preview.textContent  = p.name || 'New Product';
+      preview.className    = 'card-preview' + (p.name ? '' : ' empty');
+    }
+    if (badge) badge.textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+  }
+}
+
+/* ---- Sizes (stocked) ---- */
+function applySizePreset(id, key) {
+  const p = products.find(p => p._id === id);
+  if (!p) return;
+  SIZE_PRESETS[key].forEach(s => {
+    if (!p.sizes.includes(s)) p.sizes.push(s);
+  });
+  renderList();
+}
+
+function addManualSize(id) {
+  const input = document.getElementById(`size-input-${id}`);
+  if (!input) return;
+  const val = input.value.trim().toUpperCase();
+  if (!val) return;
+  const p = products.find(p => p._id === id);
+  if (!p) return;
+  if (!p.sizes.includes(val)) p.sizes.push(val);
+  input.value = '';
+  renderList();
+  setTimeout(() => {
+    const inp = document.getElementById(`size-input-${id}`);
+    if (inp) inp.focus();
+  }, 20);
+}
+
+function removeSize(id, size) {
+  const p = products.find(p => p._id === id);
+  if (!p) return;
+  p.sizes = p.sizes.filter(s => s !== size);
+  renderList();
+}
+
+/* ---- Stock drawer ---- */
+function openDrawer(id) {
+  const p = products.find(p => p._id === id);
+  document.getElementById('drawer-content').innerHTML = `
+    <div class="field"><label>Harbour Town</label>
+      <input type="number" value="${p.stock.ht}" oninput="updateStock(${id},'ht',this.value)"></div>
+    <div class="field"><label>Pacific Fair</label>
+      <input type="number" value="${p.stock.pf}" oninput="updateStock(${id},'pf',this.value)"></div>
+    <div class="field"><label>Southport Showroom</label>
+      <input type="number" value="${p.stock.ss}" oninput="updateStock(${id},'ss',this.value)"></div>
+    <div class="field"><label>Southport Warehouse</label>
+      <input type="number" value="${p.stock.sw}" oninput="updateStock(${id},'sw',this.value)"></div>
+  `;
+  document.getElementById('drawer').classList.add('active');
+  document.getElementById('overlay').classList.add('active');
+}
+
+function updateStock(id, loc, val) {
+  const p = products.find(p => p._id === id);
+  if (p) p.stock[loc] = parseInt(val) || 0;
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('active');
+  document.getElementById('overlay').classList.remove('active');
+  renderList();
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function catOptions(cats, current) {
+  return cats.map(c =>
+    `<option value="${esc(c)}"${current === c ? ' selected' : ''}>${c || '-- Select category --'}</option>`
+  ).join('');
+}
+
+function brandOptions(current) {
+  return BRANDS.map(b =>
+    `<option value="${esc(b)}"${current === b ? ' selected' : ''}>${b || '-- Select brand --'}</option>`
+  ).join('');
+}
+
+function renderTypeSelector(p) {
+  return `
+    <div class="type-selector">
+      <div class="type-prompt">What type of product is this?</div>
+      <div class="type-buttons">
+        <button class="btn-type" onclick="setType(${p._id},'sample')">
+          <div class="btn-type-left">
+            <span>Sample Clothing</span>
+            <span class="btn-type-sub">Tops, pants, dresses, skirts, jackets, knits</span>
+          </div>
+          <span class="btn-type-arrow">&#x203A;</span>
+        </button>
+        <button class="btn-type" onclick="setType(${p._id},'jewellery')">
+          <div class="btn-type-left">
+            <span>Jewellery / Homewares / Accessories / Scarves</span>
+            <span class="btn-type-sub">Jewellery, accessories, homewares, belts, bags, scarves</span>
+          </div>
+          <span class="btn-type-arrow">&#x203A;</span>
+        </button>
+        <button class="btn-type" onclick="setType(${p._id},'stocked')">
+          <div class="btn-type-left">
+            <span>Stocked Clothing</span>
+            <span class="btn-type-sub">Full inventory items with colour and size options</span>
+          </div>
+          <span class="btn-type-arrow">&#x203A;</span>
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderQuickRow(p) {
+  let items = [];
+  if (p.productType === 'sample')    items = SAMPLE_QUICK;
+  if (p.productType === 'jewellery') items = JEWEL_QUICK;
+  if (p.productType === 'stocked')   items = STOCKED_QUICK;
+  if (!items.length) return '';
+  const btns = items.map(item =>
+    `<button class="btn-quick" onclick="applyQuick(${p._id},'${esc(item.cat)}','${esc(item.name)}')">+ ${item.label}</button>`
+  ).join('');
+  return `
+    <div class="card-quick-wrap">
+      <div class="card-quick-label">Quick Add</div>
+      <div class="card-quick-row">${btns}</div>
+    </div>`;
+}
+
+function renderSizesSection(p) {
+  const presetBtns = Object.keys(SIZE_PRESETS).map(key =>
+    `<button class="btn-size-preset" onclick="applySizePreset(${p._id},'${key}')">${key}</button>`
+  ).join('');
+
+  const chips = p.sizes.length
+    ? p.sizes.map(s => `
+        <span class="size-chip">${esc(s)}
+          <button class="size-chip-remove" onclick="removeSize(${p._id},'${esc(s)}')" title="Remove">&#x2715;</button>
+        </span>`).join('')
+    : `<span class="size-chips-empty">No sizes added yet</span>`;
+
+  return `
+    <div class="sizes-section">
+      <div class="field">
+        <div class="sizes-preset-label">Size Presets</div>
+        <div class="sizes-presets">${presetBtns}</div>
+      </div>
+      <div class="size-chips-wrap">${chips}</div>
+      <div class="size-manual-row">
+        <input
+          type="text"
+          id="size-input-${p._id}"
+          placeholder="Type a size and press Add"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();addManualSize(${p._id});}">
+        <button class="btn-size-add" onclick="addManualSize(${p._id})">Add</button>
+      </div>
+    </div>`;
+}
+
+function renderFields(p) {
+  let cats = [];
+  if (p.productType === 'sample')    cats = SAMPLE_CATS;
+  if (p.productType === 'jewellery') cats = JEWEL_CATS;
+  if (p.productType === 'stocked')   cats = STOCKED_CATS;
+
+  const colourField = p.productType === 'stocked' ? `
+    <div class="field">
+      <label>Colour <span class="required">*</span></label>
+      <input type="text" placeholder="e.g. Navy" value="${esc(p.colour)}"
+        oninput="updateField(${p._id},'colour',this.value)">
+    </div>` : '';
+
+  const sizesField = p.productType === 'stocked'
+    ? `<div class="field field-full"><label>Sizes <span class="required">*</span></label></div>
+       ${renderSizesSection(p)}`
+    : '';
+
+  return `
+    <div class="fields-grid">
+      <div class="field field-full">
+        <label>Product Name <span class="required">*</span></label>
+        <input type="text" class="js-name-input" placeholder="e.g. Black Wrap Dress" value="${esc(p.name)}"
+          oninput="updateField(${p._id},'name',this.value)">
+      </div>
+      <div class="field">
+        <label>Category <span class="required">*</span></label>
+        <select onchange="updateField(${p._id},'category',this.value)">
+          ${catOptions(cats, p.category)}
+        </select>
+      </div>
+      <div class="field">
+        <label>Brand <span class="required">*</span></label>
+        <select onchange="updateField(${p._id},'brandName',this.value)">
+          ${brandOptions(p.brandName)}
+        </select>
+      </div>
+      ${colourField}
+      <div class="field">
+        <label>Retail Price (AUD) <span class="required">*</span></label>
+        <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.retailPrice)}"
+          oninput="updateField(${p._id},'retailPrice',this.value)">
+      </div>
+      <div class="field">
+        <label>Supply Price <span class="optional">(optional)</span></label>
+        <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.supplyPrice)}"
+          oninput="updateField(${p._id},'supplyPrice',this.value)">
+      </div>
+      <div class="field">
+        <label>Custom SKU <span class="optional">(optional — auto-generated if blank)</span></label>
+        <input type="text" placeholder="e.g. IF-TOP-001" value="${esc(p.customSku)}"
+          oninput="updateField(${p._id},'customSku',this.value)">
+      </div>
+      <div class="field">
+        <label>Supplier Name <span class="optional">(optional)</span></label>
+        <input type="text" placeholder="e.g. Fulfilment Co." value="${esc(p.supplierName)}"
+          oninput="updateField(${p._id},'supplierName',this.value)">
+      </div>
+      <div class="field">
+        <label>Supplier Code <span class="optional">(optional)</span></label>
+        <input type="text" placeholder="e.g. SUP-001" value="${esc(p.supplierCode)}"
+          oninput="updateField(${p._id},'supplierCode',this.value)">
+      </div>
+      ${sizesField}
+    </div>`;
+}
+
+function typeBadgeHtml(p) {
+  if (!p.productType) return `<span class="card-type-badge badge-unset">Select type</span>`;
+  if (p.productType === 'sample')    return `<span class="card-type-badge badge-sample">Sample</span>`;
+  if (p.productType === 'jewellery') return `<span class="card-type-badge badge-jewellery">Jewellery / Acc</span>`;
+  if (p.productType === 'stocked')   return `<span class="card-type-badge badge-stocked">Stocked</span>`;
+  return '';
+}
+
+function renderList() {
+  const list = document.getElementById('product-list');
+  list.innerHTML = '';
+
+  products.forEach((p, idx) => {
+    const total      = Object.values(p.stock).reduce((a, b) => a + b, 0);
+    const displayName = p.name || 'New Product';
+    const isEmpty     = !p.name;
+    const priceLabel  = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+
+    const stockStyle = total > 0
+      ? 'border-color:rgba(46,204,113,0.6);color:#27ae60;background:rgba(46,204,113,0.08);'
+      : 'border-color:rgba(200,0,0,0.3);color:#c0392b;background:rgba(200,0,0,0.06);';
+
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.setAttribute('data-pid', p._id);
+
+    // Card body content
+    let bodyContent = '';
+    if (!p.productType) {
+      bodyContent = renderTypeSelector(p);
+    } else {
+      bodyContent = `
+        <div class="change-type-row">
+          <button class="change-type-link" onclick="clearType(${p._id})">&#x2190; Change product type</button>
+        </div>
+        ${renderQuickRow(p)}
+        ${renderFields(p)}`;
+    }
+
+    card.innerHTML = `
+      <div class="card-header" onclick="toggleCard(${p._id})">
+        <div class="card-num">${idx + 1}</div>
+        ${typeBadgeHtml(p)}
+        <div class="card-preview${isEmpty ? ' empty' : ''}">${esc(displayName)}</div>
+        <div class="card-actions">
+          <div class="card-price-badge">${priceLabel}</div>
+          <button class="btn-card" onclick="event.stopPropagation();openDrawer(${p._id})"
+            style="${stockStyle}">STOCK [${total}]</button>
+          <button class="btn-card" onclick="event.stopPropagation();duplicate(${p._id})">DUPLICATE</button>
+          <button class="btn-card danger" onclick="event.stopPropagation();removeProduct(${p._id})">&#x2715;</button>
+        </div>
+        <div class="card-toggle${p.open ? ' open' : ''}">&#x25BE;</div>
+      </div>
+      <div class="card-body${p.open ? ' open' : ''}">
+        ${bodyContent}
+      </div>`;
+
+    list.appendChild(card);
+  });
+}
+
+/* ============================================================
+   SYNC
+   ============================================================ */
+async function startSync() {
+  const password = localStorage.getItem('portal_password') || '';
+  if (!password) { alert('Please log in first.'); return; }
+
+  // Validate
+  for (const p of products) {
+    if (!p.productType) {
+      showToast('Please select a product type for all products.');
+      return;
+    }
+    if (!p.name || !p.retailPrice || !p.category || !p.brandName) {
+      showToast('One or more products are missing required fields.');
+      return;
+    }
+    if (p.productType === 'stocked' && (!p.colour || p.sizes.length === 0)) {
+      showToast('Stocked clothing requires a colour and at least one size.');
+      return;
     }
   }
 
-  // ---- Stock drawer ----
-  function openDrawer(id) {
-    const p = products.find(p => p._id === id);
-    document.getElementById('drawer-content').innerHTML = `
-      <div class="field"><label>Harbour Town</label>
-        <input type="number" value="${p.stock.ht}" oninput="updateStock(${id},'ht',this.value)"></div>
-      <div class="field"><label>Pacific Fair</label>
-        <input type="number" value="${p.stock.pf}" oninput="updateStock(${id},'pf',this.value)"></div>
-      <div class="field"><label>Southport Showroom</label>
-        <input type="number" value="${p.stock.ss}" oninput="updateStock(${id},'ss',this.value)"></div>
-      <div class="field"><label>Southport Warehouse</label>
-        <input type="number" value="${p.stock.sw}" oninput="updateStock(${id},'sw',this.value)"></div>
-    `;
-    document.getElementById('drawer').classList.add('active');
-    document.getElementById('overlay').classList.add('active');
-  }
+  const btn = document.getElementById('sync_btn');
+  btn.disabled    = true;
+  btn.textContent = 'SYNCING...';
 
-  function updateStock(id, loc, val) {
-    const p = products.find(p => p._id === id);
-    if (p) p.stock[loc] = parseInt(val) || 0;
-  }
-
-  function closeDrawer() {
-    document.getElementById('drawer').classList.remove('active');
-    document.getElementById('overlay').classList.remove('active');
-    renderList();
-  }
-
-  // ---- Render ----
-  function renderList() {
-    const list = document.getElementById('product-list');
-    list.innerHTML = '';
-
-    products.forEach((p, idx) => {
-      const total = Object.values(p.stock).reduce((a, b) => a + b, 0);
-      const displayName = p.name || 'New Product';
-      const isEmpty = !p.name;
-      const priceLabel = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
-
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.setAttribute('data-pid', p._id);
-
-      card.innerHTML = `
-        <div class="card-header" onclick="toggleCard(${p._id})">
-          <div class="card-num">${idx + 1}</div>
-          <div class="card-preview${isEmpty ? ' empty' : ''}">${esc(displayName)}</div>
-          <div class="card-actions">
-            <div class="card-price-badge">${priceLabel}</div>
-            <button class="btn-card" onclick="event.stopPropagation(); openDrawer(${p._id})" style="${total > 0 ? 'border-color:rgba(46,204,113,0.6);color:#27ae60;background:rgba(46,204,113,0.08);' : 'border-color:rgba(200,0,0,0.3);color:#c0392b;background:rgba(200,0,0,0.06);'}">STOCK [${total}]</button>
-            <button class="btn-card" onclick="event.stopPropagation(); duplicate(${p._id})">DUPLICATE</button>
-            <button class="btn-card danger" onclick="event.stopPropagation(); removeProduct(${p._id})">&#x2715;</button>
-          </div>
-          <div class="card-toggle${p.open ? ' open' : ''}">&#x25BE;</div>
-        </div>
-        <div class="card-body${p.open ? ' open' : ''}">
-          <div class="fields-grid">
-            <div class="field field-full">
-              <label>Product Name <span class="required">*</span></label>
-              <input type="text" placeholder="e.g. Black Bag" value="${esc(p.name)}"
-                oninput="updateField(${p._id},'name',this.value)">
-            </div>
-            <div class="field">
-              <label>Category <span class="required">*</span></label>
-              <select onchange="updateField(${p._id},'category',this.value)">
-                ${CATEGORIES.map(c => `<option value="${c}"${p.category === c ? ' selected' : ''}>${c || '-- Select category --'}</option>`).join('')}
-              </select>
-            </div>
-            <div class="field">
-              <label>Brand <span class="required">*</span></label>
-              <select onchange="updateField(${p._id},'brandName',this.value)">
-                ${BRANDS.map(b => `<option value="${b}"${p.brandName === b ? ' selected' : ''}>${b || '-- Select brand --'}</option>`).join('')}
-              </select>
-            </div>
-            <div class="field">
-              <label>Retail Price (AUD) <span class="required">*</span></label>
-              <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.retailPrice)}"
-                oninput="updateField(${p._id},'retailPrice',this.value)">
-            </div>
-            <div class="field">
-              <label>Supply Price <span class="optional">(optional)</span></label>
-              <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.supplyPrice)}"
-                oninput="updateField(${p._id},'supplyPrice',this.value)">
-            </div>
-            <div class="field">
-              <label>Supplier Name <span class="optional">(optional)</span></label>
-              <input type="text" placeholder="e.g. Fulfilment Co." value="${esc(p.supplierName)}"
-                oninput="updateField(${p._id},'supplierName',this.value)">
-            </div>
-            <div class="field">
-              <label>Supplier Code <span class="optional">(optional)</span></label>
-              <input type="text" placeholder="e.g. SUP-001" value="${esc(p.supplierCode)}"
-                oninput="updateField(${p._id},'supplierCode',this.value)">
-            </div>
-          </div>
-        </div>
-      `;
-
-      list.appendChild(card);
+  async function workerCall(body) {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Portal-Password': password },
+      body: JSON.stringify(body)
     });
+    if (res.status === 401) throw new Error('Incorrect portal password.');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.error || JSON.stringify(data).slice(0, 300));
+    return data;
   }
 
-  // ---- Sync via Cloudflare Worker ----
-  async function startSync() {
-    const password = localStorage.getItem('portal_password') || '';
+  let synced = 0;
 
-    if (!password) {
-      alert('Please enter the portal password first.');
-      return;
-    }
+  for (const p of products) {
+    try {
+      const suffix   = String(Math.floor(1000 + Math.random() * 9000));
+      const finalName = `${p.name} - ${suffix}`;
+      const finalSku  = p.customSku.trim() || genSku();
 
-    const invalid = products.filter(p => !p.name || !p.retailPrice || !p.category || !p.brandName);
-    if (invalid.length > 0) {
-      showToast(`${invalid.length} product(s) missing required fields.`);
-      return;
-    }
+      btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
 
-    const btn = document.getElementById('sync_btn');
-    btn.disabled = true;
-    btn.textContent = 'SYNCING...';
+      // For stocked clothing we send one call per size (each size is a separate variant)
+      if (p.productType === 'stocked') {
+        for (const size of p.sizes) {
+          const variantName = `${finalName} | ${p.colour} | ${size}`;
+          const variantSku  = p.customSku.trim()
+            ? `${p.customSku.trim()}-${p.colour.replace(/\s+/g, '')}-${size}`
+            : genSku();
 
-    const tax = 'GST';
-    let synced = 0;
-
-    async function workerCall(body) {
-      const res = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Portal-Password': password
-        },
-        body: JSON.stringify(body)
-      });
-      if (res.status === 401) throw new Error('Incorrect portal password.');
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || JSON.stringify(data).slice(0, 300));
-      return data;
-    }
-
-    for (const p of products) {
-      try {
-        const suffix = String(Math.floor(1000 + Math.random() * 9000));
-        const finalName = `${p.name} - ${suffix}`;
-        let finalSku = '';
-        for (let i = 0; i < 8; i++) finalSku += Math.floor(Math.random() * 10);
-
-        btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
-
+          await workerCall({
+            action: 'sync_product',
+            payload: {
+              name:          variantName,
+              sku:           variantSku,
+              retail_price:  parseFloat(p.retailPrice) || 0,
+              supply_price:  parseFloat(p.supplyPrice) || 0,
+              tax_name:      'GST',
+              brand_name:    p.brandName,
+              type_name:     p.category,
+              supplier_name: p.supplierName,
+              supplier_code: p.supplierCode,
+              inventory: [
+                { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
+                { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
+                { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
+                { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 },
+              ]
+            }
+          });
+        }
+      } else {
         await workerCall({
           action: 'sync_product',
           payload: {
-            name: finalName,
-            sku: finalSku,
-            retail_price: parseFloat(p.retailPrice) || 0,
-            supply_price: parseFloat(p.supplyPrice) || 0,
-            tax_name: tax,
-            brand_name: p.brandName || '',
-            type_name: p.category || '',
-            supplier_name: p.supplierName || '',
-            supplier_code: p.supplierCode || '',
+            name:          finalName,
+            sku:           finalSku,
+            retail_price:  parseFloat(p.retailPrice) || 0,
+            supply_price:  parseFloat(p.supplyPrice) || 0,
+            tax_name:      'GST',
+            brand_name:    p.brandName,
+            type_name:     p.category,
+            supplier_name: p.supplierName,
+            supplier_code: p.supplierCode,
             inventory: [
               { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
               { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
               { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
-              { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 }
+              { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 },
             ]
           }
         });
-
-        synced++;
-
-      } catch (err) {
-        console.error(err);
-        btn.disabled = false;
-        btn.textContent = 'SYNC PRODUCTS';
-        alert(`Sync failed for "${p.name}".\n\n${err.message}`);
-        return;
       }
-    }
 
-    btn.textContent = 'SYNC COMPLETE';
-    showToast(`${synced} product${synced !== 1 ? 's' : ''} synced successfully!`);
-
-    // Show Shopify reminder popup
-    document.getElementById('shopify-modal').classList.add('active');
-
-    setTimeout(() => {
+      synced++;
+    } catch (err) {
+      console.error(err);
+      btn.disabled    = false;
       btn.textContent = 'SYNC PRODUCTS';
-      btn.disabled = false;
-    }, 3000);
-  }
-
-  function clearAll() {
-    if (products.length === 0) return;
-    if (confirm('Clear all products?')) {
-      products = [];
-      nextId = 1;
-      renderList();
-      updateCounter();
+      alert(`Sync failed for "${p.name}".\n\n${err.message}`);
+      return;
     }
   }
+
+  btn.textContent = 'SYNC COMPLETE';
+  showToast(`${synced} product${synced !== 1 ? 's' : ''} synced successfully!`);
+  document.getElementById('shopify-modal').classList.add('active');
+
+  setTimeout(() => {
+    btn.textContent = 'SYNC PRODUCTS';
+    btn.disabled    = false;
+  }, 3000);
+}
+
+function clearAll() {
+  if (!products.length) return;
+  if (confirm('Clear all products?')) {
+    products = [];
+    nextId   = 1;
+    renderList();
+    updateCounter();
+  }
+}
 </script>
 </body>
 </html>

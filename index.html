@@ -878,7 +878,8 @@ function newProductObj() {
     stock: blankStock(),
     colour: '',
     sizes: [],
-    sizeStock: {}
+    sizeStock: {},
+    tags: []
   };
 }
 
@@ -1006,6 +1007,26 @@ function removeSize(id, size) {
   if (!p) return;
   p.sizes = p.sizes.filter(s => s !== size);
   delete p.sizeStock[size];
+  renderList();
+}
+
+function addTag(id) {
+  const input = document.getElementById(`tag-inp-${id}`);
+  if (!input) return;
+  const val = input.value.trim().replace(/'/g, '');
+  if (!val) return;
+  const p = products.find(item => item._id === id);
+  if (!p || p.tags.includes(val)) { input.value = ''; return; }
+  p.tags.push(val);
+  input.value = '';
+  renderList();
+  setTimeout(() => { const i = document.getElementById(`tag-inp-${id}`); if (i) i.focus(); }, 20);
+}
+
+function removeTag(id, tag) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  p.tags = p.tags.filter(t => t !== tag);
   renderList();
 }
 
@@ -1192,6 +1213,26 @@ function renderQuickRow(p) {
     </div>`;
 }
 
+function renderTagsBlock(p) {
+  const chips = p.tags.length
+    ? p.tags.map(t => `
+        <span class="size-chip">${esc(t)}
+          <button class="size-chip-remove" onclick="removeTag(${p._id},'${esc(t)}')" title="Remove">&#x2715;</button>
+        </span>`).join('')
+    : '<span class="size-chips-empty">No tags added yet</span>';
+
+  return `
+    <div class="field field-full">
+      <label>Tags <span class="optional">(optional)</span></label>
+      <div class="size-chips-wrap">${chips}</div>
+      <div class="size-manual-row" style="margin-top:6px;">
+        <input type="text" id="tag-inp-${p._id}" placeholder="Type a tag and press Add"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();addTag(${p._id});}">
+        <button class="btn-size-add" onclick="addTag(${p._id})">Add</button>
+      </div>
+    </div>`;
+}
+
 function renderSizesBlock(p) {
   const presetBtns = Object.keys(SIZE_PRESETS).map(key =>
     `<button class="btn-size-preset" onclick="applySizePreset(${p._id},'${key}')" title="Replaces all current sizes">${key}</button>`
@@ -1266,6 +1307,7 @@ function renderFields(p) {
         <input type="text" placeholder="e.g. SUP-001" value="${esc(p.supplierCode)}"
           oninput="updateField(${p._id},'supplierCode',this.value)">
       </div>
+      ${renderTagsBlock(p)}
       ${p.productType === 'stocked' ? renderSizesBlock(p) : ''}
     </div>`;
 }
@@ -1381,6 +1423,7 @@ async function startSync() {
             supply_price: parseFloat(p.supplyPrice) || 0,
             supplier_name: p.supplierName,
             supplier_code: p.supplierCode,
+            tags: p.tags,
             colour_attr_id: colourAttr.data.id,
             size_attr_id: sizeAttr.data.id,
             variants: p.sizes.map(size => {
@@ -1410,6 +1453,7 @@ async function startSync() {
             type_name: p.category,
             supplier_name: p.supplierName,
             supplier_code: p.supplierCode,
+            tags: p.tags,
             inventory: OUTLETS.map(o => ({ outlet_id: o.id, current_amount: p.stock[o.key] || 0 }))
           }
         });

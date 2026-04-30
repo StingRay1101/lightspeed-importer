@@ -182,6 +182,18 @@
   input::placeholder { color: rgba(0,0,0,0.3); }
   input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
 
+  .tag-groups { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px; padding-top: 4px; }
+  .tag-group { display: flex; flex-direction: column; gap: 7px; }
+  .tag-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+  .btn-tag {
+    background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: var(--radius);
+    padding: 7px 14px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase; color: rgba(0,0,0,0.45);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-tag:hover { border-color: rgba(0,0,0,0.35); color: #1a1a1a; background: rgba(0,0,0,0.03); }
+  .btn-tag.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
   .sizes-block { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; margin-top: 2px; }
   .sizes-block-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.55); font-weight: 600; }
   .sizes-preset-hint { font-size: 9px; color: rgba(0,0,0,0.35); letter-spacing: 0.04em; }
@@ -591,6 +603,14 @@ const STOCKED_QUICK = [
   { label: 'Knit', name: 'Knit' }
 ];
 
+const TAG_GROUPS = [
+  { key: 'occasion', label: 'Occasion', options: ['travel', 'funeral', 'event', 'work', 'casual'] },
+  { key: 'fabric',   label: 'Fabric',   options: ['linen', 'cotton', 'silk', 'viscose'] },
+  { key: 'fit',      label: 'Fit',      options: ['wide-leg', 'relaxed', 'oversized', 'fitted'] },
+  { key: 'style',    label: 'Style',    options: ['classic', 'minimal', 'boho', 'layering'] },
+  { key: 'season',   label: 'Season',   options: ['summer', 'winter', 'all-season'] },
+];
+
 const SIZE_PRESETS = {
   'OS': ['OS'],
   'XS-S-M-L': ['XS', 'S', 'M', 'L'],
@@ -879,7 +899,8 @@ function newProductObj() {
     colour: '',
     sizes: [],
     sizeStock: {},
-    tags: []
+    tags: [],
+    tagSelections: { occasion: '', fabric: '', fit: '', style: '', season: '' }
   };
 }
 
@@ -921,6 +942,7 @@ function setType(id, type) {
   p.category = '';
   p.sizes = [];
   p.sizeStock = {};
+  p.tagSelections = { occasion: '', fabric: '', fit: '', style: '', season: '' };
   renderList();
 }
 
@@ -932,7 +954,19 @@ function clearType(id) {
   p.category = '';
   p.sizes = [];
   p.sizeStock = {};
+  p.tagSelections = { occasion: '', fabric: '', fit: '', style: '', season: '' };
   renderList();
+}
+
+function setTagSelection(id, category, value) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  p.tagSelections[category] = value;
+  const card = document.querySelector(`[data-pid="${id}"]`);
+  if (!card) return;
+  card.querySelectorAll(`[data-tag-cat="${category}"]`).forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tagVal === value);
+  });
 }
 
 function setSellOnline(id, val) {
@@ -1213,6 +1247,24 @@ function renderQuickRow(p) {
     </div>`;
 }
 
+function renderStructuredTagsBlock(p) {
+  return `
+    <div class="tag-groups field-full">
+      ${TAG_GROUPS.map(group => `
+        <div class="tag-group">
+          <label>${group.label} <span class="required">*</span></label>
+          <div class="tag-btns">
+            ${group.options.map(opt => `
+              <button class="btn-tag${p.tagSelections[group.key] === opt ? ' active' : ''}"
+                data-tag-cat="${group.key}" data-tag-val="${opt}"
+                onclick="setTagSelection(${p._id},'${group.key}','${opt}')">
+                ${opt}
+              </button>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
 function renderTagsBlock(p) {
   const chips = p.tags.length
     ? p.tags.map(t => `
@@ -1307,7 +1359,7 @@ function renderFields(p) {
         <input type="text" placeholder="e.g. SUP-001" value="${esc(p.supplierCode)}"
           oninput="updateField(${p._id},'supplierCode',this.value)">
       </div>
-      ${renderTagsBlock(p)}
+      ${p.productType === 'stocked' ? renderStructuredTagsBlock(p) : renderTagsBlock(p)}
       ${p.productType === 'stocked' ? renderSizesBlock(p) : ''}
     </div>`;
 }
@@ -1382,6 +1434,8 @@ async function startSync() {
     if (p.productType === 'stocked') {
       if (!p.colour) { showToast(`"${p.name}" needs a colour.`); return; }
       if (p.sizes.length === 0) { showToast(`"${p.name}" needs at least one size.`); return; }
+      const missingTag = TAG_GROUPS.find(g => !p.tagSelections[g.key]);
+      if (missingTag) { showToast(`"${p.name}" needs a ${missingTag.label} tag selected.`); return; }
     }
   }
 
@@ -1408,6 +1462,9 @@ async function startSync() {
       btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
       const suffix = String(Math.floor(1000 + Math.random() * 9000));
       const finalName = p.sellOnline ? p.name : `${p.name} - ${suffix}`;
+      const syncTags = p.productType === 'stocked'
+        ? TAG_GROUPS.map(g => `${g.key}: ${p.tagSelections[g.key]}`)
+        : p.tags;
 
       if (p.productType === 'stocked') {
         const colourAttr = await workerCall({ action: 'create_variant_attribute', payload: { name: 'Colour' } });
@@ -1423,7 +1480,7 @@ async function startSync() {
             supply_price: parseFloat(p.supplyPrice) || 0,
             supplier_name: p.supplierName,
             supplier_code: p.supplierCode,
-            tags: p.tags,
+            tags: syncTags,
             colour_attr_id: colourAttr.data.id,
             size_attr_id: sizeAttr.data.id,
             variants: p.sizes.map(size => {
@@ -1453,7 +1510,7 @@ async function startSync() {
             type_name: p.category,
             supplier_name: p.supplierName,
             supplier_code: p.supplierCode,
-            tags: p.tags,
+            tags: syncTags,
             inventory: OUTLETS.map(o => ({ outlet_id: o.id, current_amount: p.stock[o.key] || 0 }))
           }
         });

@@ -900,7 +900,7 @@ function newProductObj() {
     sizes: [],
     sizeStock: {},
     tags: [],
-    tagSelections: { occasion: '', fabric: '', fit: '', style: '', season: '' }
+    tagSelections: { occasion: [], fabric: [], fit: [], style: [], season: [] }
   };
 }
 
@@ -942,7 +942,7 @@ function setType(id, type) {
   p.category = '';
   p.sizes = [];
   p.sizeStock = {};
-  p.tagSelections = { occasion: '', fabric: '', fit: '', style: '', season: '' };
+  p.tagSelections = { occasion: [], fabric: [], fit: [], style: [], season: [] };
   renderList();
 }
 
@@ -954,18 +954,21 @@ function clearType(id) {
   p.category = '';
   p.sizes = [];
   p.sizeStock = {};
-  p.tagSelections = { occasion: '', fabric: '', fit: '', style: '', season: '' };
+  p.tagSelections = { occasion: [], fabric: [], fit: [], style: [], season: [] };
   renderList();
 }
 
 function setTagSelection(id, category, value) {
   const p = products.find(item => item._id === id);
   if (!p) return;
-  p.tagSelections[category] = value;
+  const arr = p.tagSelections[category];
+  const idx = arr.indexOf(value);
+  if (idx === -1) arr.push(value);
+  else arr.splice(idx, 1);
   const card = document.querySelector(`[data-pid="${id}"]`);
   if (!card) return;
   card.querySelectorAll(`[data-tag-cat="${category}"]`).forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tagVal === value);
+    btn.classList.toggle('active', arr.includes(btn.dataset.tagVal));
   });
 }
 
@@ -1255,7 +1258,7 @@ function renderStructuredTagsBlock(p) {
           <label>${group.label} <span class="required">*</span></label>
           <div class="tag-btns">
             ${group.options.map(opt => `
-              <button class="btn-tag${p.tagSelections[group.key] === opt ? ' active' : ''}"
+              <button class="btn-tag${p.tagSelections[group.key].includes(opt) ? ' active' : ''}"
                 data-tag-cat="${group.key}" data-tag-val="${opt}"
                 onclick="setTagSelection(${p._id},'${group.key}','${opt}')">
                 ${opt}
@@ -1434,7 +1437,7 @@ async function startSync() {
     if (p.productType === 'stocked') {
       if (!p.colour) { showToast(`"${p.name}" needs a colour.`); return; }
       if (p.sizes.length === 0) { showToast(`"${p.name}" needs at least one size.`); return; }
-      const missingTag = TAG_GROUPS.find(g => !p.tagSelections[g.key]);
+      const missingTag = TAG_GROUPS.find(g => p.tagSelections[g.key].length === 0);
       if (missingTag) { showToast(`"${p.name}" needs a ${missingTag.label} tag selected.`); return; }
     }
   }
@@ -1463,7 +1466,7 @@ async function startSync() {
       const suffix = String(Math.floor(1000 + Math.random() * 9000));
       const finalName = p.sellOnline ? p.name : `${p.name} - ${suffix}`;
       const syncTags = p.productType === 'stocked'
-        ? TAG_GROUPS.map(g => `${g.key}: ${p.tagSelections[g.key]}`)
+        ? TAG_GROUPS.flatMap(g => p.tagSelections[g.key].map(v => `${g.key}: ${v}`))
         : p.tags;
 
       if (p.productType === 'stocked') {

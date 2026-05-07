@@ -1488,7 +1488,7 @@ async function startSync() {
             size_attr_id: sizeAttr.data.id,
             variants: p.sizes.map(size => {
               const base = p.customSku.trim();
-              const sku = base ? `${base}-${p.colour.replace(/\s+/g, '')}-${size.replace(/\//g, '')}` : genSku();
+              const sku = base ? (size === 'OS' ? base : `${base}-${size.replace(/\//g, '')}`) : genSku();
               const s = p.sizeStock[size] || blankStock();
               return {
                 colour: p.colour,

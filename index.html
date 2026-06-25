@@ -434,6 +434,79 @@
   }
   .btn-clear:hover { border-color: #ff8080; color: #ffb0b0; background: rgba(255,80,80,0.1); }
 
+
+  .import-section {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin: 0 0 16px;
+  }
+
+  .import-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+
+  .import-help {
+    font-size: 11px;
+    color: rgba(0,0,0,0.45);
+    line-height: 1.7;
+    margin-bottom: 14px;
+    letter-spacing: 0.02em;
+  }
+
+  .import-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-import {
+    background: #1a1a1a;
+    color: #fff;
+    border: 1px solid #1a1a1a;
+    padding: 12px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .btn-import:hover { background: #333; border-color: #333; }
+
+  .btn-import-secondary {
+    background: transparent;
+    color: rgba(0,0,0,0.55);
+    border: 1px solid rgba(0,0,0,0.15);
+    padding: 12px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .btn-import-secondary:hover { color: #1a1a1a; border-color: rgba(0,0,0,0.35); background: rgba(0,0,0,0.035); }
+
+  .import-status {
+    font-size: 11px;
+    color: rgba(0,0,0,0.42);
+    letter-spacing: 0.04em;
+    margin-left: auto;
+  }
+
+
   .counter { font-size: 11px; color: rgba(255,255,255,0.55); margin-left: auto; letter-spacing: 0.06em; }
   .counter span { color: #fff; font-weight: 600; }
 
@@ -504,6 +577,9 @@
     header { flex-direction: column; align-items: flex-start; gap: 14px; }
     .stock-simple-grid { grid-template-columns: 1fr; }
     .stock-modal-header, .stock-modal-body, .stock-modal-footer { padding-left: 20px; padding-right: 20px; }
+
+    .import-status { margin-left: 0; width: 100%; }
+    .btn-import, .btn-import-secondary { width: 100%; }
   }
 </style>
 </head>
@@ -552,6 +628,17 @@
     <button class="add-btn" onclick="addProduct()">
       <span style="font-size:18px;line-height:1;">+</span> Add Product
     </button>
+
+    <div class="import-section">
+      <h2>Import Products From File</h2>
+      <p class="import-help">Upload an Excel or CSV file. The importer links these columns automatically: Harbour Town QTY, Pacific Fair QTY, Southport Showroom QTY, Southport Warehouse QTY, Product Name, Retail Price, Supply Price, Custom SKU, Supplier Code, Supplier, Category, and Brand.</p>
+      <div class="import-row">
+        <input type="file" id="product-import-file" accept=".xlsx,.xls,.csv" onchange="handleImportFile(event)" hidden>
+        <button class="btn-import" onclick="document.getElementById('product-import-file').click()">IMPORT XLSX / CSV</button>
+        <button class="btn-import-secondary" onclick="downloadImportTemplate()">DOWNLOAD TEMPLATE</button>
+        <div class="import-status" id="import-status">No file imported</div>
+      </div>
+    </div>
     <div class="export-section">
       <h2>Sync to Lightspeed</h2>
       <div class="export-row">
@@ -575,6 +662,7 @@
 
 <div id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 const SAMPLE_QUICK = [
   { label: 'Top', name: 'Top Sample' },
@@ -667,6 +755,197 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+
+function setImportStatus(msg) {
+  const el = document.getElementById('import-status');
+  if (el) el.textContent = msg;
+}
+
+function normaliseImportHeader(value) {
+  return (value || '').toString().trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+const IMPORT_COLUMNS = {
+  htQty: ['harbour town qty', 'harbour town quantity', 'harbour town', 'ht qty', 'ht quantity', 'ht'],
+  pfQty: ['pacific fair qty', 'pacific fair quantity', 'pacific fair', 'pf qty', 'pf quantity', 'pf'],
+  ssQty: ['southport showroom qty', 'southport showroom quantity', 'southport showroom', 'ss qty', 'ss quantity', 'ss'],
+  swQty: ['southport warehouse qty', 'southport warehouse quantity', 'southport warehouse', 'sw qty', 'sw quantity', 'sw'],
+  name: ['product name', 'name', 'product'],
+  retailPrice: ['retail price', 'retail', 'price', 'sell price', 'selling price'],
+  supplyPrice: ['supply price', 'cost price', 'cost', 'supply'],
+  customSku: ['custom sku', 'sku', 'product sku'],
+  supplierCode: ['supplier code', 'supplier sku', 'supplier product code', 'vendor code'],
+  supplierName: ['supplier', 'supplier name', 'vendor'],
+  category: ['category', 'product category', 'type', 'product type'],
+  brandName: ['brand', 'brand name'],
+  tags: ['tags', 'tag'],
+  sellOnline: ['sell online', 'online', 'shopify'],
+  productType: ['import type', 'product import type', 'producttype'],
+  colour: ['colour', 'color'],
+  size: ['size']
+};
+
+function getImportValue(row, aliases) {
+  const wanted = aliases.map(normaliseImportHeader);
+  const key = Object.keys(row).find(k => wanted.includes(normaliseImportHeader(k)));
+  const value = key ? row[key] : '';
+  return value === null || value === undefined ? '' : value;
+}
+
+function importText(row, field) {
+  return getImportValue(row, IMPORT_COLUMNS[field]).toString().trim();
+}
+
+function importMoney(row, field) {
+  const raw = getImportValue(row, IMPORT_COLUMNS[field]);
+  if (raw === null || raw === undefined || raw === '') return '';
+  const cleaned = raw.toString().replace(/[$,]/g, '').trim();
+  const n = parseFloat(cleaned);
+  return Number.isFinite(n) ? n.toFixed(2) : '';
+}
+
+function importQty(row, field) {
+  const raw = getImportValue(row, IMPORT_COLUMNS[field]);
+  if (raw === null || raw === undefined || raw === '') return 0;
+  const n = parseInt(raw.toString().replace(/[^0-9-]/g, ''), 10);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+function importBoolean(row, field) {
+  const raw = importText(row, field).toLowerCase();
+  return ['yes', 'y', 'true', '1', 'online', 'shopify'].includes(raw);
+}
+
+function guessImportedProductType(row) {
+  const explicit = importText(row, 'productType').toLowerCase();
+  if (['sample', 'samples', 'sample clothing'].includes(explicit)) return 'sample';
+  if (['stocked', 'stocked clothing', 'variant', 'variants'].includes(explicit)) return 'stocked';
+  if (['jewellery', 'jewelry', 'accessories', 'accessory', 'homewares', 'homeware', 'scarves', 'bags', 'belts'].includes(explicit)) return 'jewellery';
+
+  const category = importText(row, 'category').toLowerCase();
+  const name = importText(row, 'name').toLowerCase();
+  const size = importText(row, 'size');
+  const colour = importText(row, 'colour');
+
+  if (size || colour) return 'stocked';
+  if (name.includes('sample') || category.includes('sample')) return 'sample';
+  if (['jewellery', 'jewelry', 'accessories', 'accessory', 'homewares', 'homeware', 'scarves', 'bags', 'belts'].some(x => category.includes(x))) return 'jewellery';
+
+  return 'jewellery';
+}
+
+function importedTags(row) {
+  const raw = importText(row, 'tags');
+  if (!raw) return [];
+  return raw.split(/[,|;]/).map(t => t.trim()).filter(Boolean);
+}
+
+function buildProductFromImportRow(row, index) {
+  const p = newProductObj();
+  const size = importText(row, 'size').toUpperCase();
+  const colour = importText(row, 'colour');
+
+  p.open = index === 0;
+  p.productType = guessImportedProductType(row);
+  p.sellOnline = importBoolean(row, 'sellOnline');
+  p.name = importText(row, 'name');
+  p.category = importText(row, 'category');
+  p.brandName = importText(row, 'brandName');
+  p.retailPrice = importMoney(row, 'retailPrice');
+  p.supplyPrice = importMoney(row, 'supplyPrice');
+  p.customSku = importText(row, 'customSku');
+  p.supplierName = importText(row, 'supplierName');
+  p.supplierCode = importText(row, 'supplierCode');
+  p.stock = {
+    ht: importQty(row, 'htQty'),
+    pf: importQty(row, 'pfQty'),
+    ss: importQty(row, 'ssQty'),
+    sw: importQty(row, 'swQty')
+  };
+  p.tags = importedTags(row);
+
+  if (p.productType === 'stocked' && size) {
+    p.colour = colour;
+    p.sizes = [size];
+    p.sizeStock = { [size]: { ...p.stock } };
+    p.stock = blankStock();
+  }
+
+  return p;
+}
+
+
+function hasImportReplaceWarningData() {
+  return products.some(p =>
+    p.productType || p.name || p.category || p.brandName || p.retailPrice || p.supplyPrice ||
+    p.customSku || p.supplierName || p.supplierCode || p.colour || p.sizes.length ||
+    p.tags.length || getTotalStock(p) > 0
+  );
+}
+
+function importRowsToProducts(rows, fileName) {
+  const validRows = rows.filter(row => importText(row, 'name'));
+  if (!validRows.length) {
+    setImportStatus('No products found in file');
+    showToast('No rows with a Product Name were found.');
+    return;
+  }
+
+  if (hasImportReplaceWarningData() && !confirm('Replace the current product list with this imported file?')) return;
+
+  products = [];
+  nextId = 1;
+  validRows.forEach((row, index) => products.push(buildProductFromImportRow(row, index)));
+
+  renderList();
+  updateCounter();
+  setImportStatus(`${products.length} product${products.length !== 1 ? 's' : ''} imported from ${fileName}`);
+  showToast(`${products.length} product${products.length !== 1 ? 's' : ''} imported.`);
+}
+
+async function handleImportFile(event) {
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+
+  if (typeof XLSX === 'undefined') {
+    showToast('The Excel importer library has not loaded yet. Refresh the page and try again.');
+    return;
+  }
+
+  try {
+    setImportStatus(`Reading ${file.name}...`);
+    const data = await file.arrayBuffer();
+    const workbook = XLSX.read(data, { type: 'array', cellDates: false });
+    const sheetName = workbook.SheetNames[0];
+    if (!sheetName) throw new Error('No worksheet found in this file.');
+
+    const worksheet = workbook.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(worksheet, { defval: '', raw: false });
+    importRowsToProducts(rows, file.name);
+  } catch (err) {
+    console.error(err);
+    setImportStatus('Import failed');
+    alert(`Import failed.\n\n${err.message || err}`);
+  }
+}
+
+function downloadImportTemplate() {
+  if (typeof XLSX === 'undefined') {
+    showToast('The Excel importer library has not loaded yet. Refresh the page and try again.');
+    return;
+  }
+
+  const headers = [[
+    'Harbour Town QTY', 'Pacific Fair QTY', 'Southport Showroom QTY', 'Southport Warehouse QTY',
+    'Product Name', 'Retail Price', 'Supply Price', 'Custom SKU', 'Supplier Code', 'Supplier', 'Category', 'Brand'
+  ]];
+  const ws = XLSX.utils.aoa_to_sheet(headers);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Products');
+  XLSX.writeFile(wb, 'Imagine-Lightspeed-Import-Template.xlsx');
 }
 
 function updateCounter() {

@@ -1184,16 +1184,18 @@
 
         rows.forEach(row => {
           // Map column names from the spreadsheet
-          const name        = (row['Product Name']           || '').toString().trim();
-          const retailPrice = (row['Retail Price']           || '').toString().trim();
-          const supplyPrice = (row['Supply Price']           || '').toString().trim();
-          const sku         = (row['Custom SKU']             || '').toString().trim();
-          const supplierCode= (row['Supplier Code']          || '').toString().trim();
-          const supplier    = (row['Supplier']               || '').toString().trim();
-          const htQty       = parseInt(row['Harbour Town QTY']          || 0) || 0;
-          const pfQty       = parseInt(row['Pacific Fair QTY']          || 0) || 0;
-          const ssQty       = parseInt(row['Southport Showroom QTY']    || 0) || 0;
-          const swQty       = parseInt(row['Southport Warehouse QTY']   || 0) || 0;
+          const name        = (row['Product Name']                || '').toString().trim();
+          const retailPrice = (row['Retail Price']                || '').toString().trim();
+          const supplyPrice = (row['Supply Price']                || '').toString().trim();
+          const sku         = (row['Custom SKU']                  || '').toString().trim();
+          const supplierCode= (row['Supplier Code']               || '').toString().trim();
+          const supplier    = (row['Supplier']                    || '').toString().trim();
+          const brand       = (row['Brand']                       || '').toString().trim();
+          const category    = (row['Category']                    || '').toString().trim();
+          const htQty       = parseInt(row['Harbour Town QTY']        || 0) || 0;
+          const pfQty       = parseInt(row['Pacific Fair QTY']        || 0) || 0;
+          const ssQty       = parseInt(row['Southport Showroom QTY']  || 0) || 0;
+          const swQty       = parseInt(row['Southport Warehouse QTY'] || 0) || 0;
 
           if (!name) return; // skip empty rows
 
@@ -1201,8 +1203,8 @@
             _id:          nextId++,
             open:         false,
             name:         name,
-            category:     '',
-            brandName:    '',
+            category:     category,
+            brandName:    brand,
             retailPrice:  retailPrice,
             supplyPrice:  supplyPrice,
             supplierName: supplier,
@@ -1216,7 +1218,13 @@
 
         renderList();
         updateCounter();
-        showToast(`${imported} product${imported !== 1 ? 's' : ''} imported — please set Brand and Category for each.`);
+        const hasBrandCol    = rows[0].hasOwnProperty('Brand');
+        const hasCategoryCol = rows[0].hasOwnProperty('Category');
+        const missing = [!hasBrandCol && 'Brand', !hasCategoryCol && 'Category'].filter(Boolean);
+        const suffix2 = missing.length > 0
+          ? ` — please set ${missing.join(' and ')} for each product.`
+          : '';
+        showToast(`${imported} product${imported !== 1 ? 's' : ''} imported${suffix2}`);
 
         // Reset file input so same file can be re-imported if needed
         event.target.value = '';

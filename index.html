@@ -10,7 +10,6 @@
   :root {
     --bg: #fafafa;
     --surface: rgba(0,0,0,0.04);
-    --surface2: rgba(0,0,0,0.06);
     --border: rgba(0,0,0,0.12);
     --text: #1a1a1a;
     --muted: rgba(0,0,0,0.45);
@@ -39,84 +38,11 @@
 
   .if-logo { height: 52px; width: auto; display: block; }
 
-  .header-right p {
-    font-size: 11px;
-    color: #6b6259;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-align: right;
-  }
-
+  .header-right p { font-size: 11px; color: #6b6259; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
   .header-right p + p { margin-top: 3px; color: rgba(0,0,0,0.3); }
 
   .container { max-width: 860px; margin: 0 auto; }
-
-  /* Config panel */
-  .config-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 24px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
-    align-items: end;
-  }
-
-  .config-panel .field-full { grid-column: 1 / -1; }
-
-  .status-dot {
-    display: inline-block;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #2ecc71;
-    margin-right: 6px;
-    box-shadow: 0 0 6px rgba(46,204,113,0.5);
-  }
-
-  .status-text { font-size: 11px; font-weight: 700; color: #27ae60; letter-spacing: 0.08em; }
-
-  /* Template bar */
-  .template-label {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-
-  .template-bar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .btn-temp {
-    background: rgba(0,0,0,0.05);
-    border: 1px solid rgba(0,0,0,0.15);
-    color: #1a1a1a;
-    padding: 6px 12px;
-    font-size: 10px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: all 0.15s;
-    text-transform: uppercase;
-  }
-
-  .btn-temp:hover { background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.3); }
-
-  /* Product list */
-  #product-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
+  #product-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
 
   .product-card {
     background: var(--surface);
@@ -125,495 +51,459 @@
     overflow: hidden;
     transition: border-color 0.2s;
   }
-
-  .product-card:focus-within { border-color: rgba(255,255,255,0.7); }
+  .product-card:focus-within { border-color: rgba(0,0,0,0.28); }
 
   .card-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    cursor: pointer;
-    user-select: none;
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 18px; cursor: pointer; user-select: none;
   }
 
   .card-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    color: #ffffff;
-    background: #1a1a1a;
-    width: 28px; height: 28px;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    color: #fff; background: #1a1a1a; width: 28px; height: 28px;
+    border-radius: 2px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
   }
+
+  .card-type-badge {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.07em;
+    padding: 3px 8px; border-radius: 2px; text-transform: uppercase;
+    flex-shrink: 0; white-space: nowrap;
+  }
+  .badge-unset     { background: rgba(200,140,0,0.12); color: rgba(150,100,0,0.9); }
+  .badge-sample    { background: rgba(0,0,0,0.08); color: rgba(0,0,0,0.5); }
+  .badge-jewellery { background: rgba(130,80,175,0.12); color: rgb(100,45,140); }
+  .badge-stocked   { background: rgba(46,204,113,0.12); color: #1e9450; }
 
   .card-preview {
-    flex: 1;
-    font-size: 13px;
-    color: #1a1a1a;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    font-weight: 600;
+    flex: 1; font-size: 13px; color: #1a1a1a; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;
+    font-weight: 600; min-width: 0;
   }
+  .card-preview.empty { color: rgba(0,0,0,0.28); font-style: italic; font-weight: 400; text-transform: none; }
 
-  .card-preview.empty {
-    color: rgba(0,0,0,0.3);
-    font-style: italic;
-    font-weight: 400;
-    text-transform: none;
-  }
-
-  .card-price-badge {
-    font-size: 12px;
-    color: rgba(0,0,0,0.5);
-    font-weight: 500;
-    min-width: 50px;
-    text-align: right;
-  }
+  .card-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .card-price-badge { font-size: 12px; color: rgba(0,0,0,0.5); font-weight: 500; min-width: 50px; text-align: right; }
 
   .btn-card {
-    background: rgba(0,0,0,0.05);
-    border: 1px solid rgba(0,0,0,0.15);
-    color: #1a1a1a;
-    padding: 5px 10px;
-    font-size: 10px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-    letter-spacing: 0.05em;
+    background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.15);
+    color: #1a1a1a; padding: 5px 10px; font-size: 10px; font-weight: 700;
+    font-family: 'DM Mono', monospace; cursor: pointer; border-radius: 2px;
+    transition: all 0.15s; letter-spacing: 0.05em; white-space: nowrap;
   }
-
   .btn-card:hover { background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.3); }
   .btn-card.danger:hover { background: rgba(200,0,0,0.08); border-color: rgba(200,0,0,0.3); color: #c00; }
 
-  .card-toggle {
-    color: rgba(0,0,0,0.35);
-    font-size: 16px;
-    transition: transform 0.2s;
-    flex-shrink: 0;
-  }
-
+  .card-toggle { color: rgba(0,0,0,0.35); font-size: 16px; transition: transform 0.2s; flex-shrink: 0; }
   .card-toggle.open { transform: rotate(180deg); }
 
-  .card-body {
-    display: none;
-    padding: 0 18px 20px;
-    border-top: 1px solid var(--border);
-    animation: slideDown 0.15s ease;
-  }
-
+  .card-body { display: none; padding: 0 18px 22px; border-top: 1px solid var(--border); animation: slideDown 0.15s ease; }
   .card-body.open { display: block; }
 
   @keyframes slideDown {
     from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  .fields-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-top: 16px;
-  }
+  .type-selector { padding: 18px 0 4px; }
+  .type-prompt { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.38); margin-bottom: 10px; }
+  .type-buttons { display: flex; flex-direction: column; gap: 8px; }
 
+  .btn-type {
+    background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: var(--radius);
+    padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 12px;
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: #1a1a1a; cursor: pointer; transition: all 0.15s;
+    text-align: left; display: flex; align-items: center;
+    justify-content: space-between; width: 100%;
+  }
+  .btn-type:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .btn-type-left { display: flex; flex-direction: column; gap: 3px; }
+  .btn-type-sub { font-size: 10px; font-weight: 400; letter-spacing: 0.04em; opacity: 0.5; text-transform: none; }
+  .btn-type:hover .btn-type-sub { opacity: 0.7; }
+  .btn-type-arrow { font-size: 14px; opacity: 0.4; }
+  .btn-type:hover .btn-type-arrow { opacity: 1; }
+
+  .change-type-row { margin: 14px 0 0; }
+  .change-type-link {
+    font-size: 10px; color: rgba(0,0,0,0.33); cursor: pointer;
+    letter-spacing: 0.06em; text-decoration: underline; text-underline-offset: 2px;
+    background: none; border: none; font-family: 'DM Mono', monospace;
+    padding: 0; transition: color 0.15s;
+  }
+  .change-type-link:hover { color: rgba(0,0,0,0.7); }
+
+  .online-section {
+    margin: 14px 0 16px; padding: 14px 16px;
+    background: rgba(0,0,0,0.025); border: 1px solid rgba(0,0,0,0.08);
+    border-radius: var(--radius);
+  }
+  .online-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.45); display: block; margin-bottom: 10px; }
+  .online-btns { display: flex; gap: 8px; }
+  .btn-online {
+    flex: 1; background: #fff; border: 1px solid rgba(0,0,0,0.15);
+    border-radius: var(--radius); padding: 9px; font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(0,0,0,0.45); cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .btn-online:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
+  .btn-online.is-yes { background: #1a5e2a; color: #fff; border-color: #1a5e2a; }
+  .btn-online.is-no  { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .online-note { font-size: 10px; color: rgba(0,0,0,0.35); margin-top: 8px; letter-spacing: 0.02em; }
+
+  .card-quick-wrap { padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .card-quick-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(0,0,0,0.35); margin-bottom: 8px; }
+  .card-quick-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .btn-quick {
+    background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.14);
+    color: #1a1a1a; padding: 5px 12px; font-size: 10px; font-weight: 700;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.05em; cursor: pointer;
+    border-radius: var(--radius); transition: all 0.15s; text-transform: uppercase;
+  }
+  .btn-quick:hover { background: rgba(0,0,0,0.12); border-color: rgba(0,0,0,0.3); }
+
+  .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .field-full { grid-column: 1 / -1; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
 
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  label {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(0,0,0,0.55);
-    font-weight: 600;
-  }
-
+  label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.55); font-weight: 600; }
   label .optional { color: rgba(0,0,0,0.35); font-size: 9px; text-transform: none; letter-spacing: 0; font-weight: 400; }
   label .required { color: #1a1a1a; }
 
   input, select {
-    background: #ffffff;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: var(--radius);
-    color: #1a1a1a;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    padding: 10px 12px;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    width: 100%;
-    outline: none;
+    background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: var(--radius);
+    color: #1a1a1a; font-family: 'DM Mono', monospace; font-size: 13px;
+    padding: 10px 12px; transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%; outline: none;
   }
-
-  input:focus, select:focus {
-    border-color: rgba(0,0,0,0.4);
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
-  }
-
-  select option { background: #ffffff; color: #1a1a1a; }
+  input:focus, select:focus { border-color: rgba(0,0,0,0.4); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+  select option { background: #fff; color: #1a1a1a; }
   input::placeholder { color: rgba(0,0,0,0.3); }
   input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
 
-  /* Stock drawer */
-  .drawer-overlay {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.35);
-    display: none; z-index: 1999;
+  .tag-groups { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 16px; padding-top: 4px; }
+  .tag-group { display: flex; flex-direction: column; gap: 7px; }
+  .tag-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+  .btn-tag {
+    background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: var(--radius);
+    padding: 7px 14px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase; color: rgba(0,0,0,0.45);
+    cursor: pointer; transition: all 0.15s;
   }
+  .btn-tag:hover { border-color: rgba(0,0,0,0.35); color: #1a1a1a; background: rgba(0,0,0,0.03); }
+  .btn-tag.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
 
-  .drawer-overlay.active { display: block; }
+  .sizes-block { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; margin-top: 2px; }
+  .sizes-block-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(0,0,0,0.55); font-weight: 600; }
+  .sizes-preset-hint { font-size: 9px; color: rgba(0,0,0,0.35); letter-spacing: 0.04em; }
+  .sizes-presets { display: flex; flex-wrap: wrap; gap: 6px; }
 
-  .drawer {
-    position: fixed; top: 0; right: -440px;
-    width: 380px; height: 100%;
-    background: #f0eeeb;
-    border-left: 1px solid rgba(0,0,0,0.1);
-    transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+  .btn-size-preset {
+    background: rgba(0,0,0,0.04); border: 1px dashed rgba(0,0,0,0.2);
+    color: rgba(0,0,0,0.6); padding: 5px 12px; font-size: 10px; font-weight: 700;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.05em; cursor: pointer;
+    border-radius: var(--radius); transition: all 0.15s; text-transform: uppercase;
+  }
+  .btn-size-preset:hover { background: #1a1a1a; color: #fff; border-color: #1a1a1a; border-style: solid; }
+
+  .size-chips-wrap {
+    display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px; padding: 8px;
+    background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.1);
+    border-radius: var(--radius); align-items: flex-start; align-content: flex-start;
+  }
+  .size-chip {
+    background: #1a1a1a; color: #fff; font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+    padding: 5px 10px; border-radius: 2px; display: flex; align-items: center; gap: 7px;
+  }
+  .size-chip-remove {
+    background: none; border: none; color: rgba(255,255,255,0.4);
+    cursor: pointer; font-size: 12px; padding: 0; line-height: 1;
+    font-family: inherit; transition: color 0.1s;
+  }
+  .size-chip-remove:hover { color: #ff8080; }
+  .size-chips-empty { font-size: 11px; color: rgba(0,0,0,0.26); font-style: italic; align-self: center; }
+
+  .size-manual-row { display: flex; gap: 8px; }
+  .size-manual-row input { flex: 1; }
+  .btn-size-add {
+    background: #1a1a1a; color: #fff; border: none; padding: 10px 18px;
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; border-radius: var(--radius); cursor: pointer;
+    white-space: nowrap; transition: background 0.15s; text-transform: uppercase;
+  }
+  .btn-size-add:hover { background: #333; }
+  .stock-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
     z-index: 2000;
-    padding: 36px 28px;
+    padding: 0;
+    overflow-y: auto;
+  }
+  .stock-modal-overlay.active { display: flex; }
+
+  .stock-modal {
+    background: #f5f3f0;
+    width: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
 
-  .drawer.active { right: 0; }
-
-  .drawer h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: #1a1a1a;
-    letter-spacing: 0.04em;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    padding-bottom: 14px;
-    margin-bottom: 24px;
-  }
-
-  .drawer-fields { display: flex; flex-direction: column; gap: 16px; flex: 1; }
-
-  .drawer-save {
+  .stock-modal-header {
     background: #1a1a1a;
-    color: #ffffff;
-    border: none;
-    padding: 14px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    margin-top: 28px;
-    transition: all 0.15s;
-  }
-
-  .drawer-save:hover { background: #333; }
-
-  /* Add button */
-  .add-btn {
+    padding: 24px 40px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    width: 100%;
-    background: rgba(0,0,0,0.03);
-    border: 1px dashed rgba(0,0,0,0.2);
-    border-radius: var(--radius);
-    padding: 14px 18px;
-    color: rgba(0,0,0,0.45);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-    letter-spacing: 0.06em;
-    margin-bottom: 16px;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 
+  .stock-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600; color: #fff;
+    letter-spacing: 0.04em;
+  }
+
+  .stock-modal-subtitle {
+    font-size: 11px; color: rgba(255,255,255,0.45);
+    letter-spacing: 0.08em; margin-top: 3px; text-transform: uppercase;
+  }
+
+  .stock-modal-close {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; font-family: 'DM Mono', monospace; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.1em; padding: 10px 20px;
+    border-radius: var(--radius); cursor: pointer; transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .stock-modal-close:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4); }
+
+  .stock-modal-body { flex: 1; padding: 40px; overflow-x: auto; }
+
+  .stock-simple-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 700px;
+  }
+
+  .stock-simple-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+  }
+
+  .stock-simple-card-label {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(0,0,0,0.4); margin-bottom: 10px;
+  }
+
+  .stock-simple-card input {
+    font-size: 22px; font-weight: 700; text-align: center;
+    border: 1px solid rgba(0,0,0,0.15); border-radius: var(--radius);
+    padding: 12px; width: 100%;
+  }
+
+  .stock-grid-wrap { min-width: 640px; }
+
+  .stock-grid-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .stock-grid-table thead th {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(0,0,0,0.45); font-weight: 700; padding: 10px 16px 14px;
+    text-align: center; border-bottom: 2px solid rgba(0,0,0,0.1);
+  }
+
+  .stock-grid-table thead th:first-child {
+    text-align: left; width: 100px;
+  }
+
+  .stock-grid-table tbody tr { background: #fff; }
+  .stock-grid-table tbody tr + tr td { border-top: 1px solid rgba(0,0,0,0.06); }
+
+  .stock-grid-table td {
+    padding: 10px 10px;
+    vertical-align: middle;
+  }
+
+  .stock-grid-table td:first-child {
+    padding-left: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #1a1a1a;
+    white-space: nowrap;
+    border-right: 2px solid rgba(0,0,0,0.08);
+  }
+
+  .stock-grid-table td input[type="number"] {
+    width: 100%;
+    min-width: 80px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 8px;
+    border: 1px solid rgba(0,0,0,0.14);
+    border-radius: var(--radius);
+  }
+
+  .stock-grid-table tfoot td {
+    padding: 12px 10px;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(0,0,0,0.4); text-align: center; border-top: 2px solid rgba(0,0,0,0.1);
+  }
+  .stock-grid-table tfoot td:first-child { text-align: left; padding-left: 16px; }
+
+  .col-total {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: #1a1a1a !important;
+  }
+
+  .stock-modal-footer {
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+
+  .stock-total-summary {
+    font-size: 12px; color: rgba(0,0,0,0.4); letter-spacing: 0.06em;
+  }
+  .stock-total-summary strong { color: #1a1a1a; font-size: 14px; }
+
+  .stock-modal-save {
+    background: #1a1a1a; color: #fff; border: none; padding: 14px 36px;
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; cursor: pointer; border-radius: var(--radius);
+    transition: background 0.15s; text-transform: uppercase;
+  }
+  .stock-modal-save:hover { background: #333; }
+
+  .add-btn {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    background: rgba(0,0,0,0.03); border: 1px dashed rgba(0,0,0,0.2);
+    border-radius: var(--radius); padding: 14px 18px; color: rgba(0,0,0,0.45);
+    font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer;
+    transition: all 0.15s; letter-spacing: 0.06em; margin-bottom: 16px;
+  }
   .add-btn:hover { border-color: rgba(0,0,0,0.4); color: #1a1a1a; background: rgba(0,0,0,0.07); }
 
-  /* Sync section */
   .export-section {
-    background: #1a1a1a;
-    border: 1px solid #111;
-    border-radius: var(--radius);
-    padding: 22px;
-    margin-top: 8px;
+    background: #1a1a1a; border: 1px solid #111;
+    border-radius: var(--radius); padding: 22px; margin-top: 8px;
   }
-
   .export-section h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: #ffffff;
-    letter-spacing: 0.04em;
-    margin-bottom: 16px;
+    font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600;
+    color: #fff; letter-spacing: 0.04em; margin-bottom: 16px;
   }
-
   .export-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
   .btn-sync {
-    background: #ffffff;
-    color: #1a1a1a;
-    border: none;
-    padding: 12px 28px;
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: all 0.15s;
+    background: #fff; color: #1a1a1a; border: none; padding: 12px 28px;
+    font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.1em; cursor: pointer; border-radius: var(--radius); transition: all 0.15s;
   }
-
   .btn-sync:hover { background: #f0f0f0; box-shadow: 0 2px 16px rgba(0,0,0,0.2); }
   .btn-sync:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 
   .btn-clear {
-    background: transparent;
-    border: 1px solid rgba(255,100,100,0.4);
-    color: rgba(255,150,150,0.9);
-    padding: 12px 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    border-radius: var(--radius);
-    transition: all 0.15s;
+    background: transparent; border: 1px solid rgba(255,100,100,0.4);
+    color: rgba(255,150,150,0.9); padding: 12px 20px;
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.08em; cursor: pointer; border-radius: var(--radius); transition: all 0.15s;
   }
-
   .btn-clear:hover { border-color: #ff8080; color: #ffb0b0; background: rgba(255,80,80,0.1); }
 
   .counter { font-size: 11px; color: rgba(255,255,255,0.55); margin-left: auto; letter-spacing: 0.06em; }
-  .counter span { color: #ffffff; font-weight: 600; }
+  .counter span { color: #fff; font-weight: 600; }
 
-  /* Toast */
   #toast {
     position: fixed; bottom: 28px; right: 28px;
-    background: #1a1a1a;
-    color: #ffffff;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 12px 22px;
-    border-radius: var(--radius);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.25s;
-    pointer-events: none;
-    z-index: 3000;
-    letter-spacing: 0.05em;
+    background: #1a1a1a; color: #fff; font-family: 'DM Mono', monospace;
+    font-size: 12px; font-weight: 700; padding: 12px 22px; border-radius: var(--radius);
+    opacity: 0; transform: translateY(10px); transition: all 0.25s;
+    pointer-events: none; z-index: 9000; letter-spacing: 0.05em;
   }
-
   #toast.show { opacity: 1; transform: translateY(0); }
 
   .logout-btn {
-    background: none;
-    border: 1px solid rgba(0,0,0,0.15);
-    color: rgba(0,0,0,0.4);
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    padding: 4px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-top: 6px;
-    transition: all 0.15s;
-    text-transform: uppercase;
+    background: none; border: 1px solid rgba(0,0,0,0.15); color: rgba(0,0,0,0.4);
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.08em; padding: 4px 10px; border-radius: 3px;
+    cursor: pointer; margin-top: 6px; transition: all 0.15s; text-transform: uppercase;
   }
+  .logout-btn:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
 
-  .logout-btn:hover {
-    border-color: rgba(0,0,0,0.3);
-    color: #1a1a1a;
-  }
   .login-screen {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: #fafafa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
+    position: fixed; inset: 0; background: #fafafa;
+    display: flex; align-items: center; justify-content: center; z-index: 9999;
   }
-
   .login-screen.hidden { display: none; }
-
   .login-box {
     text-align: center;
     width: 320px;
-  }
-
-  .login-box img {
-    height: 52px;
-    width: auto;
-    margin-bottom: 32px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    filter: invert(1);
-  }
-
-  .login-box h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 6px;
-  }
-
-  .login-box p {
-    font-size: 11px;
-    color: rgba(0,0,0,0.4);
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.06em;
-    margin-bottom: 24px;
-  }
-
-  .login-box input {
-    background: #ffffff;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 4px;
-    color: #1a1a1a;
-    font-family: 'DM Mono', monospace;
-    font-size: 16px;
-    padding: 12px 16px;
-    width: 100%;
-    outline: none;
-    text-align: center;
-    letter-spacing: 0.2em;
-    margin-bottom: 10px;
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-
-  .login-box input:focus {
-    border-color: rgba(0,0,0,0.4);
-    box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
-  }
-
-  .login-box button {
-    width: 100%;
-    background: #1a1a1a;
-    color: #ffffff;
-    border: none;
-    padding: 13px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
-  .login-box button:hover { background: #333; }
-
-  .login-error {
-    font-size: 11px;
-    color: #c0392b;
-    font-family: 'DM Mono', monospace;
-    margin-top: 10px;
-    min-height: 16px;
-    letter-spacing: 0.04em;
-  }
-
-  /* Shopify reminder modal */
-  .modal-overlay {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.45);
-    display: none;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    z-index: 4000;
   }
+  .login-box img { height: 52px; width: auto; margin: 0 0 32px; display: block; align-self: center; }
+  .login-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+  .login-box p { font-size: 11px; color: rgba(0,0,0,0.4); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; margin-bottom: 24px; }
+  .login-box input {
+    background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: 4px;
+    color: #1a1a1a; font-family: 'DM Mono', monospace; font-size: 16px;
+    padding: 12px 16px; width: 100%; outline: none; text-align: center;
+    letter-spacing: 0.2em; margin-bottom: 10px; transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .login-box input:focus { border-color: rgba(0,0,0,0.4); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+  .login-box button {
+    width: 100%; background: #1a1a1a; color: #fff; border: none; padding: 13px;
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.1em; border-radius: 4px; cursor: pointer; transition: background 0.15s;
+  }
+  .login-box button:hover { background: #333; }
+  .login-error { font-size: 11px; color: #c0392b; font-family: 'DM Mono', monospace; margin-top: 10px; min-height: 16px; letter-spacing: 0.04em; }
 
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    display: none; align-items: center; justify-content: center; z-index: 4000;
+  }
   .modal-overlay.active { display: flex; }
-
-  .modal-box {
-    background: #ffffff;
-    border-radius: 6px;
-    padding: 40px 36px;
-    max-width: 440px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
-  }
-
-  .modal-logo {
-    height: 36px;
-    width: auto;
-    margin-bottom: 20px;
-    filter: invert(1);
-  }
-
-  .modal-box h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 12px;
-  }
-
-  .modal-box p {
-    font-size: 12px;
-    color: #555;
-    line-height: 1.7;
-    margin-bottom: 24px;
-    font-family: 'DM Mono', monospace;
-  }
-
+  .modal-box { background: #fff; border-radius: 6px; padding: 40px 36px; max-width: 440px; width: 90%; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
+  .modal-logo { height: 36px; width: auto; margin-bottom: 20px; filter: invert(1); }
+  .modal-box h2 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: #1a1a1a; margin-bottom: 12px; }
+  .modal-box p { font-size: 12px; color: #555; line-height: 1.7; margin-bottom: 24px; font-family: 'DM Mono', monospace; }
   .modal-box p strong { color: #1a1a1a; }
-
-  .modal-btn {
-    display: block;
-    background: #1a1a1a;
-    color: #ffffff;
-    text-decoration: none;
-    padding: 13px 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    transition: background 0.15s;
-  }
-
+  .modal-btn { display: block; background: #1a1a1a; color: #fff; text-decoration: none; padding: 13px 20px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; border-radius: 4px; margin-bottom: 10px; transition: background 0.15s; }
   .modal-btn:hover { background: #333; }
-
-  .modal-close {
-    background: none;
-    border: 1px solid rgba(0,0,0,0.15);
-    color: rgba(0,0,0,0.45);
-    padding: 11px 20px;
-    width: 100%;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
+  .modal-close { background: none; border: 1px solid rgba(0,0,0,0.15); color: rgba(0,0,0,0.45); padding: 11px 20px; width: 100%; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
   .modal-close:hover { border-color: rgba(0,0,0,0.3); color: #1a1a1a; }
 
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     .fields-grid { grid-template-columns: 1fr; }
-    .config-panel { grid-template-columns: 1fr; }
     header { flex-direction: column; align-items: flex-start; gap: 14px; }
-    .drawer { width: 100%; right: -100%; }
-    .card-actions { gap: 5px; }
+    .stock-simple-grid { grid-template-columns: 1fr; }
+    .stock-modal-header, .stock-modal-body, .stock-modal-footer { padding-left: 20px; padding-right: 20px; }
   }
 </style>
 </head>
@@ -624,65 +514,55 @@
     <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion">
     <h2>Product Importer</h2>
     <p>Enter your portal password to continue</p>
-    <input type="password" id="login-password" placeholder="••••••" onkeydown="if(event.key==='Enter') attemptLogin()">
+    <input type="password" id="login-password" placeholder="Password" onkeydown="if(event.key==='Enter') attemptLogin()">
     <button id="login-btn" onclick="attemptLogin()">ENTER</button>
     <div class="login-error" id="login-error"></div>
   </div>
 </div>
 
 <div id="main-content" style="display:none;">
-
-<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
-
-<div class="drawer" id="drawer">
-  <h3>Stock Levels</h3>
-  <div class="drawer-fields" id="drawer-content"></div>
-  <button class="drawer-save" onclick="closeDrawer()">SAVE &amp; CLOSE</button>
-</div>
-
-<header>
-  <img src="Imagine Fashion Logo Transp.png" class="if-logo" alt="Imagine Fashion">
-  <div class="header-right">
-    <p>Lightspeed X-Series</p>
-    <p>Direct Product Sync</p>
-    <button onclick="logout()" class="logout-btn">Log Out</button>
-  </div>
-</header>
-
-<div class="container">
-
-  <!-- Quick templates -->
-  <div class="template-label">Quick Add</div>
-  <div class="template-bar" id="templates"></div>
-
-  <!-- Product list -->
-  <div id="product-list"></div>
-
-  <div style="display:flex;gap:10px;margin-bottom:16px;">
-    <button class="add-btn" style="margin-bottom:0;" onclick="addProduct()">
-      <span style="font-size:18px;line-height:1;">+</span> Add Product
-    </button>
-    <button class="add-btn" style="margin-bottom:0;flex-shrink:0;width:auto;padding:14px 20px;" onclick="document.getElementById('file-import').click()">
-      <span style="font-size:16px;line-height:1;">&#8593;</span> Import XLSX / CSV
-    </button>
-    <input type="file" id="file-import" accept=".xlsx,.csv" style="display:none" onchange="handleFileImport(event)">
-  </div>
-
-  <!-- Sync -->
-  <div class="export-section">
-    <h2>Sync to Lightspeed</h2>
-    <div class="export-row">
-      <button class="btn-sync" id="sync_btn" onclick="startSync()">SYNC PRODUCTS</button>
-      <button class="btn-clear" onclick="clearAll()">CLEAR ALL</button>
-      <div class="counter" id="counter"><span>0</span> products</div>
+  <div class="stock-modal-overlay" id="stock-modal-overlay">
+    <div class="stock-modal">
+      <div class="stock-modal-header">
+        <div>
+          <div class="stock-modal-title" id="stock-modal-title">Stock Levels</div>
+          <div class="stock-modal-subtitle" id="stock-modal-subtitle"></div>
+        </div>
+        <button class="stock-modal-close" onclick="closeStockModal()">Save &amp; Close</button>
+      </div>
+      <div class="stock-modal-body" id="stock-modal-body"></div>
+      <div class="stock-modal-footer">
+        <div class="stock-total-summary" id="stock-modal-total"></div>
+        <button class="stock-modal-save" onclick="closeStockModal()">Save &amp; Close</button>
+      </div>
     </div>
   </div>
 
+  <header>
+    <img src="Imagine Fashion Logo Transp.png" class="if-logo" alt="Imagine Fashion">
+    <div class="header-right">
+      <p>Lightspeed X-Series</p>
+      <p>Direct Product Sync</p>
+      <button onclick="logout()" class="logout-btn">Log Out</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="product-list"></div>
+    <button class="add-btn" onclick="addProduct()">
+      <span style="font-size:18px;line-height:1;">+</span> Add Product
+    </button>
+    <div class="export-section">
+      <h2>Sync to Lightspeed</h2>
+      <div class="export-row">
+        <button class="btn-sync" id="sync_btn" onclick="startSync()">SYNC PRODUCTS</button>
+        <button class="btn-clear" onclick="clearAll()">CLEAR ALL</button>
+        <div class="counter" id="counter"><span>0</span> products</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-</div><!-- end main-content -->
-
-<!-- Shopify reminder modal -->
 <div class="modal-overlay" id="shopify-modal">
   <div class="modal-box">
     <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="modal-logo">
@@ -695,548 +575,978 @@
 
 <div id="toast"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-  let products = [];
-  let nextId = 1;
+const SAMPLE_QUICK = [
+  { label: 'Top', name: 'Top Sample' },
+  { label: 'Pant', name: 'Pant Sample' },
+  { label: 'Dress', name: 'Dress Sample' },
+  { label: 'Skirt', name: 'Skirt Sample' },
+  { label: 'Jacket', name: 'Jacket Sample' },
+  { label: 'Knit', name: 'Knit Sample' }
+];
 
-  const CATEGORIES = [
-    '', 'Sample Top', 'Sample Pant', 'Sample Dress', 'Sample Skirt',
-    'Sample Jacket', 'Sample Knit', 'Jewellery', 'Accessories',
-    'Homewares', 'Belts', 'Bags', 'Scarves'
-  ];
+const JEWEL_QUICK = [
+  { label: 'Jewellery', name: 'Jewellery' },
+  { label: 'Accessories', name: 'Accessories' },
+  { label: 'Homewares', name: 'Homewares' },
+  { label: 'Belts', name: 'Belts' },
+  { label: 'Bags', name: 'Bags' },
+  { label: 'Scarves', name: 'Scarves' }
+];
 
-  const BRANDS = [
-    '', 'Accessories', 'All Season', 'Belts', 'Discontinued', 'Ex Display',
-    'Final Clearance', 'Freight', 'Gift Card', 'Imagine Fashion',
-    'Imagine Fashion Dev 1', 'Imagine Fashion Wholesale', 'Jewellery',
-    'Needs Altering', 'Not specified', 'Summer 20-21', 'Summer 21-22',
-    'Summer 22-23', 'Summer 23-24', 'Summer 24-25', 'Summer 25-26',
-    'Summer 25-27', 'Summer 25-28', 'Summer Discontinued', 'Winter 2021',
-    'Winter 2022', 'Winter 2023', 'Winter 2024', 'Winter 2025', 'Winter 2026',
-    'Wrapped Gift Cards'
-  ];
+const STOCKED_QUICK = [
+  { label: 'Top', name: 'Top' },
+  { label: 'Pant', name: 'Pant' },
+  { label: 'Dress', name: 'Dress' },
+  { label: 'Skirt', name: 'Skirt' },
+  { label: 'Jacket', name: 'Jacket' },
+  { label: 'Knit', name: 'Knit' }
+];
 
-  const OUTLET_IDS = {
-    ht: '06f24f8b-21a8-11ef-f4ca-d46876ffea7a',
-    pf: '06f24f8b-21a8-11ef-f4ca-d468a998f3bc',
-    ss: '06f24f8b-21fd-11ef-f4ca-d466e09040b3',
-    sw: '06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200'
-  };
+const TAG_GROUPS = [
+  { key: 'occasion', label: 'Occasion', options: ['travel', 'funeral', 'event', 'work', 'casual', 'resort', 'wedding', 'lunch', 'races', 'evening', 'holiday', 'dinner', 'mother of the bride', 'high tea'] },
+  { key: 'fabric',   label: 'Fabric',   options: ['linen', 'cotton', 'silk', 'viscose', 'knit', 'rayon', 'wool', 'cashmere'] },
+  { key: 'fit',      label: 'Fit',      options: ['wide leg', 'relaxed', 'oversized', 'fitted', 'straight leg', 'elastic waist', 'cropped'] },
+  { key: 'style',    label: 'Style',    options: ['classic', 'minimal', 'boho', 'layering', 'feminine', 'elevated', 'resort', 'modest', 'sleeveless', 'short sleeve', 'long sleeve', 'singlet', 'jacket', 'shorts', 'knit'] },
+  { key: 'season',   label: 'Season',   options: ['summer', 'winter', 'all season'] },
+];
 
-  // ---- Worker URL - paste your Cloudflare Worker URL here ----
-  const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
+const SIZE_PRESETS = {
+  'OS': ['OS'],
+  'XS-S-M-L': ['XS', 'S', 'M', 'L'],
+  'XS-S-M-L-XL': ['XS', 'S', 'M', 'L', 'XL'],
+  'S-M-L': ['S', 'M', 'L'],
+  'S-M-L-XL': ['S', 'M', 'L', 'XL'],
+  'SM-ML': ['S/M', 'M/L'],
+  'SM-ML-XL': ['S/M', 'M/L', 'XL']
+};
 
-  // ---- Login ----
-  const MAX_ATTEMPTS = 5;
-  const LOCKOUT_DURATION = 30 * 60 * 1000; // 30 minutes
+const OUTLETS = [
+  { key: 'ht', label: 'Harbour Town', id: '06f24f8b-21a8-11ef-f4ca-d46876ffea7a' },
+  { key: 'pf', label: 'Pacific Fair', id: '06f24f8b-21a8-11ef-f4ca-d468a998f3bc' },
+  { key: 'ss', label: 'Southport Showroom', id: '06f24f8b-21fd-11ef-f4ca-d466e09040b3' },
+  { key: 'sw', label: 'Southport Warehouse', id: '06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200' }
+];
 
-  function checkLockout() {
-    const lockoutUntil = parseInt(localStorage.getItem('lockout_until') || '0');
-    if (Date.now() < lockoutUntil) {
-      const mins = Math.ceil((lockoutUntil - Date.now()) / 60000);
-      return `Too many failed attempts. Try again in ${mins} minute${mins !== 1 ? 's' : ''}.`;
-    }
-    return null;
+const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
+
+let products = [];
+let nextId = 1;
+let LIVE_PRODUCT_CATEGORIES = [];
+let LIVE_BRANDS = [];
+let LIVE_SUPPLIERS = [];
+let REFERENCE_DATA_LOADED = false;
+let REFERENCE_DATA_ERROR = '';
+let _stockModalId = null;
+
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_DURATION = 30 * 60 * 1000;
+
+function checkLockout() {
+  const until = parseInt(localStorage.getItem('lockout_until') || '0', 10);
+  if (Date.now() < until) {
+    const mins = Math.ceil((until - Date.now()) / 60000);
+    return `Too many failed attempts. Try again in ${mins} minute${mins !== 1 ? 's' : ''}.`;
+  }
+  return null;
+}
+
+function recordFailedAttempt() {
+  const n = parseInt(localStorage.getItem('failed_attempts') || '0', 10) + 1;
+  localStorage.setItem('failed_attempts', n);
+  if (n >= MAX_ATTEMPTS) {
+    localStorage.setItem('lockout_until', Date.now() + LOCKOUT_DURATION);
+    localStorage.setItem('failed_attempts', '0');
+    return true;
+  }
+  return false;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function updateCounter() {
+  const n = products.length;
+  document.getElementById('counter').innerHTML = `<span>${n}</span> product${n !== 1 ? 's' : ''}`;
+}
+
+function esc(s) {
+  return (s || '').toString()
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function genSku() {
+  let s = '';
+  for (let i = 0; i < 8; i++) s += Math.floor(Math.random() * 10);
+  return s;
+}
+
+function blankStock() {
+  return { ht: 0, pf: 0, ss: 0, sw: 0 };
+}
+
+function categorySelectPlaceholder() {
+  if (LIVE_PRODUCT_CATEGORIES.length) return '-- Select category --';
+  if (REFERENCE_DATA_ERROR) return '-- Could not load categories --';
+  if (REFERENCE_DATA_LOADED) return '-- No categories found in Lightspeed --';
+  return '-- Loading categories from Lightspeed --';
+}
+
+function brandSelectPlaceholder() {
+  if (LIVE_BRANDS.length) return '-- Select brand --';
+  if (REFERENCE_DATA_ERROR) return '-- Could not load brands --';
+  if (REFERENCE_DATA_LOADED) return '-- No brands found in Lightspeed --';
+  return '-- Loading brands from Lightspeed --';
+}
+
+function supplierSelectPlaceholder() {
+  if (LIVE_SUPPLIERS.length) return '-- Select supplier --';
+  if (REFERENCE_DATA_ERROR) return '-- Could not load suppliers --';
+  if (REFERENCE_DATA_LOADED) return '-- No suppliers found in Lightspeed --';
+  return '-- Loading suppliers from Lightspeed --';
+}
+
+function getLiveCategoryValues() {
+  const values = [''];
+  const seen = new Set();
+
+  LIVE_PRODUCT_CATEGORIES.forEach(cat => {
+    if (!cat.leaf_category) return;
+    const label = (cat.display_name || cat.category_path || cat.name || '').trim();
+    if (!label) return;
+    const key = label.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    values.push(label);
+  });
+
+  return values;
+}
+
+function categoryOpts(current) {
+  const values = getLiveCategoryValues();
+  if (current && !values.includes(current)) values.push(current);
+
+  return values.map(c =>
+    `<option value="${esc(c)}"${current === c ? ' selected' : ''}>${c || categorySelectPlaceholder()}</option>`
+  ).join('');
+}
+
+async function loadReferenceData(password = localStorage.getItem('portal_password') || '') {
+  if (!password) return;
+  REFERENCE_DATA_ERROR = '';
+  REFERENCE_DATA_LOADED = false;
+
+  const res = await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Portal-Password': password
+    },
+    body: JSON.stringify({ action: 'get_reference_data' })
+  });
+
+  if (res.status === 401) {
+    throw new Error('Incorrect portal password.');
   }
 
-  function recordFailedAttempt() {
-    const attempts = parseInt(localStorage.getItem('failed_attempts') || '0') + 1;
-    localStorage.setItem('failed_attempts', attempts);
-    if (attempts >= MAX_ATTEMPTS) {
-      localStorage.setItem('lockout_until', Date.now() + LOCKOUT_DURATION);
-      localStorage.setItem('failed_attempts', '0');
-      return true; // locked out
-    }
-    return false;
+  const data = await res.json();
+  if (!res.ok) {
+    REFERENCE_DATA_ERROR = data?.error || 'Could not load reference data.';
+    REFERENCE_DATA_LOADED = true;
+    LIVE_PRODUCT_CATEGORIES = [];
+    LIVE_BRANDS = [];
+    LIVE_SUPPLIERS = [];
+    renderList();
+    throw new Error(data?.error || 'Could not load reference data.');
   }
 
-  function attemptLogin() {
-    const entered = document.getElementById('login-password').value.trim();
-    if (!entered) return;
+  LIVE_PRODUCT_CATEGORIES = Array.isArray(data.categories) ? data.categories : [];
+  LIVE_BRANDS = Array.isArray(data.brands) ? data.brands : [];
+  LIVE_SUPPLIERS = Array.isArray(data.suppliers) ? data.suppliers : [];
+  REFERENCE_DATA_LOADED = true;
+  REFERENCE_DATA_ERROR = '';
+  renderList();
+}
 
-    // Check lockout first
-    const lockoutMsg = checkLockout();
-    if (lockoutMsg) {
-      document.getElementById('login-error').textContent = lockoutMsg;
-      document.getElementById('login-password').disabled = true;
-      document.getElementById('login-btn').disabled = true;
-      return;
-    }
+async function attemptLogin() {
+  const entered = document.getElementById('login-password').value.trim();
+  if (!entered) return;
 
-    // Verify against the worker
-    fetch(WORKER_URL, {
+  const lockoutMsg = checkLockout();
+  if (lockoutMsg) {
+    document.getElementById('login-error').textContent = lockoutMsg;
+    document.getElementById('login-password').disabled = true;
+    document.getElementById('login-btn').disabled = true;
+    return;
+  }
+
+  try {
+    const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Portal-Password': entered },
       body: JSON.stringify({ action: 'ping' })
-    }).then(res => {
-      if (res.status === 401) {
-        const lockedOut = recordFailedAttempt();
-        const attempts = parseInt(localStorage.getItem('failed_attempts') || '0');
-        const remaining = MAX_ATTEMPTS - attempts;
-        if (lockedOut) {
-          document.getElementById('login-error').textContent = 'Too many failed attempts. This device is locked out for 30 minutes.';
-          document.getElementById('login-password').disabled = true;
-          document.getElementById('login-btn').disabled = true;
-        } else {
-          document.getElementById('login-error').textContent = `Incorrect password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`;
-        }
-        document.getElementById('login-password').value = '';
-        document.getElementById('login-password').focus();
-      } else {
-        // Success — clear failed attempts and unlock
-        localStorage.removeItem('failed_attempts');
-        localStorage.removeItem('lockout_until');
-        localStorage.setItem('portal_password', entered);
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('main-content').style.display = 'block';
-        document.getElementById('login-error').textContent = '';
-      }
-    }).catch((err) => {
-      console.error('Login error:', err);
-      document.getElementById('login-error').textContent = 'Could not reach server. Check your internet connection.';
     });
-  }
 
-  // ---- Init ----
-  window.onload = () => {
-    // Check if device is locked out
-    const lockoutMsg = checkLockout();
-    if (lockoutMsg) {
-      document.getElementById('login-error').textContent = lockoutMsg;
-      document.getElementById('login-password').disabled = true;
-      document.getElementById('login-btn').disabled = true;
+    if (res.status === 401) {
+      const locked = recordFailedAttempt();
+      const attempts = parseInt(localStorage.getItem('failed_attempts') || '0', 10);
+      const remaining = MAX_ATTEMPTS - attempts;
+
+      if (locked) {
+        document.getElementById('login-error').textContent = 'Too many failed attempts. This device is locked out for 30 minutes.';
+        document.getElementById('login-password').disabled = true;
+        document.getElementById('login-btn').disabled = true;
+      } else {
+        document.getElementById('login-error').textContent =
+          `Incorrect password. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining.`;
+      }
+      document.getElementById('login-password').value = '';
+      document.getElementById('login-password').focus();
+      return;
     }
 
-    const saved = localStorage.getItem('portal_password');
+    localStorage.removeItem('failed_attempts');
+    localStorage.removeItem('lockout_until');
+    localStorage.setItem('portal_password', entered);
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('main-content').style.display = 'block';
 
-    // If we have a saved password, verify it's still valid then unlock
-    if (saved) {
-      fetch(WORKER_URL, {
+    try {
+      await loadReferenceData(entered);
+    } catch (err) {
+      console.error(err);
+      showToast('Could not load brands, suppliers, and categories from Lightspeed.');
+    }
+  } catch {
+    document.getElementById('login-error').textContent = 'Could not reach server. Check your internet connection.';
+  }
+}
+
+window.onload = async () => {
+  const lockoutMsg = checkLockout();
+  if (lockoutMsg) {
+    document.getElementById('login-error').textContent = lockoutMsg;
+    document.getElementById('login-password').disabled = true;
+    document.getElementById('login-btn').disabled = true;
+  }
+
+  const saved = localStorage.getItem('portal_password');
+  if (saved) {
+    try {
+      const res = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Portal-Password': saved },
         body: JSON.stringify({ action: 'ping' })
-      }).then(res => {
-        if (res.status !== 401) {
-          document.getElementById('login-screen').classList.add('hidden');
-          document.getElementById('main-content').style.display = 'block';
-        } else {
-          localStorage.removeItem('portal_password');
-        }
-      }).catch(() => {
-        // If offline just let them through if password was saved
+      });
+
+      if (res.status !== 401) {
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('main-content').style.display = 'block';
-      });
+        try {
+          await loadReferenceData(saved);
+        } catch (err) {
+          console.error(err);
+          showToast('Could not load brands, suppliers, and categories from Lightspeed.');
+        }
+      } else {
+        localStorage.removeItem('portal_password');
+      }
+    } catch {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main-content').style.display = 'block';
     }
+  }
 
-    CATEGORIES.filter(c => c).forEach(cat => {
-      const btn = document.createElement('button');
-      btn.className = 'btn-temp';
-      const label = cat.replace('Sample ', '');
-      btn.textContent = '+ ' + label;
-      btn.onclick = () => addProduct(cat, label + ' Sample');
-      document.getElementById('templates').appendChild(btn);
-    });
+  addProduct();
+};
 
-    addProduct();
+function logout() {
+  localStorage.removeItem('portal_password');
+  LIVE_PRODUCT_CATEGORIES = [];
+  LIVE_BRANDS = [];
+  LIVE_SUPPLIERS = [];
+  REFERENCE_DATA_LOADED = false;
+  REFERENCE_DATA_ERROR = '';
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-password').disabled = false;
+  document.getElementById('login-btn').disabled = false;
+  document.getElementById('login-error').textContent = '';
+}
+
+function newProductObj() {
+  return {
+    _id: nextId++,
+    open: true,
+    productType: null,
+    sellOnline: false,
+    name: '',
+    category: '',
+    brandName: '',
+    retailPrice: '',
+    supplyPrice: '',
+    customSku: '',
+    supplierName: '',
+    supplierCode: '',
+    stock: blankStock(),
+    colour: '',
+    sizes: [],
+    sizeStock: {},
+    tags: [],
+    tagSelections: { occasion: [], fabric: [], fit: [], style: [], season: [] }
   };
+}
 
-  function logout() {
-    localStorage.removeItem('portal_password');
-    document.getElementById('main-content').style.display = 'none';
-    document.getElementById('login-screen').classList.remove('hidden');
-    document.getElementById('login-password').value = '';
-    document.getElementById('login-password').disabled = false;
-    document.getElementById('login-btn').disabled = false;
-    document.getElementById('login-error').textContent = '';
-  }
+function addProduct() {
+  products.push(newProductObj());
+  renderList();
+  updateCounter();
+  setTimeout(() => {
+    const cards = document.querySelectorAll('.product-card');
+    if (cards.length) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
+}
 
-  function saveConfig() {
-    // Password is managed via the login screen, nothing to save here
-  }
+function removeProduct(id) {
+  products = products.filter(p => p._id !== id);
+  renderList();
+  updateCounter();
+}
 
-  // ---- Helpers ----
-  function uid() {
-    return Math.random().toString(36).slice(2, 10).toUpperCase();
-  }
+function duplicate(id) {
+  const src = products.find(p => p._id === id);
+  const copy = JSON.parse(JSON.stringify(src));
+  copy._id = nextId++;
+  copy.open = true;
+  products.push(copy);
+  renderList();
+  updateCounter();
+}
 
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
+function toggleCard(id) {
+  const p = products.find(item => item._id === id);
+  if (p) { p.open = !p.open; renderList(); }
+}
 
-  function updateCounter() {
-    document.getElementById('counter').innerHTML = `<span>${products.length}</span> product${products.length !== 1 ? 's' : ''}`;
-  }
+function setType(id, type) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  p.productType = type;
+  p.category = '';
+  p.sizes = [];
+  p.sizeStock = {};
+  p.tagSelections = { occasion: [], fabric: [], fit: [], style: [], season: [] };
+  renderList();
+}
 
-  function esc(str) {
-    return (str || '').toString()
-      .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
-      .replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
+function clearType(id) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  p.productType = null;
+  p.name = '';
+  p.category = '';
+  p.sizes = [];
+  p.sizeStock = {};
+  p.tagSelections = { occasion: [], fabric: [], fit: [], style: [], season: [] };
+  renderList();
+}
 
-  // ---- Product management ----
-  function addProduct(cat, name) {
-    if (cat === undefined) cat = '';
+function setTagSelection(id, category, value) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  const arr = p.tagSelections[category];
+  const idx = arr.indexOf(value);
+  if (idx === -1) arr.push(value);
+  else arr.splice(idx, 1);
+  const card = document.querySelector(`[data-pid="${id}"]`);
+  if (!card) return;
+  card.querySelectorAll(`[data-tag-cat="${category}"]`).forEach(btn => {
+    btn.classList.toggle('active', arr.includes(btn.dataset.tagVal));
+  });
+}
 
-    // If there's exactly one product and it's completely empty, fill it instead of adding a new one
-    if (
-      products.length === 1 &&
-      !products[0].name &&
-      !products[0].category &&
-      !products[0].retailPrice &&
-      (cat || name)
-    ) {
-      products[0].name = name || '';
-      products[0].category = cat;
-      renderList();
-      return;
-    }
+function setSellOnline(id, val) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  p.sellOnline = val;
+  const card = document.querySelector(`[data-pid="${id}"]`);
+  if (!card) return;
+  card.querySelector('.btn-online-yes').className = 'btn-online btn-online-yes' + (val ? ' is-yes' : '');
+  card.querySelector('.btn-online-no').className = 'btn-online btn-online-no' + (!val ? ' is-no' : '');
+  card.querySelector('.online-note').textContent = val
+    ? 'Product name will be used as-is for a clean Shopify listing.'
+    : 'A 4-digit code will be appended to keep the name unique in Lightspeed.';
+}
 
-    products.push({
-      _id: nextId++,
-      open: true,
-      name: name || '',
-      category: cat,
-      brandName: '',
-      retailPrice: '',
-      supplyPrice: '',
-      supplierName: '',
-      supplierCode: '',
-      stock: { ht: 0, pf: 0, ss: 0, sw: 0 }
-    });
-    renderList();
-    updateCounter();
-    setTimeout(() => {
-      const cards = document.querySelectorAll('.product-card');
-      if (cards.length) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 50);
-  }
-
-  function removeProduct(id) {
-    products = products.filter(p => p._id !== id);
-    renderList();
-    updateCounter();
-  }
-
-  function duplicate(id) {
-    const src = products.find(p => p._id === id);
-    const copy = JSON.parse(JSON.stringify(src));
-    copy._id = nextId++;
-    copy.open = true;
-    products.push(copy);
-    renderList();
-    updateCounter();
-  }
-
-  function toggleCard(id) {
-    const p = products.find(p => p._id === id);
-    if (p) p.open = !p.open;
-    renderList();
-  }
-
-  function updateField(id, field, value) {
-    const p = products.find(p => p._id === id);
-    if (!p) return;
-    p[field] = value;
+function applyQuick(id, name) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  p.name = name;
+  renderList();
+  setTimeout(() => {
     const card = document.querySelector(`[data-pid="${id}"]`);
     if (card) {
-      const preview = card.querySelector('.card-preview');
-      const badge = card.querySelector('.card-price-badge');
-      preview.textContent = p.name || 'New Product';
-      preview.className = 'card-preview' + (p.name ? '' : ' empty');
-      badge.textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+      const inp = card.querySelector('.js-name-input');
+      if (inp) inp.focus();
+    }
+  }, 30);
+}
+
+function updateField(id, field, value) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  p[field] = value;
+  const card = document.querySelector(`[data-pid="${id}"]`);
+  if (!card) return;
+  const preview = card.querySelector('.card-preview');
+  const badge = card.querySelector('.card-price-badge');
+  if (preview) {
+    preview.textContent = p.name || 'New Product';
+    preview.className = 'card-preview' + (p.name ? '' : ' empty');
+  }
+  if (badge) badge.textContent = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+}
+
+function applySizePreset(id, key) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  const newSizes = SIZE_PRESETS[key];
+  const newStock = {};
+  newSizes.forEach(size => { newStock[size] = p.sizeStock[size] || blankStock(); });
+  p.sizes = [...newSizes];
+  p.sizeStock = newStock;
+  renderList();
+}
+
+function addManualSize(id) {
+  const input = document.getElementById(`size-inp-${id}`);
+  if (!input) return;
+  const val = input.value.trim().toUpperCase();
+  if (!val) return;
+  const p = products.find(item => item._id === id);
+  if (!p || p.sizes.includes(val)) { input.value = ''; return; }
+  p.sizes.push(val);
+  p.sizeStock[val] = blankStock();
+  input.value = '';
+  renderList();
+  setTimeout(() => { const i = document.getElementById(`size-inp-${id}`); if (i) i.focus(); }, 20);
+}
+
+function removeSize(id, size) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  p.sizes = p.sizes.filter(s => s !== size);
+  delete p.sizeStock[size];
+  renderList();
+}
+
+function addTag(id) {
+  const input = document.getElementById(`tag-inp-${id}`);
+  if (!input) return;
+  const val = input.value.trim().replace(/'/g, '');
+  if (!val) return;
+  const p = products.find(item => item._id === id);
+  if (!p || p.tags.includes(val)) { input.value = ''; return; }
+  p.tags.push(val);
+  input.value = '';
+  renderList();
+  setTimeout(() => { const i = document.getElementById(`tag-inp-${id}`); if (i) i.focus(); }, 20);
+}
+
+function removeTag(id, tag) {
+  const p = products.find(item => item._id === id);
+  if (!p) return;
+  p.tags = p.tags.filter(t => t !== tag);
+  renderList();
+}
+
+function updateStock(id, loc, val) {
+  const p = products.find(item => item._id === id);
+  if (p) p.stock[loc] = parseInt(val, 10) || 0;
+  refreshStockModalTotal(id);
+}
+
+function updateSizeStock(id, size, loc, val) {
+  const p = products.find(item => item._id === id);
+  if (p && p.sizeStock[size]) p.sizeStock[size][loc] = parseInt(val, 10) || 0;
+  refreshStockModalTotal(id);
+}
+
+function getTotalStock(p) {
+  if (p.productType === 'stocked' && p.sizes.length > 0) {
+    return p.sizes.reduce((total, size) => {
+      const s = p.sizeStock[size] || blankStock();
+      return total + s.ht + s.pf + s.ss + s.sw;
+    }, 0);
+  }
+  return Object.values(p.stock).reduce((a, b) => a + b, 0);
+}
+
+function openStockModal(id) {
+  _stockModalId = id;
+  const p = products.find(item => item._id === id);
+  const isVariant = p.productType === 'stocked' && p.sizes.length > 0;
+
+  document.getElementById('stock-modal-title').textContent = isVariant ? 'Stock by Size' : 'Stock Levels';
+  document.getElementById('stock-modal-subtitle').textContent = p.name || 'Unnamed product';
+
+  renderStockModalBody(p);
+  refreshStockModalTotal(id);
+  document.getElementById('stock-modal-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderStockModalBody(p) {
+  const body = document.getElementById('stock-modal-body');
+  const isVariant = p.productType === 'stocked' && p.sizes.length > 0;
+
+  if (!isVariant) {
+    body.innerHTML = `
+      <div class="stock-simple-grid">
+        ${OUTLETS.map(o => `
+          <div class="stock-simple-card">
+            <div class="stock-simple-card-label">${o.label}</div>
+            <input type="number" min="0" value="${p.stock[o.key]}"
+              oninput="updateStock(${p._id},'${o.key}',this.value)">
+          </div>`).join('')}
+      </div>`;
+    return;
+  }
+
+  const colTotals = {};
+  OUTLETS.forEach(o => { colTotals[o.key] = 0; });
+
+  const rows = p.sizes.map(size => {
+    const s = p.sizeStock[size] || blankStock();
+    const rowTotal = OUTLETS.reduce((sum, o) => sum + (s[o.key] || 0), 0);
+    OUTLETS.forEach(o => { colTotals[o.key] += s[o.key] || 0; });
+    return `
+      <tr>
+        <td>${esc(size)}</td>
+        ${OUTLETS.map(o => `
+          <td>
+            <input type="number" min="0" value="${s[o.key]}"
+              oninput="updateSizeStock(${p._id},'${esc(size)}','${o.key}',this.value)">
+          </td>`).join('')}
+        <td style="font-weight:700;text-align:center;font-size:13px;">${rowTotal}</td>
+      </tr>`;
+  }).join('');
+
+  const grandTotal = OUTLETS.reduce((sum, o) => sum + colTotals[o.key], 0);
+
+  body.innerHTML = `
+    <div class="stock-grid-wrap">
+      <table class="stock-grid-table">
+        <thead>
+          <tr>
+            <th>Size</th>
+            ${OUTLETS.map(o => `<th>${o.label}</th>`).join('')}
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            ${OUTLETS.map(o => `<td class="col-total">${colTotals[o.key]}</td>`).join('')}
+            <td class="col-total">${grandTotal}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>`;
+}
+
+function refreshStockModalTotal(id) {
+  if (_stockModalId !== id) return;
+  const p = products.find(item => item._id === id);
+  const total = getTotalStock(p);
+  const el = document.getElementById('stock-modal-total');
+  if (el) el.innerHTML = `Total units across all locations: <strong>${total}</strong>`;
+}
+
+function closeStockModal() {
+  document.getElementById('stock-modal-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+  _stockModalId = null;
+  renderList();
+}
+
+function brandOpts(current) {
+  const values = [''].concat(LIVE_BRANDS.map(b => b.name));
+  if (current && !values.includes(current)) values.push(current);
+  return values.map(b =>
+    `<option value="${esc(b)}"${current === b ? ' selected' : ''}>${b || brandSelectPlaceholder()}</option>`
+  ).join('');
+}
+
+function supplierOpts(current) {
+  const values = [''].concat(LIVE_SUPPLIERS.map(s => s.name));
+  if (current && !values.includes(current)) values.push(current);
+  return values.map(s =>
+    `<option value="${esc(s)}"${current === s ? ' selected' : ''}>${s || supplierSelectPlaceholder()}</option>`
+  ).join('');
+}
+
+function renderTypeSelector(p) {
+  return `
+    <div class="type-selector">
+      <div class="type-prompt">What type of product is this?</div>
+      <div class="type-buttons">
+        <button class="btn-type" onclick="setType(${p._id},'sample')">
+          <div class="btn-type-left">
+            <span>Sample Clothing</span>
+            <span class="btn-type-sub">Tops, pants, dresses, skirts, jackets, knits</span>
+          </div>
+          <span class="btn-type-arrow">&#x203A;</span>
+        </button>
+        <button class="btn-type" onclick="setType(${p._id},'jewellery')">
+          <div class="btn-type-left">
+            <span>Jewellery / Homewares / Accessories / Scarves</span>
+            <span class="btn-type-sub">Jewellery, accessories, homewares, belts, bags, scarves</span>
+          </div>
+          <span class="btn-type-arrow">&#x203A;</span>
+        </button>
+        <button class="btn-type" onclick="setType(${p._id},'stocked')">
+          <div class="btn-type-left">
+            <span>Stocked Clothing</span>
+            <span class="btn-type-sub">Full inventory items with colour and size variants</span>
+          </div>
+          <span class="btn-type-arrow">&#x203A;</span>
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderOnlineToggle(p) {
+  const note = p.sellOnline
+    ? 'Product name will be used as-is for a clean Shopify listing.'
+    : 'A 4-digit code will be appended to keep the name unique in Lightspeed.';
+  return `
+    <div class="online-section">
+      <span class="online-label">Will this product be sold online?</span>
+      <div class="online-btns">
+        <button class="btn-online btn-online-yes${p.sellOnline ? ' is-yes' : ''}" onclick="setSellOnline(${p._id},true)">Yes</button>
+        <button class="btn-online btn-online-no${!p.sellOnline ? ' is-no' : ''}" onclick="setSellOnline(${p._id},false)">No</button>
+      </div>
+      <div class="online-note">${note}</div>
+    </div>`;
+}
+
+function renderQuickRow(p) {
+  const items = p.productType === 'sample' ? SAMPLE_QUICK : p.productType === 'jewellery' ? JEWEL_QUICK : STOCKED_QUICK;
+  return `
+    <div class="card-quick-wrap">
+      <div class="card-quick-label">Quick Add</div>
+      <div class="card-quick-row">
+        ${items.map(item => `<button class="btn-quick" onclick="applyQuick(${p._id},'${esc(item.name)}')">+ ${item.label}</button>`).join('')}
+      </div>
+    </div>`;
+}
+
+function renderStructuredTagsBlock(p) {
+  return `
+    <div class="tag-groups field-full">
+      ${TAG_GROUPS.map(group => `
+        <div class="tag-group">
+          <label>${group.label} <span class="required">*</span></label>
+          <div class="tag-btns">
+            ${group.options.map(opt => `
+              <button class="btn-tag${p.tagSelections[group.key].includes(opt) ? ' active' : ''}"
+                data-tag-cat="${group.key}" data-tag-val="${opt}"
+                onclick="setTagSelection(${p._id},'${group.key}','${opt}')">
+                ${opt}
+              </button>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderTagsBlock(p) {
+  const chips = p.tags.length
+    ? p.tags.map(t => `
+        <span class="size-chip">${esc(t)}
+          <button class="size-chip-remove" onclick="removeTag(${p._id},'${esc(t)}')" title="Remove">&#x2715;</button>
+        </span>`).join('')
+    : '<span class="size-chips-empty">No tags added yet</span>';
+
+  return `
+    <div class="field field-full">
+      <label>Tags <span class="optional">(optional)</span></label>
+      <div class="size-chips-wrap">${chips}</div>
+      <div class="size-manual-row" style="margin-top:6px;">
+        <input type="text" id="tag-inp-${p._id}" placeholder="Type a tag and press Add"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();addTag(${p._id});}">
+        <button class="btn-size-add" onclick="addTag(${p._id})">Add</button>
+      </div>
+    </div>`;
+}
+
+function renderSizesBlock(p) {
+  const presetBtns = Object.keys(SIZE_PRESETS).map(key =>
+    `<button class="btn-size-preset" onclick="applySizePreset(${p._id},'${key}')" title="Replaces all current sizes">${key}</button>`
+  ).join('');
+
+  const chips = p.sizes.length
+    ? p.sizes.map(s => `
+        <span class="size-chip">${esc(s)}
+          <button class="size-chip-remove" onclick="removeSize(${p._id},'${esc(s)}')" title="Remove">&#x2715;</button>
+        </span>`).join('')
+    : '<span class="size-chips-empty">No sizes added yet</span>';
+
+  return `
+    <div class="sizes-block">
+      <label class="sizes-block-label">Sizes <span class="required">*</span></label>
+      <div class="sizes-preset-hint">Selecting a preset replaces all current sizes.</div>
+      <div class="sizes-presets">${presetBtns}</div>
+      <div class="size-chips-wrap">${chips}</div>
+      <div class="size-manual-row">
+        <input type="text" id="size-inp-${p._id}" placeholder="Type a size and press Add"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();addManualSize(${p._id});}">
+        <button class="btn-size-add" onclick="addManualSize(${p._id})">Add</button>
+      </div>
+    </div>`;
+}
+
+function renderFields(p) {
+  const colourRow = p.productType === 'stocked' ? `
+    <div class="field">
+      <label>Colour <span class="required">*</span></label>
+      <input type="text" placeholder="e.g. Navy" value="${esc(p.colour)}"
+        oninput="updateField(${p._id},'colour',this.value)">
+    </div>` : '';
+
+  return `
+    <div class="fields-grid">
+      <div class="field field-full">
+        <label>Product Name <span class="required">*</span></label>
+        <input type="text" class="js-name-input" placeholder="e.g. Black Wrap Dress" value="${esc(p.name)}"
+          oninput="updateField(${p._id},'name',this.value)">
+      </div>
+      <div class="field">
+        <label>Category <span class="required">*</span></label>
+        <select onchange="updateField(${p._id},'category',this.value)">${categoryOpts(p.category)}</select>
+      </div>
+      <div class="field">
+        <label>Brand <span class="required">*</span></label>
+        <select onchange="updateField(${p._id},'brandName',this.value)">${brandOpts(p.brandName)}</select>
+      </div>
+      ${colourRow}
+      <div class="field">
+        <label>Retail Price (AUD) <span class="required">*</span></label>
+        <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.retailPrice)}"
+          oninput="updateField(${p._id},'retailPrice',this.value)">
+      </div>
+      <div class="field">
+        <label>Supply Price <span class="optional">(optional)</span></label>
+        <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.supplyPrice)}"
+          oninput="updateField(${p._id},'supplyPrice',this.value)">
+      </div>
+      <div class="field">
+        <label>Custom SKU <span class="optional">(optional - auto-generated if blank)</span></label>
+        <input type="text" placeholder="e.g. IF-TOP-001" value="${esc(p.customSku)}"
+          oninput="updateField(${p._id},'customSku',this.value)">
+      </div>
+      <div class="field">
+        <label>Supplier <span class="optional">(optional)</span></label>
+        <select onchange="updateField(${p._id},'supplierName',this.value)">${supplierOpts(p.supplierName)}</select>
+      </div>
+      <div class="field">
+        <label>Supplier Code <span class="optional">(optional)</span></label>
+        <input type="text" placeholder="e.g. SUP-001" value="${esc(p.supplierCode)}"
+          oninput="updateField(${p._id},'supplierCode',this.value)">
+      </div>
+      ${p.productType === 'stocked' ? renderStructuredTagsBlock(p) : renderTagsBlock(p)}
+      ${p.productType === 'stocked' ? renderSizesBlock(p) : ''}
+    </div>`;
+}
+
+function typeBadge(p) {
+  if (!p.productType) return '<span class="card-type-badge badge-unset">Select type</span>';
+  if (p.productType === 'sample') return '<span class="card-type-badge badge-sample">Sample</span>';
+  if (p.productType === 'jewellery') return '<span class="card-type-badge badge-jewellery">Jewellery / Acc</span>';
+  return '<span class="card-type-badge badge-stocked">Stocked</span>';
+}
+
+function renderList() {
+  const list = document.getElementById('product-list');
+  list.innerHTML = '';
+
+  products.forEach((p, idx) => {
+    const total = getTotalStock(p);
+    const priceLabel = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
+    const stockStyle = total > 0
+      ? 'border-color:rgba(46,204,113,0.6);color:#27ae60;background:rgba(46,204,113,0.08);'
+      : 'border-color:rgba(200,0,0,0.3);color:#c0392b;background:rgba(200,0,0,0.06);';
+
+    const bodyContent = !p.productType
+      ? renderTypeSelector(p)
+      : `<div class="change-type-row">
+           <button class="change-type-link" onclick="clearType(${p._id})">&#x2190; Change product type</button>
+         </div>
+         ${renderOnlineToggle(p)}
+         ${renderQuickRow(p)}
+         ${renderFields(p)}`;
+
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.setAttribute('data-pid', p._id);
+    card.innerHTML = `
+      <div class="card-header" onclick="toggleCard(${p._id})">
+        <div class="card-num">${idx + 1}</div>
+        ${typeBadge(p)}
+        <div class="card-preview${p.name ? '' : ' empty'}">${esc(p.name || 'New Product')}</div>
+        <div class="card-actions">
+          <div class="card-price-badge">${priceLabel}</div>
+          <button class="btn-card" onclick="event.stopPropagation();openStockModal(${p._id})"
+            style="${stockStyle}">STOCK [${total}]</button>
+          <button class="btn-card" onclick="event.stopPropagation();duplicate(${p._id})">DUPLICATE</button>
+          <button class="btn-card danger" onclick="event.stopPropagation();removeProduct(${p._id})">&#x2715;</button>
+        </div>
+        <div class="card-toggle${p.open ? ' open' : ''}">&#x25BE;</div>
+      </div>
+      <div class="card-body${p.open ? ' open' : ''}">${bodyContent}</div>`;
+
+    list.appendChild(card);
+  });
+}
+
+async function startSync() {
+  const password = localStorage.getItem('portal_password') || '';
+  if (!password) { alert('Please log in first.'); return; }
+  if (!REFERENCE_DATA_LOADED) {
+    showToast('Brands, suppliers, and categories have not loaded yet. Please wait a moment and try again.');
+    return;
+  }
+  if (!LIVE_PRODUCT_CATEGORIES.length || !LIVE_BRANDS.length) {
+    showToast(REFERENCE_DATA_ERROR || 'Reference data was not returned from Lightspeed.');
+    return;
+  }
+
+  for (const p of products) {
+    if (!p.productType) { showToast('Please select a product type for all products.'); return; }
+    if (!p.name || !p.retailPrice || !p.category || !p.brandName) {
+      showToast(`"${p.name || 'Unnamed product'}" is missing required fields.`); return;
+    }
+    if (p.productType === 'stocked') {
+      if (!p.colour) { showToast(`"${p.name}" needs a colour.`); return; }
+      if (p.sizes.length === 0) { showToast(`"${p.name}" needs at least one size.`); return; }
+      const missingTag = TAG_GROUPS.find(g => p.tagSelections[g.key].length === 0);
+      if (missingTag) { showToast(`"${p.name}" needs a ${missingTag.label} tag selected.`); return; }
     }
   }
 
-  // ---- Stock drawer ----
-  function openDrawer(id) {
-    const p = products.find(p => p._id === id);
-    document.getElementById('drawer-content').innerHTML = `
-      <div class="field"><label>Harbour Town</label>
-        <input type="number" value="${p.stock.ht}" oninput="updateStock(${id},'ht',this.value)"></div>
-      <div class="field"><label>Pacific Fair</label>
-        <input type="number" value="${p.stock.pf}" oninput="updateStock(${id},'pf',this.value)"></div>
-      <div class="field"><label>Southport Showroom</label>
-        <input type="number" value="${p.stock.ss}" oninput="updateStock(${id},'ss',this.value)"></div>
-      <div class="field"><label>Southport Warehouse</label>
-        <input type="number" value="${p.stock.sw}" oninput="updateStock(${id},'sw',this.value)"></div>
-    `;
-    document.getElementById('drawer').classList.add('active');
-    document.getElementById('overlay').classList.add('active');
-  }
+  const btn = document.getElementById('sync_btn');
+  btn.disabled = true;
+  btn.textContent = 'SYNCING...';
 
-  function updateStock(id, loc, val) {
-    const p = products.find(p => p._id === id);
-    if (p) p.stock[loc] = parseInt(val) || 0;
-  }
-
-  function closeDrawer() {
-    document.getElementById('drawer').classList.remove('active');
-    document.getElementById('overlay').classList.remove('active');
-    renderList();
-  }
-
-  // ---- Render ----
-  function renderList() {
-    const list = document.getElementById('product-list');
-    list.innerHTML = '';
-
-    products.forEach((p, idx) => {
-      const total = Object.values(p.stock).reduce((a, b) => a + b, 0);
-      const displayName = p.name || 'New Product';
-      const isEmpty = !p.name;
-      const priceLabel = p.retailPrice ? `$${parseFloat(p.retailPrice).toFixed(2)}` : '';
-
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.setAttribute('data-pid', p._id);
-
-      card.innerHTML = `
-        <div class="card-header" onclick="toggleCard(${p._id})">
-          <div class="card-num">${idx + 1}</div>
-          <div class="card-preview${isEmpty ? ' empty' : ''}">${esc(displayName)}</div>
-          <div class="card-actions">
-            <div class="card-price-badge">${priceLabel}</div>
-            <button class="btn-card" onclick="event.stopPropagation(); openDrawer(${p._id})" style="${total > 0 ? 'border-color:rgba(46,204,113,0.6);color:#27ae60;background:rgba(46,204,113,0.08);' : 'border-color:rgba(200,0,0,0.3);color:#c0392b;background:rgba(200,0,0,0.06);'}">STOCK [${total}]</button>
-            <button class="btn-card" onclick="event.stopPropagation(); duplicate(${p._id})">DUPLICATE</button>
-            <button class="btn-card danger" onclick="event.stopPropagation(); removeProduct(${p._id})">&#x2715;</button>
-          </div>
-          <div class="card-toggle${p.open ? ' open' : ''}">&#x25BE;</div>
-        </div>
-        <div class="card-body${p.open ? ' open' : ''}">
-          <div class="fields-grid">
-            <div class="field field-full">
-              <label>Product Name <span class="required">*</span></label>
-              <input type="text" placeholder="e.g. Black Bag" value="${esc(p.name)}"
-                oninput="updateField(${p._id},'name',this.value)">
-            </div>
-            <div class="field">
-              <label>Category <span class="required">*</span></label>
-              <select onchange="updateField(${p._id},'category',this.value)">
-                ${CATEGORIES.map(c => `<option value="${c}"${p.category === c ? ' selected' : ''}>${c || '-- Select category --'}</option>`).join('')}
-              </select>
-            </div>
-            <div class="field">
-              <label>Brand <span class="required">*</span></label>
-              <select onchange="updateField(${p._id},'brandName',this.value)">
-                ${BRANDS.map(b => `<option value="${b}"${p.brandName === b ? ' selected' : ''}>${b || '-- Select brand --'}</option>`).join('')}
-              </select>
-            </div>
-            <div class="field">
-              <label>Retail Price (AUD) <span class="required">*</span></label>
-              <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.retailPrice)}"
-                oninput="updateField(${p._id},'retailPrice',this.value)">
-            </div>
-            <div class="field">
-              <label>Supply Price <span class="optional">(optional)</span></label>
-              <input type="number" step="0.01" min="0" placeholder="0.00" value="${esc(p.supplyPrice)}"
-                oninput="updateField(${p._id},'supplyPrice',this.value)">
-            </div>
-            <div class="field">
-              <label>Supplier Name <span class="optional">(optional)</span></label>
-              <input type="text" placeholder="e.g. Fulfilment Co." value="${esc(p.supplierName)}"
-                oninput="updateField(${p._id},'supplierName',this.value)">
-            </div>
-            <div class="field">
-              <label>Supplier Code <span class="optional">(optional)</span></label>
-              <input type="text" placeholder="e.g. SUP-001" value="${esc(p.supplierCode)}"
-                oninput="updateField(${p._id},'supplierCode',this.value)">
-            </div>
-          </div>
-        </div>
-      `;
-
-      list.appendChild(card);
+  async function workerCall(body) {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Portal-Password': password },
+      body: JSON.stringify(body)
     });
+    if (res.status === 401) throw new Error('Incorrect portal password.');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.error || JSON.stringify(data).slice(0, 300));
+    return data;
   }
 
-  // ---- Sync via Cloudflare Worker ----
-  async function startSync() {
-    const password = localStorage.getItem('portal_password') || '';
+  let synced = 0;
 
-    if (!password) {
-      alert('Please enter the portal password first.');
-      return;
-    }
+  for (const p of products) {
+    try {
+      btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
+      const suffix = String(Math.floor(1000 + Math.random() * 9000));
+      const finalName = p.sellOnline ? p.name : `${p.name} - ${suffix}`;
+      const syncTags = p.productType === 'stocked'
+        ? TAG_GROUPS.flatMap(g => p.tagSelections[g.key].map(v => `${g.key}: ${v}`))
+        : p.tags;
 
-    const invalid = products.filter(p => !p.name || !p.retailPrice || !p.category || !p.brandName);
-    if (invalid.length > 0) {
-      showToast(`${invalid.length} product(s) missing required fields.`);
-      return;
-    }
+      if (p.productType === 'stocked') {
+        const colourAttr = await workerCall({ action: 'create_variant_attribute', payload: { name: 'Colour' } });
+        const sizeAttr = await workerCall({ action: 'create_variant_attribute', payload: { name: 'Size' } });
 
-    const btn = document.getElementById('sync_btn');
-    btn.disabled = true;
-    btn.textContent = 'SYNCING...';
-
-    const tax = 'GST';
-    let synced = 0;
-
-    async function workerCall(body) {
-      const res = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Portal-Password': password
-        },
-        body: JSON.stringify(body)
-      });
-      if (res.status === 401) throw new Error('Incorrect portal password.');
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || JSON.stringify(data).slice(0, 300));
-      return data;
-    }
-
-    for (const p of products) {
-      try {
-        const suffix = String(Math.floor(1000 + Math.random() * 9000));
-        const finalName = `${p.name} - ${suffix}`;
-        let finalSku = p.customSku || '';
-        if (!finalSku) {
-          for (let i = 0; i < 8; i++) finalSku += Math.floor(Math.random() * 10);
-        }
-
-        btn.textContent = `SYNCING ${synced + 1}/${products.length}...`;
-
+        await workerCall({
+          action: 'sync_variant_product',
+          payload: {
+            name: finalName,
+            brand_name: p.brandName,
+            type_name: p.category,
+            tax_name: 'GST',
+            supply_price: parseFloat(p.supplyPrice) || 0,
+            supplier_name: p.supplierName,
+            supplier_code: p.supplierCode,
+            tags: syncTags,
+            colour_attr_id: colourAttr.data.id,
+            size_attr_id: sizeAttr.data.id,
+            variants: p.sizes.map(size => {
+              const base = p.customSku.trim();
+              const sku = base ? (size === 'OS' ? base : `${base}-${size.replace(/\//g, '')}`) : genSku();
+              const s = p.sizeStock[size] || blankStock();
+              return {
+                colour: p.colour,
+                size,
+                sku,
+                retail_price: parseFloat(p.retailPrice) || 0,
+                inventory: OUTLETS.map(o => ({ outlet_id: o.id, current_amount: s[o.key] || 0 }))
+              };
+            })
+          }
+        });
+      } else {
         await workerCall({
           action: 'sync_product',
           payload: {
             name: finalName,
-            sku: finalSku,
+            sku: p.customSku.trim() || genSku(),
             retail_price: parseFloat(p.retailPrice) || 0,
             supply_price: parseFloat(p.supplyPrice) || 0,
-            tax_name: tax,
-            brand_name: p.brandName || '',
-            type_name: p.category || '',
-            supplier_name: p.supplierName || '',
-            supplier_code: p.supplierCode || '',
-            inventory: [
-              { outlet_id: OUTLET_IDS.ht, current_amount: Number(p.stock.ht) || 0 },
-              { outlet_id: OUTLET_IDS.pf, current_amount: Number(p.stock.pf) || 0 },
-              { outlet_id: OUTLET_IDS.ss, current_amount: Number(p.stock.ss) || 0 },
-              { outlet_id: OUTLET_IDS.sw, current_amount: Number(p.stock.sw) || 0 }
-            ]
+            tax_name: 'GST',
+            brand_name: p.brandName,
+            type_name: p.category,
+            supplier_name: p.supplierName,
+            supplier_code: p.supplierCode,
+            tags: syncTags,
+            inventory: OUTLETS.map(o => ({ outlet_id: o.id, current_amount: p.stock[o.key] || 0 }))
           }
         });
-
-        synced++;
-
-      } catch (err) {
-        console.error(err);
-        btn.disabled = false;
-        btn.textContent = 'SYNC PRODUCTS';
-        alert(`Sync failed for "${p.name}".\n\n${err.message}`);
-        return;
       }
-    }
 
-    btn.textContent = 'SYNC COMPLETE';
-    showToast(`${synced} product${synced !== 1 ? 's' : ''} synced successfully!`);
-
-    // Show Shopify reminder popup
-    document.getElementById('shopify-modal').classList.add('active');
-
-    setTimeout(() => {
-      btn.textContent = 'SYNC PRODUCTS';
+      synced++;
+    } catch (err) {
+      console.error(err);
       btn.disabled = false;
-    }, 3000);
-  }
-
-  function clearAll() {
-    if (products.length === 0) return;
-    if (confirm('Clear all products?')) {
-      products = [];
-      nextId = 1;
-      renderList();
-      updateCounter();
+      btn.textContent = 'SYNC PRODUCTS';
+      alert(`Sync failed for "${p.name}".\n\n${err.message}`);
+      return;
     }
   }
 
-  // ---- File Import (XLSX / CSV) ----
-  function handleFileImport(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+  btn.textContent = 'SYNC COMPLETE';
+  showToast(`${synced} product${synced !== 1 ? 's' : ''} synced successfully!`);
+  document.getElementById('shopify-modal').classList.add('active');
+  setTimeout(() => {
+    btn.textContent = 'SYNC PRODUCTS';
+    btn.disabled = false;
+  }, 3000);
+}
 
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-      try {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-
-        if (rows.length === 0) {
-          alert('No data found in the file.');
-          return;
-        }
-
-        // Clear existing empty placeholder product
-        if (products.length === 1 && !products[0].name && !products[0].category && !products[0].retailPrice) {
-          products = [];
-        }
-
-        let imported = 0;
-
-        rows.forEach(row => {
-          // Map column names from the spreadsheet
-          const name        = (row['Product Name']                || '').toString().trim();
-          const retailPrice = (row['Retail Price']                || '').toString().trim();
-          const supplyPrice = (row['Supply Price']                || '').toString().trim();
-          const sku         = (row['Custom SKU']                  || '').toString().trim();
-          const supplierCode= (row['Supplier Code']               || '').toString().trim();
-          const supplier    = (row['Supplier']                    || '').toString().trim();
-          const brand       = (row['Brand']                       || '').toString().trim();
-          const category    = (row['Category']                    || '').toString().trim();
-          const htQty       = parseInt(row['Harbour Town QTY']        || 0) || 0;
-          const pfQty       = parseInt(row['Pacific Fair QTY']        || 0) || 0;
-          const ssQty       = parseInt(row['Southport Showroom QTY']  || 0) || 0;
-          const swQty       = parseInt(row['Southport Warehouse QTY'] || 0) || 0;
-
-          if (!name) return; // skip empty rows
-
-          products.push({
-            _id:          nextId++,
-            open:         false,
-            name:         name,
-            category:     category,
-            brandName:    brand,
-            retailPrice:  retailPrice,
-            supplyPrice:  supplyPrice,
-            supplierName: supplier,
-            supplierCode: supplierCode,
-            customSku:    sku,
-            stock: { ht: htQty, pf: pfQty, ss: ssQty, sw: swQty }
-          });
-
-          imported++;
-        });
-
-        renderList();
-        updateCounter();
-        const hasBrandCol    = rows[0].hasOwnProperty('Brand');
-        const hasCategoryCol = rows[0].hasOwnProperty('Category');
-        const missing = [!hasBrandCol && 'Brand', !hasCategoryCol && 'Category'].filter(Boolean);
-        const suffix2 = missing.length > 0
-          ? ` — please set ${missing.join(' and ')} for each product.`
-          : '';
-        showToast(`${imported} product${imported !== 1 ? 's' : ''} imported${suffix2}`);
-
-        // Reset file input so same file can be re-imported if needed
-        event.target.value = '';
-
-      } catch (err) {
-        console.error(err);
-        alert(`Import failed: ${err.message}`);
-      }
-    };
-
-    reader.readAsArrayBuffer(file);
+function clearAll() {
+  if (!products.length) return;
+  if (confirm('Clear all products?')) {
+    products = [];
+    nextId = 1;
+    renderList();
+    updateCounter();
   }
+}
 </script>
 </body>
 </html>

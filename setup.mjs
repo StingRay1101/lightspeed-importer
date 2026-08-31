@@ -22,7 +22,7 @@ const WORKER_NAME = 'lightpspeedimporter';
 const REQUIRED_SCOPES = [
   'write_products',
   'write_inventory',
-  'read_locations',      // no write_locations exists; locations are read-only
+  'read_locations',      // satisfied by write_locations, which stores may also hold
   'write_publications',
 ];
 

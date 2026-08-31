@@ -77,7 +77,7 @@ store hasn't approved the latest app version.
 Then confirm the token can read what the importer needs:
 
 ```bash
-TOKEN=$(curl -s -X POST "https://YOUR-STORE.myshopify.com/admin/oauth/access_token" -d "grant_type=client_credentials" -d "client_id=$CID" -d "client_secret=$CSEC" | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p') && curl -s -X POST "https://YOUR-STORE.myshopify.com/admin/api/2025-10/graphql.json" -H "X-Shopify-Access-Token: $TOKEN" -H "Content-Type: application/json" -d '{"query":"{ shop { name } locations(first:10){nodes{id name}} publications(first:10){nodes{id name}} }"}'
+TOKEN=$(curl -s -X POST "https://YOUR-STORE.myshopify.com/admin/oauth/access_token" -d "grant_type=client_credentials" -d "client_id=$CID" -d "client_secret=$CSEC" | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p') && curl -s -X POST "https://YOUR-STORE.myshopify.com/admin/api/2026-01/graphql.json" -H "X-Shopify-Access-Token: $TOKEN" -H "Content-Type: application/json" -d '{"query":"{ shop { name } locations(first:10){nodes{id name}} publications(first:10){nodes{id name}} }"}'
 ```
 
 A good response names your shop, lists your locations, and includes a publication
@@ -214,9 +214,11 @@ The differences worth mentioning:
 
 - `worker.js` is now in this repo. The old Lightspeed worker never was, which is
   why it had to be rewritten from scratch rather than ported.
-- The worker pins Shopify Admin API `2025-10` (`API_VERSION` at the top of the
-  file). Shopify supports each version for about a year, so bump it roughly
-  annually and re-run the step 6 checks.
+- The worker pins Shopify Admin API `2026-01` (`API_VERSION` at the top of the
+  file), which Shopify supports until **16 January 2027**. Bump it before then
+  and re-run the step 6 checks. Each version gets about 12 months, so this is
+  roughly an annual chore. Don't drift onto an unsupported version — calls start
+  failing outright rather than degrading.
 - Access tokens from the Dev Dashboard last 24 hours. The worker exchanges the
   client id and secret for one on demand, caches it in memory, and expires it a
   minute early; a rejected token is dropped and re-fetched once automatically.

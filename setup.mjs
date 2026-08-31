@@ -333,16 +333,45 @@ if (deploy.toLowerCase() !== 'y') {
   process.exit(0);
 }
 
-const portalPassword = await ask('Staff portal password (hidden): ', true);
+/**
+ * Windows cannot spawn npx's .cmd shim without a shell, and passing an args
+ * array alongside shell:true is deprecated. A single command string avoids
+ * both. Every argument here is a literal — the secret travels on stdin, never
+ * on the command line — so there is nothing to escape.
+ */
+function wrangler(args, options = {}) {
+  return spawnSync(['npx', 'wrangler', ...args].join(' '), {
+    encoding: 'utf8', shell: true, ...options,
+  });
+}
+
+// Secrets are piped in, which makes wrangler non-interactive — it cannot then
+// open a browser to log in. So authentication is confirmed up front, while it
+// can still be fixed, rather than after the password has been typed.
+console.log('\nChecking Cloudflare login...');
+const who = wrangler(['whoami']);
+const whoOutput = `${who.stdout || ''}${who.stderr || ''}`;
+
+if (who.error?.code === 'ENOENT') {
+  fail('Could not run npx. Is Node installed and on your PATH?');
+}
+if (who.status !== 0 || /not authenticated|CLOUDFLARE_API_TOKEN/i.test(whoOutput)) {
+  fail('You are not logged in to Cloudflare.',
+    'Run this, finish the browser login, then run node setup.mjs again:\n\n' +
+    '    npx wrangler login\n\n' +
+    'Everything you just entered will need retyping, but nothing was changed.');
+}
+const account = whoOutput.match(/([^\s|]+@[^\s|]+)/)?.[1];
+tick(`Logged in to Cloudflare${account ? ` as ${account}` : ''}`);
+
+const portalPassword = await ask('\nStaff portal password (hidden): ', true);
 if (!portalPassword) fail('The portal password is required — staff use it to log in.');
 
 function putSecret(name, value) {
-  const r = spawnSync('npx', ['wrangler', 'secret', 'put', name, '--name', WORKER_NAME], {
-    input: value, encoding: 'utf8', shell: true,
-  });
+  const r = wrangler(['secret', 'put', name, '--name', WORKER_NAME], { input: value });
   if (r.status !== 0) {
     fail(`Could not set ${name}.\n${(r.stderr || r.stdout || '').slice(0, 500)}`,
-      'If this is an auth error, run:  npx wrangler login');
+      `Check the worker "${WORKER_NAME}" exists in this Cloudflare account.`);
   }
   tick(`${name} set`);
 }
@@ -358,10 +387,10 @@ if (mode === '1') {
 }
 
 console.log(`\n${bold('Deploying worker.js')}`);
-const dep = spawnSync('npx', [
-  'wrangler', 'deploy', 'worker.js', '--name', WORKER_NAME,
-  '--compatibility-date', '2025-01-01',
-], { stdio: 'inherit', shell: true });
+const dep = wrangler(
+  ['deploy', 'worker.js', '--name', WORKER_NAME, '--compatibility-date', '2025-01-01'],
+  { stdio: 'inherit', encoding: undefined }
+);
 
 if (dep.status !== 0) fail('Deploy failed. See the output above.');
 

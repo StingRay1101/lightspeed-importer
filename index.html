@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="Retina Favicon Grey.png">
-<title>Imagine Fashion | Lightspeed Importer</title>
+<title>Imagine Fashion | Shopify Importer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -617,13 +617,14 @@
   <header>
     <img src="Imagine Fashion Logo Transp.png" class="if-logo" alt="Imagine Fashion">
     <div class="header-right">
-      <p>Lightspeed X-Series</p>
+      <p id="header-shop">Shopify</p>
       <p>Direct Product Sync</p>
       <button onclick="logout()" class="logout-btn">Log Out</button>
     </div>
   </header>
 
   <div class="container">
+    <div id="supplier-datalist-host"></div>
     <div id="product-list"></div>
     <button class="add-btn" onclick="addProduct()">
       <span style="font-size:18px;line-height:1;">+</span> Add Product
@@ -640,7 +641,7 @@
       </div>
     </div>
     <div class="export-section">
-      <h2>Sync to Lightspeed</h2>
+      <h2>Sync to Shopify</h2>
       <div class="export-row">
         <button class="btn-sync" id="sync_btn" onclick="startSync()">SYNC PRODUCTS</button>
         <button class="btn-clear" onclick="clearAll()">CLEAR ALL</button>
@@ -653,10 +654,10 @@
 <div class="modal-overlay" id="shopify-modal">
   <div class="modal-box">
     <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="modal-logo">
-    <h2>Don't forget Shopify!</h2>
-    <p>For each product you just created, open it in Lightspeed and click the <strong>"Sell on Shopify"</strong> button to publish it to your online store.</p>
-    <a href="https://imaginefashionretail.retail.lightspeed.app/products?active=true&direction=DESC&field=CREATED_AT" target="_blank" class="modal-btn">Open Recently Created Products</a>
-    <button class="modal-close" onclick="document.getElementById('shopify-modal').classList.remove('active')">I've done this</button>
+    <h2>Synced to Shopify</h2>
+    <p id="shopify-modal-summary">Your products are now in Shopify. Items marked <strong>sold online</strong> are active and published to the Online Store; everything else was created as a <strong>draft</strong>.</p>
+    <a href="https://admin.shopify.com/products?order=created_at%20desc" target="_blank" rel="noopener" class="modal-btn">Open Recently Created Products</a>
+    <button class="modal-close" onclick="document.getElementById('shopify-modal').classList.remove('active')">Done</button>
   </div>
 </div>
 
@@ -709,14 +710,24 @@ const SIZE_PRESETS = {
   'SM-ML-XL': ['S/M', 'M/L', 'XL']
 };
 
+// Shopify location IDs are resolved at login from the store itself, so the
+// four stock columns keep working even if a location is renamed or recreated.
 const OUTLETS = [
-  { key: 'ht', label: 'Harbour Town', id: '06f24f8b-21a8-11ef-f4ca-d46876ffea7a' },
-  { key: 'pf', label: 'Pacific Fair', id: '06f24f8b-21a8-11ef-f4ca-d468a998f3bc' },
-  { key: 'ss', label: 'Southport Showroom', id: '06f24f8b-21fd-11ef-f4ca-d466e09040b3' },
-  { key: 'sw', label: 'Southport Warehouse', id: '06f24f8b-21a8-11ef-f4ca-ddeb7f9ae200' }
+  { key: 'ht', label: 'Harbour Town', id: null },
+  { key: 'pf', label: 'Pacific Fair', id: null },
+  { key: 'ss', label: 'Southport Showroom', id: null },
+  { key: 'sw', label: 'Southport Warehouse', id: null }
 ];
 
+function outletLocationMap() {
+  return Object.fromEntries(OUTLETS.map(o => [o.key, o.id]));
+}
+
 const WORKER_URL = 'https://lightpspeedimporter.sam-58d.workers.dev';
+
+// Bumped whenever the sync payload changes shape. The worker rejects anything
+// older so a stale browser tab can't sync a half-configured product.
+const CONTRACT_VERSION = 2;
 
 let products = [];
 let nextId = 1;
@@ -725,6 +736,8 @@ let LIVE_BRANDS = [];
 let LIVE_SUPPLIERS = [];
 let REFERENCE_DATA_LOADED = false;
 let REFERENCE_DATA_ERROR = '';
+let ONLINE_PUBLICATION_ID = null;
+let SHOP_NAME = '';
 let _stockModalId = null;
 
 const MAX_ATTEMPTS = 5;
@@ -945,7 +958,7 @@ function downloadImportTemplate() {
   const ws = XLSX.utils.aoa_to_sheet(headers);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Products');
-  XLSX.writeFile(wb, 'Imagine-Lightspeed-Import-Template.xlsx');
+  XLSX.writeFile(wb, 'Imagine-Shopify-Import-Template.xlsx');
 }
 
 function updateCounter() {
@@ -972,22 +985,15 @@ function blankStock() {
 function categorySelectPlaceholder() {
   if (LIVE_PRODUCT_CATEGORIES.length) return '-- Select category --';
   if (REFERENCE_DATA_ERROR) return '-- Could not load categories --';
-  if (REFERENCE_DATA_LOADED) return '-- No categories found in Lightspeed --';
-  return '-- Loading categories from Lightspeed --';
+  if (REFERENCE_DATA_LOADED) return '-- No product types found in Shopify --';
+  return '-- Loading categories from Shopify --';
 }
 
 function brandSelectPlaceholder() {
   if (LIVE_BRANDS.length) return '-- Select brand --';
   if (REFERENCE_DATA_ERROR) return '-- Could not load brands --';
-  if (REFERENCE_DATA_LOADED) return '-- No brands found in Lightspeed --';
-  return '-- Loading brands from Lightspeed --';
-}
-
-function supplierSelectPlaceholder() {
-  if (LIVE_SUPPLIERS.length) return '-- Select supplier --';
-  if (REFERENCE_DATA_ERROR) return '-- Could not load suppliers --';
-  if (REFERENCE_DATA_LOADED) return '-- No suppliers found in Lightspeed --';
-  return '-- Loading suppliers from Lightspeed --';
+  if (REFERENCE_DATA_LOADED) return '-- No vendors found in Shopify --';
+  return '-- Loading brands from Shopify --';
 }
 
 function getLiveCategoryValues() {
@@ -1048,9 +1054,29 @@ async function loadReferenceData(password = localStorage.getItem('portal_passwor
   LIVE_PRODUCT_CATEGORIES = Array.isArray(data.categories) ? data.categories : [];
   LIVE_BRANDS = Array.isArray(data.brands) ? data.brands : [];
   LIVE_SUPPLIERS = Array.isArray(data.suppliers) ? data.suppliers : [];
+  ONLINE_PUBLICATION_ID = data.onlineStorePublicationId || null;
+  SHOP_NAME = data.shop || '';
+
+  // Naming the connected store in the header makes syncing into the wrong
+  // Shopify account obvious at a glance.
+  const shopLabel = document.getElementById('header-shop');
+  if (shopLabel && SHOP_NAME) shopLabel.textContent = SHOP_NAME;
+
+  // Bind each stock column to its Shopify location.
+  const resolved = Array.isArray(data.outlets) ? data.outlets : [];
+  OUTLETS.forEach(outlet => {
+    const match = resolved.find(o => o.key === outlet.key);
+    outlet.id = match ? match.locationId : null;
+  });
+
   REFERENCE_DATA_LOADED = true;
   REFERENCE_DATA_ERROR = '';
   renderList();
+
+  const unmatched = OUTLETS.filter(o => !o.id).map(o => o.label);
+  if (unmatched.length) {
+    showToast(`No Shopify location matched: ${unmatched.join(', ')}. Stock for these will be skipped.`);
+  }
 }
 
 async function attemptLogin() {
@@ -1100,7 +1126,7 @@ async function attemptLogin() {
       await loadReferenceData(entered);
     } catch (err) {
       console.error(err);
-      showToast('Could not load brands, suppliers, and categories from Lightspeed.');
+      showToast('Could not load brands, suppliers, and categories from Shopify.');
     }
   } catch {
     document.getElementById('login-error').textContent = 'Could not reach server. Check your internet connection.';
@@ -1131,7 +1157,7 @@ window.onload = async () => {
           await loadReferenceData(saved);
         } catch (err) {
           console.error(err);
-          showToast('Could not load brands, suppliers, and categories from Lightspeed.');
+          showToast('Could not load brands, suppliers, and categories from Shopify.');
         }
       } else {
         localStorage.removeItem('portal_password');
@@ -1260,8 +1286,8 @@ function setSellOnline(id, val) {
   card.querySelector('.btn-online-yes').className = 'btn-online btn-online-yes' + (val ? ' is-yes' : '');
   card.querySelector('.btn-online-no').className = 'btn-online btn-online-no' + (!val ? ' is-no' : '');
   card.querySelector('.online-note').textContent = val
-    ? 'Product name will be used as-is for a clean Shopify listing.'
-    : 'A 4-digit code will be appended to keep the name unique in Lightspeed.';
+    ? 'Created as Active and published to the Online Store, with the name used as-is.'
+    : 'Created as a Draft, unpublished, with a 4-digit code appended to the name.';
 }
 
 function applyQuick(id, name) {
@@ -1465,12 +1491,12 @@ function brandOpts(current) {
   ).join('');
 }
 
-function supplierOpts(current) {
-  const values = [''].concat(LIVE_SUPPLIERS.map(s => s.name));
-  if (current && !values.includes(current)) values.push(current);
-  return values.map(s =>
-    `<option value="${esc(s)}"${current === s ? ' selected' : ''}>${s || supplierSelectPlaceholder()}</option>`
-  ).join('');
+// Shopify stores no supplier list, so previously-used names are offered as
+// autocomplete suggestions rather than a fixed dropdown.
+function supplierDatalist() {
+  return `<datalist id="supplier-options">${
+    LIVE_SUPPLIERS.map(s => `<option value="${esc(s.name)}"></option>`).join('')
+  }</datalist>`;
 }
 
 function renderTypeSelector(p) {
@@ -1505,8 +1531,8 @@ function renderTypeSelector(p) {
 
 function renderOnlineToggle(p) {
   const note = p.sellOnline
-    ? 'Product name will be used as-is for a clean Shopify listing.'
-    : 'A 4-digit code will be appended to keep the name unique in Lightspeed.';
+    ? 'Created as Active and published to the Online Store, with the name used as-is.'
+    : 'Created as a Draft, unpublished, with a 4-digit code appended to the name.';
   return `
     <div class="online-section">
       <span class="online-label">Will this product be sold online?</span>
@@ -1634,7 +1660,9 @@ function renderFields(p) {
       </div>
       <div class="field">
         <label>Supplier <span class="optional">(optional)</span></label>
-        <select onchange="updateField(${p._id},'supplierName',this.value)">${supplierOpts(p.supplierName)}</select>
+        <input type="text" list="supplier-options" placeholder="Start typing a supplier"
+          value="${esc(p.supplierName)}"
+          oninput="updateField(${p._id},'supplierName',this.value)">
       </div>
       <div class="field">
         <label>Supplier Code <span class="optional">(optional)</span></label>
@@ -1656,6 +1684,9 @@ function typeBadge(p) {
 function renderList() {
   const list = document.getElementById('product-list');
   list.innerHTML = '';
+
+  const suppliers = document.getElementById('supplier-datalist-host');
+  if (suppliers) suppliers.innerHTML = supplierDatalist();
 
   products.forEach((p, idx) => {
     const total = getTotalStock(p);
@@ -1703,8 +1734,13 @@ async function startSync() {
     showToast('Brands, suppliers, and categories have not loaded yet. Please wait a moment and try again.');
     return;
   }
-  if (!LIVE_PRODUCT_CATEGORIES.length || !LIVE_BRANDS.length) {
-    showToast(REFERENCE_DATA_ERROR || 'Reference data was not returned from Lightspeed.');
+  if (REFERENCE_DATA_ERROR) {
+    showToast(REFERENCE_DATA_ERROR);
+    return;
+  }
+  const unmapped = OUTLETS.filter(o => !o.id).map(o => o.label);
+  if (unmapped.length === OUTLETS.length) {
+    showToast('No Shopify locations matched your stores. Stock cannot be set — check SETUP.md.');
     return;
   }
 
@@ -1748,33 +1784,34 @@ async function startSync() {
         ? TAG_GROUPS.flatMap(g => p.tagSelections[g.key].map(v => `${g.key}: ${v}`))
         : p.tags;
 
-      if (p.productType === 'stocked') {
-        const colourAttr = await workerCall({ action: 'create_variant_attribute', payload: { name: 'Colour' } });
-        const sizeAttr = await workerCall({ action: 'create_variant_attribute', payload: { name: 'Size' } });
+      const common = {
+        contract: CONTRACT_VERSION,
+        name: finalName,
+        brand_name: p.brandName,
+        type_name: p.category,
+        supply_price: parseFloat(p.supplyPrice) || 0,
+        supplier_name: p.supplierName,
+        supplier_code: p.supplierCode,
+        tags: syncTags,
+        sell_online: p.sellOnline,
+        online_publication_id: ONLINE_PUBLICATION_ID,
+        outlets: outletLocationMap()
+      };
 
+      if (p.productType === 'stocked') {
         await workerCall({
           action: 'sync_variant_product',
           payload: {
-            name: finalName,
-            brand_name: p.brandName,
-            type_name: p.category,
-            tax_name: 'GST',
-            supply_price: parseFloat(p.supplyPrice) || 0,
-            supplier_name: p.supplierName,
-            supplier_code: p.supplierCode,
-            tags: syncTags,
-            colour_attr_id: colourAttr.data.id,
-            size_attr_id: sizeAttr.data.id,
+            ...common,
+            colour: p.colour,
             variants: p.sizes.map(size => {
               const base = p.customSku.trim();
               const sku = base ? (size === 'OS' ? base : `${base}-${size.replace(/\//g, '')}`) : genSku();
-              const s = p.sizeStock[size] || blankStock();
               return {
-                colour: p.colour,
                 size,
                 sku,
                 retail_price: parseFloat(p.retailPrice) || 0,
-                inventory: OUTLETS.map(o => ({ outlet_id: o.id, current_amount: s[o.key] || 0 }))
+                stock: p.sizeStock[size] || blankStock()
               };
             })
           }
@@ -1783,17 +1820,10 @@ async function startSync() {
         await workerCall({
           action: 'sync_product',
           payload: {
-            name: finalName,
+            ...common,
             sku: p.customSku.trim() || genSku(),
             retail_price: parseFloat(p.retailPrice) || 0,
-            supply_price: parseFloat(p.supplyPrice) || 0,
-            tax_name: 'GST',
-            brand_name: p.brandName,
-            type_name: p.category,
-            supplier_name: p.supplierName,
-            supplier_code: p.supplierCode,
-            tags: syncTags,
-            inventory: OUTLETS.map(o => ({ outlet_id: o.id, current_amount: p.stock[o.key] || 0 }))
+            stock: p.stock
           }
         });
       }

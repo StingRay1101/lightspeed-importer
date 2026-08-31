@@ -207,13 +207,15 @@ Use a real product you don't mind deleting.
 2. Add one **Stocked Clothing** product with two sizes, set stock at a couple of
    stores, mark it **not** sold online, and sync.
 3. In Shopify, check the new product:
-   - Status is **Draft** and it isn't published to the Online Store
+   - Status is **Draft** and it isn't on the Online Store channel
    - Options are **Colour** and **Size**, one variant per size
    - SKUs match the pattern you expect (`BASE-S`, `BASE-M`; `OS` gets no suffix)
    - Cost per item equals the supply price
    - Inventory shows at the right stores with the right numbers
    - Supplier and Supplier Code appear under Metafields
-4. Repeat with **sold online = Yes** and confirm it's **Active** and published.
+4. Repeat with **sold online = Yes**. It should also be **Draft**, but this time
+   already on the **Online Store** channel — so setting it Active is the only
+   thing between it and the storefront.
 5. Delete both test products.
 
 ---
@@ -227,8 +229,14 @@ The differences worth mentioning:
 
 - The **"Don't forget Shopify!"** step is gone. Products land in Shopify
   directly, so there's no second manual step in Lightspeed any more.
-- **Sold online = Yes** now means the product is created Active and published to
-  the Online Store. **No** means it's created as a Draft and left unpublished.
+- **Every product is created as a Draft**, so nothing the importer creates can
+  sell until someone opens it in Shopify and sets it Active. **Sold online = Yes**
+  additionally puts it on the Online Store channel, so activating it is then the
+  only remaining step. **No** leaves it off every sales channel.
+
+  This is deliberate: the importer can create a lot of products quickly, and a
+  draft-by-default gate means a mistake is invisible to customers. To change it,
+  set `PRODUCT_STATUS` at the top of `worker.js`.
   The 4-digit suffix on non-online names has been kept.
 - **Supplier** is now a type-ahead box instead of a fixed dropdown, because
   Shopify keeps no supplier list. Existing suppliers are suggested as you type,

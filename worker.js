@@ -38,6 +38,11 @@ const OUTLET_MATCHERS = [
   { key: 'sw', label: 'Southport Warehouse', match: ['southport warehouse', 'warehouse'] },
 ];
 
+// Everything is created as a draft so a person reviews it in Shopify before it
+// can ever sell. Products marked "sold online" are still published to the
+// Online Store channel, so going live is a single status flip on the product.
+const PRODUCT_STATUS = 'DRAFT';
+
 const SUPPLIER_NAMESPACE = 'custom';
 const SUPPLIER_KEY = 'supplier';
 const SUPPLIER_CODE_KEY = 'supplier_code';
@@ -416,7 +421,7 @@ async function syncSimpleProduct(env, payload) {
       vendor: payload.brand_name || undefined,
       productType: payload.type_name || undefined,
       tags: payload.tags || [],
-      status: payload.sell_online ? 'ACTIVE' : 'DRAFT',
+      status: PRODUCT_STATUS,
       metafields: supplierMetafields(payload),
     },
   });
@@ -463,7 +468,7 @@ async function syncVariantProduct(env, payload) {
       vendor: payload.brand_name || undefined,
       productType: payload.type_name || undefined,
       tags: payload.tags || [],
-      status: payload.sell_online ? 'ACTIVE' : 'DRAFT',
+      status: PRODUCT_STATUS,
       metafields: supplierMetafields(payload),
       productOptions: [
         { name: 'Colour', position: 1, values: [{ name: payload.colour }] },

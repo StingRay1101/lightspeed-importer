@@ -655,7 +655,7 @@
   <div class="modal-box">
     <img src="Imagine Fashion Logo Transp.png" alt="Imagine Fashion" class="modal-logo">
     <h2>Synced to Shopify</h2>
-    <p id="shopify-modal-summary">Your products are now in Shopify. Items marked <strong>sold online</strong> are active and published to the Online Store; everything else was created as a <strong>draft</strong>.</p>
+    <p id="shopify-modal-summary">Your products are now in Shopify, all as <strong>drafts</strong>. Nothing is on sale until you review it and set it <strong>Active</strong>. Items marked <strong>sold online</strong> are already on the Online Store channel, so activating them is all that's left.</p>
     <a href="https://admin.shopify.com/products?order=created_at%20desc" target="_blank" rel="noopener" class="modal-btn">Open Recently Created Products</a>
     <button class="modal-close" onclick="document.getElementById('shopify-modal').classList.remove('active')">Done</button>
   </div>
@@ -1287,8 +1287,8 @@ function setSellOnline(id, val) {
   card.querySelector('.btn-online-yes').className = 'btn-online btn-online-yes' + (val ? ' is-yes' : '');
   card.querySelector('.btn-online-no').className = 'btn-online btn-online-no' + (!val ? ' is-no' : '');
   card.querySelector('.online-note').textContent = val
-    ? 'Created as Active and published to the Online Store, with the name used as-is.'
-    : 'Created as a Draft, unpublished, with a 4-digit code appended to the name.';
+    ? 'Added to the Online Store channel, name used as-is. Created as a Draft — set it Active in Shopify to go live.'
+    : 'Created as a Draft, not on any sales channel, with a 4-digit code appended to the name.';
 }
 
 function applyQuick(id, name) {
@@ -1532,8 +1532,8 @@ function renderTypeSelector(p) {
 
 function renderOnlineToggle(p) {
   const note = p.sellOnline
-    ? 'Created as Active and published to the Online Store, with the name used as-is.'
-    : 'Created as a Draft, unpublished, with a 4-digit code appended to the name.';
+    ? 'Added to the Online Store channel, name used as-is. Created as a Draft — set it Active in Shopify to go live.'
+    : 'Created as a Draft, not on any sales channel, with a 4-digit code appended to the name.';
   return `
     <div class="online-section">
       <span class="online-label">Will this product be sold online?</span>

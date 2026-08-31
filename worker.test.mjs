@@ -193,7 +193,7 @@ out = await res.json();
 check('variant product syncs', res.status === 200 && out.data?.id, JSON.stringify(out));
 
 const vCreate = calls.find(c => c.query.includes('ProductCreate')).variables.product;
-check('online product is ACTIVE', vCreate.status === 'ACTIVE', vCreate.status);
+check('online product is still DRAFT', vCreate.status === 'DRAFT', vCreate.status);
 check('two options declared', vCreate.productOptions.length === 2, JSON.stringify(vCreate.productOptions));
 check('Colour option is single-valued', vCreate.productOptions[0].name === 'Colour'
   && vCreate.productOptions[0].values.length === 1, JSON.stringify(vCreate.productOptions[0]));

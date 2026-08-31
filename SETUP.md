@@ -8,7 +8,13 @@ The front end (`index.html`) is a static page on GitHub Pages. All credentials
 live in a Cloudflare Worker (`worker.js`), which is the only thing that talks to
 Shopify. Nothing sensitive is ever in the browser.
 
-Work through steps 1–5 in order. Step 6 is the smoke test.
+**Shortcut:** once you have the app from step 1, `node setup.mjs` does steps 2
+through 4 for you — it verifies the credentials, checks the scopes, matches your
+store locations, then sets the Cloudflare secrets and deploys. It prompts for
+the secret without echoing it and never writes it to disk. Steps 5 and 6 are
+still manual.
+
+Otherwise work through steps 1–5 in order. Step 6 is the smoke test.
 
 ---
 

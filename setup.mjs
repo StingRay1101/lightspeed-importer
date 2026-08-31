@@ -60,6 +60,11 @@ function ask(query, hidden = false) {
   return new Promise(resolve => {
     awaitingInput = true;
     const done = answer => { awaitingInput = false; resolve(answer.trim()); };
+    // Git Bash's MinTTY doesn't report as a TTY, so masking silently stops
+    // working there. Say so rather than echoing a secret unannounced.
+    if (hidden && !interactive) {
+      console.log(dim('  (this terminal cannot hide input — what you type will be visible)'));
+    }
     if (hidden && interactive) {
       process.stdout.write(query);
       const echo = rl._writeToOutput;

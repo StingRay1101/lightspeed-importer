@@ -1001,8 +1001,9 @@ function getLiveCategoryValues() {
   const seen = new Set();
 
   LIVE_PRODUCT_CATEGORIES.forEach(cat => {
-    if (!cat.leaf_category) return;
-    const label = (cat.display_name || cat.category_path || cat.name || '').trim();
+    // Lightspeed categories were a tree and only leaf nodes were selectable.
+    // Shopify product types are flat, so every entry is offered.
+    const label = (typeof cat === 'string' ? cat : cat.display_name || cat.name || '').trim();
     if (!label) return;
     const key = label.toLowerCase();
     if (seen.has(key)) return;

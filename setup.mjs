@@ -16,12 +16,21 @@ import { spawnSync } from 'child_process';
 const API_VERSION = '2026-01';
 const WORKER_NAME = 'lightpspeedimporter';
 
+// Only the capabilities that matter are listed. Shopify's write_X implies
+// read_X and returns just write_X in the granted list, so asking for both
+// would report reads as missing when they are actually present.
 const REQUIRED_SCOPES = [
-  'read_products', 'write_products',
-  'read_inventory', 'write_inventory',
-  'read_locations',
-  'read_publications', 'write_publications',
+  'write_products',
+  'write_inventory',
+  'read_locations',      // no write_locations exists; locations are read-only
+  'write_publications',
 ];
+
+function hasScope(granted, needed) {
+  if (granted.includes(needed)) return true;
+  if (needed.startsWith('read_')) return granted.includes(`write_${needed.slice(5)}`);
+  return false;
+}
 
 const OUTLETS = [
   { label: 'Harbour Town', match: ['harbour town', 'harbourtown'] },
@@ -226,13 +235,15 @@ try {
 /* 2. Check scopes                                                   */
 /* ---------------------------------------------------------------- */
 
-const missing = REQUIRED_SCOPES.filter(s => !grantedScopes.includes(s));
+console.log(dim(`  granted: ${grantedScopes.length ? grantedScopes.join(', ') : '(none reported)'}`));
+
+const missing = REQUIRED_SCOPES.filter(s => !hasScope(grantedScopes, s));
 if (missing.length) {
   cross(`Missing scopes: ${missing.join(', ')}`);
   fail('The app does not have every scope the importer needs.',
     'Add them to the app version in the Dev Dashboard, release it, then approve the\nupdated scopes on the store. Granting them without approving does nothing.');
 }
-tick(`All ${REQUIRED_SCOPES.length} required scopes granted`);
+tick(`All required scopes granted ${dim('(write_ implies read_)')}`);
 
 /* ---------------------------------------------------------------- */
 /* 3. Read the store                                                 */

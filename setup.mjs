@@ -138,9 +138,13 @@ function oauthHint(detail) {
       '  - the shop domain is wrong — check you are not pointing at the wholesale store\n' +
       '    when the app lives on the retail one, or vice versa';
   }
-  if (/invalid_client|unauthorized_client/i.test(detail)) {
-    return 'The client ID exists but the secret does not match it. Re-copy both from the\n' +
-      'same app in the Dev Dashboard — and if you rotated the secret, use the new one.';
+  if (/invalid_request|invalid_client|unauthorized_client/i.test(detail)) {
+    return 'Most often the secret is wrong or was not pasted cleanly — this same error\n' +
+      'appears for a completely made-up secret. Check the length reported above looks\n' +
+      'right, and re-copy the secret from the app in the Dev Dashboard.\n\n' +
+      'If the secret is definitely correct, then either the app does not support the\n' +
+      'client credentials grant (admin-created apps do not — use option 1 instead), or\n' +
+      'the app and the store are in different Shopify organisations.';
   }
   return 'Usually the client ID or secret is wrong, or the app and the store are in different\n' +
     'Shopify organisations. The client credentials grant only works within one organisation.';
@@ -214,6 +218,12 @@ try {
 
   if (!res.ok) {
     const detail = describeBody(await res.text().catch(() => ''));
+    // Echo what was actually attempted. The secret is reported by length only,
+    // which is enough to spot a truncated or empty paste without exposing it.
+    console.log(dim(`\n  attempted with:`));
+    console.log(dim(`    store         ${shop}`));
+    console.log(dim(`    client ID     ${clientId} (${clientId.length} chars)`));
+    console.log(dim(`    client secret ${clientSecret.length} characters`));
     fail(`Shopify refused the credentials (HTTP ${res.status}). ${detail}`,
       res.status === 404 ? `No store answered at ${shop}. Check the domain.` : oauthHint(detail));
   }

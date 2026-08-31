@@ -66,7 +66,9 @@ function ask(query, hidden = false) {
       console.log(dim('  (this terminal cannot hide input — what you type will be visible)'));
     }
     if (hidden && interactive) {
-      process.stdout.write(query);
+      // readline redraws the current line, wiping any prompt written onto it,
+      // so the question goes on its own line above the (blank) input line.
+      console.log(query);
       const echo = rl._writeToOutput;
       rl._writeToOutput = () => {};
       rl.question('', answer => {
@@ -103,12 +105,36 @@ process.on('uncaughtException', err => {
   process.stdin.pause();
 });
 
-/** Shopify serves an HTML error page for unknown stores; don't paste it back. */
+/**
+ * Shopify answers OAuth failures with an HTML error page whose <title> carries
+ * the actual reason, e.g. "400 - Oauth error application_cannot_be_found".
+ * Pull that out rather than dumping the markup or discarding the diagnosis.
+ */
 function describeBody(text) {
   const body = (text || '').trim();
   if (!body) return '';
-  if (/^\s*</.test(body) || /<html/i.test(body)) return 'Shopify returned a web page rather than an API response.';
+  if (/^\s*</.test(body) || /<html/i.test(body)) {
+    const title = body.match(/<title>([^<]*)<\/title>/i)?.[1]?.trim();
+    return title ? `Shopify said: ${title}` : 'Shopify returned a web page rather than an API response.';
+  }
   return body.slice(0, 300);
+}
+
+/** Turns Shopify's OAuth error codes into something actionable. */
+function oauthHint(detail) {
+  if (/application_cannot_be_found/i.test(detail)) {
+    return 'Shopify has no app with that client ID on this store. Usually one of:\n' +
+      '  - the app was never installed on THIS store (installing on another store does not count)\n' +
+      '  - the client ID belongs to an app in a different Shopify organisation\n' +
+      '  - the shop domain is wrong — check you are not pointing at the wholesale store\n' +
+      '    when the app lives on the retail one, or vice versa';
+  }
+  if (/invalid_client|unauthorized_client/i.test(detail)) {
+    return 'The client ID exists but the secret does not match it. Re-copy both from the\n' +
+      'same app in the Dev Dashboard — and if you rotated the secret, use the new one.';
+  }
+  return 'Usually the client ID or secret is wrong, or the app and the store are in different\n' +
+    'Shopify organisations. The client credentials grant only works within one organisation.';
 }
 
 console.log(`\n${bold('Shopify importer setup')}`);
@@ -146,9 +172,7 @@ try {
   if (!res.ok) {
     const detail = describeBody(await res.text().catch(() => ''));
     fail(`Shopify refused the credentials (HTTP ${res.status}). ${detail}`,
-      res.status === 401 || res.status === 400
-        ? 'Usually the client ID or secret is wrong, or the app and the store are in different\nShopify organisations. The client credentials grant only works within one organisation.'
-        : 'Check the shop domain is right.');
+      res.status === 404 ? `No store answered at ${shop}. Check the domain.` : oauthHint(detail));
   }
 
   const data = await res.json();

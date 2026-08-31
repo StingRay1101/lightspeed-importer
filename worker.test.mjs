@@ -10,15 +10,27 @@ const tmp = path.join(process.env.TEMP || '.', 'worker.smoke.mjs');
 fs.writeFileSync(tmp, src);
 const worker = (await import('file://' + tmp.replace(/\\/g, '/'))).default;
 
+// Dev Dashboard credentials: the worker must exchange these for a 24h token.
 const env = {
   PORTAL_PASSWORD: 'pw',
   SHOPIFY_STORE: 'test.myshopify.com',
-  SHOPIFY_ADMIN_TOKEN: 'shpat_test',
+  SHOPIFY_CLIENT_ID: 'client-id',
+  SHOPIFY_CLIENT_SECRET: 'client-secret',
 };
 
 const calls = [];
+const tokenRequests = [];
+let authHeaders = [];
 
 globalThis.fetch = async (url, opts) => {
+  if (String(url).includes('/admin/oauth/access_token')) {
+    tokenRequests.push(Object.fromEntries(new URLSearchParams(opts.body)));
+    return new Response(
+      JSON.stringify({ access_token: 'shpua_issued', scope: 'write_products', expires_in: 86399 }),
+      { status: 200 }
+    );
+  }
+  authHeaders.push(opts.headers['X-Shopify-Access-Token']);
   const body = JSON.parse(opts.body);
   const q = body.query;
   calls.push({ query: q, variables: body.variables });
@@ -89,10 +101,20 @@ const bad = await worker.fetch(new Request('https://w.dev', {
 }), env);
 check('wrong password rejected with 401', bad.status === 401, bad.status);
 
-/* ---------- reference data ---------- */
+/* ---------- token exchange ---------- */
 calls.length = 0;
 let res = await worker.fetch(post('get_reference_data', {}), env);
 let ref = await res.json();
+check('client credentials exchanged for a token', tokenRequests.length === 1, tokenRequests.length);
+check('grant_type is client_credentials',
+  tokenRequests[0]?.grant_type === 'client_credentials', JSON.stringify(tokenRequests[0]));
+check('client id and secret sent',
+  tokenRequests[0]?.client_id === 'client-id' && tokenRequests[0]?.client_secret === 'client-secret',
+  JSON.stringify(tokenRequests[0]));
+check('issued token used on API calls',
+  authHeaders.length > 0 && authHeaders.every(h => h === 'shpua_issued'), JSON.stringify(authHeaders));
+
+/* ---------- reference data ---------- */
 check('reference data returns 200', res.status === 200, res.status);
 check('categories come from productTypes', ref.categories?.[0]?.name === 'Dresses', JSON.stringify(ref.categories));
 check('brands come from productVendors', ref.brands?.[0]?.name === 'Zaffiro', JSON.stringify(ref.brands));
@@ -206,6 +228,30 @@ out = await res.json();
 check('Shopify userErrors surface as readable message',
   res.status === 502 && /Title is required/.test(out.error), JSON.stringify(out));
 globalThis.fetch = realFetch;
+
+/* ---------- token caching and refresh ---------- */
+const before = tokenRequests.length;
+await worker.fetch(post('get_reference_data', {}), env);
+check('cached token reused instead of re-exchanged', tokenRequests.length === before, tokenRequests.length - before);
+
+// A revoked token should be dropped and re-fetched once, not surfaced as an error.
+let issuedCalls = 0;
+globalThis.fetch = async (url, opts) => {
+  if (String(url).includes('/admin/oauth/access_token')) {
+    tokenRequests.push({ refreshed: true });
+    return new Response(JSON.stringify({ access_token: 'shpua_fresh', expires_in: 86399 }), { status: 200 });
+  }
+  issuedCalls++;
+  if (issuedCalls === 1) return new Response('unauthorised', { status: 401 });
+  return new Response(JSON.stringify({ data: { shop: { name: 'S', currencyCode: 'AUD' },
+    productTypes: { edges: [] }, productVendors: { edges: [] },
+    locations: { nodes: [] }, publications: { nodes: [] } } }), { status: 200 });
+};
+const refreshedBefore = tokenRequests.length;
+res = await worker.fetch(post('get_reference_data', {}), env);
+check('401 triggers one token refresh and retry',
+  res.status === 200 && tokenRequests.length === refreshedBefore + 1,
+  `status ${res.status}, refreshes ${tokenRequests.length - refreshedBefore}`);
 
 console.log(failures ? `\n${failures} CHECK(S) FAILED` : '\nAll checks passed.');
 process.exit(failures ? 1 : 0);

@@ -12,12 +12,26 @@ Work through steps 1–5 in order. Step 6 is the smoke test.
 
 ---
 
-## 1. Create the Shopify custom app
+## 1. Create the Shopify app
 
-In Shopify admin: **Settings → Apps and sales channels → Develop apps → Create an app**.
+Shopify retired admin-created custom apps on **1 January 2026**. You can no
+longer create one under *Settings → Apps and sales channels → Develop apps*, and
+the permanent `shpat_` tokens they issued are no longer handed out. Existing apps
+created before that date still work.
 
-Name it something like `Product Importer`, then **Configure Admin API scopes** and
-tick exactly these:
+So there are two routes:
+
+- **If the store already has a pre-2026 custom app** with a working Admin API
+  token and the scopes below, reuse it. Set `SHOPIFY_ADMIN_TOKEN` in step 3 and
+  skip the client id/secret.
+- **Otherwise** create an app in the **Dev Dashboard**, which is the current
+  path. It issues a token that lasts 24 hours; the worker fetches and refreshes
+  it automatically, so this is invisible in day-to-day use.
+
+For the Dev Dashboard route, go to <https://dev.shopify.com>, open the
+organisation that owns the store, and create an app named something like
+`Product Importer`. Then open its **API access / scopes** and grant exactly
+these:
 
 | Scope | Why it's needed |
 |---|---|
@@ -26,12 +40,50 @@ tick exactly these:
 | `read_locations` | Match your four stores to Shopify locations |
 | `read_publications`, `write_publications` | Publish "sold online" products to the Online Store |
 
-Click **Save**, then **Install app**, then **Reveal token once** under Admin API
-access token. Copy it — it starts with `shpat_` and Shopify will never show it
-again.
+Release a version with those scopes, then **install the app on the store** and
+approve the scope request. Nothing works until the store has approved it.
 
-> Keep this token out of email and chat. Paste it straight into Cloudflare in
-> step 3. If it leaks, uninstall the app and create a new one.
+Finally, from the app's **Client credentials** section copy the **Client ID** and
+**Client secret**. These go into Cloudflare in step 3.
+
+> The client secret is a long-lived credential — treat it like a password. Keep
+> it out of email and chat, and paste it straight into Cloudflare. If it leaks,
+> rotate it in the Dev Dashboard.
+
+**The client credentials grant only works when the app and the store are in the
+same Shopify organisation.** If the app was created in a different organisation
+you'll get an error at token exchange, and the fix is to recreate the app under
+the organisation that owns the store.
+
+### Check the credentials before touching Cloudflare
+
+Worth doing, so that if something is wrong you know it's the app and not the
+worker. Capture the secret without it landing in your shell history:
+
+```bash
+read -rsp "Client ID: " CID && echo && read -rsp "Client secret: " CSEC && echo "ok"
+```
+
+Exchange them for a token, replacing `YOUR-STORE`:
+
+```bash
+curl -s -X POST "https://YOUR-STORE.myshopify.com/admin/oauth/access_token" -d "grant_type=client_credentials" -d "client_id=$CID" -d "client_secret=$CSEC"
+```
+
+You should get back an `access_token`, a `scope` list, and `expires_in: 86399`.
+Check the scope list actually contains all eight scopes — if it's short, the
+store hasn't approved the latest app version.
+
+Then confirm the token can read what the importer needs:
+
+```bash
+TOKEN=$(curl -s -X POST "https://YOUR-STORE.myshopify.com/admin/oauth/access_token" -d "grant_type=client_credentials" -d "client_id=$CID" -d "client_secret=$CSEC" | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p') && curl -s -X POST "https://YOUR-STORE.myshopify.com/admin/api/2025-10/graphql.json" -H "X-Shopify-Access-Token: $TOKEN" -H "Content-Type: application/json" -d '{"query":"{ shop { name } locations(first:10){nodes{id name}} publications(first:10){nodes{id name}} }"}'
+```
+
+A good response names your shop, lists your locations, and includes a publication
+called "Online Store". This one query exercises the three scopes that most often
+get missed, so an `ACCESS_DENIED` here names the field that failed and tells you
+which scope to add.
 
 ---
 
@@ -69,8 +121,13 @@ Variables and Secrets**. Add these three as **encrypted secrets**:
 | Name | Value |
 |---|---|
 | `PORTAL_PASSWORD` | The staff password (keep the current one so nobody has to relearn it) |
-| `SHOPIFY_STORE` | Your `.myshopify.com` domain, e.g. `imagine-fashion.myshopify.com` |
-| `SHOPIFY_ADMIN_TOKEN` | The `shpat_...` token from step 1 |
+| `SHOPIFY_STORE` | Your `.myshopify.com` domain, e.g. `imagine-fashion.myshopify.com` — no `https://` |
+| `SHOPIFY_CLIENT_ID` | Client ID from step 1 |
+| `SHOPIFY_CLIENT_SECRET` | Client secret from step 1 |
+
+If you're reusing a pre-2026 custom app instead, set `SHOPIFY_ADMIN_TOKEN` to its
+permanent token and omit the client id and secret. The worker takes whichever
+pair it finds, preferring the permanent token.
 
 Delete the old Lightspeed secrets once the new sync is working — not before, in
 case you need to roll back.
@@ -160,6 +217,10 @@ The differences worth mentioning:
 - The worker pins Shopify Admin API `2025-10` (`API_VERSION` at the top of the
   file). Shopify supports each version for about a year, so bump it roughly
   annually and re-run the step 6 checks.
+- Access tokens from the Dev Dashboard last 24 hours. The worker exchanges the
+  client id and secret for one on demand, caches it in memory, and expires it a
+  minute early; a rejected token is dropped and re-fetched once automatically.
+  There is nothing to rotate manually and no token stored at rest.
 - `ALLOWED_ORIGINS` in `worker.js` controls CORS. Add any new domain the
   importer gets served from, or requests will be blocked by the browser.
 - `serve.js` runs the page locally on `http://localhost:8788` for testing before

@@ -6,9 +6,13 @@
  * Shopify does not need (options are declared inline on the product).
  *
  * Required secrets (wrangler secret put <NAME>):
- *   PORTAL_PASSWORD      staff password for the importer
- *   SHOPIFY_STORE        e.g. imagine-fashion.myshopify.com
- *   SHOPIFY_ADMIN_TOKEN  Admin API access token (shpat_...)
+ *   PORTAL_PASSWORD        staff password for the importer
+ *   SHOPIFY_STORE          e.g. imagine-fashion.myshopify.com
+ *   SHOPIFY_CLIENT_ID      Dev Dashboard app client ID
+ *   SHOPIFY_CLIENT_SECRET  Dev Dashboard app client secret
+ *
+ * A store that still has a pre-2026 admin-created custom app can instead set
+ * SHOPIFY_ADMIN_TOKEN to that app's permanent token and omit the id/secret.
  *
  * Required Admin API scopes:
  *   write_products, read_products, write_inventory, read_inventory,
@@ -67,6 +71,49 @@ function json(request, body, status = 200) {
 
 class ShopifyError extends Error {}
 
+// Shopify stopped issuing permanent tokens when admin-created custom apps were
+// retired on 1 Jan 2026. Dev Dashboard apps exchange a client id and secret for
+// a token that lasts 24 hours, so it is fetched on demand and cached in the
+// isolate rather than stored as a secret.
+let cachedToken = null;
+
+async function getAccessToken(env) {
+  // A legacy custom app created before the cutoff still has a permanent token.
+  if (env.SHOPIFY_ADMIN_TOKEN) return env.SHOPIFY_ADMIN_TOKEN;
+
+  if (cachedToken && Date.now() < cachedToken.expiresAt) return cachedToken.value;
+
+  const res = await fetch(`https://${env.SHOPIFY_STORE}/admin/oauth/access_token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: env.SHOPIFY_CLIENT_ID,
+      client_secret: env.SHOPIFY_CLIENT_SECRET,
+    }),
+  });
+
+  if (!res.ok) {
+    const detail = (await res.text().catch(() => '')).slice(0, 200);
+    throw new ShopifyError(
+      `Shopify would not issue an access token (HTTP ${res.status}). Check ` +
+      'SHOPIFY_CLIENT_ID and SHOPIFY_CLIENT_SECRET, and that the app and the ' +
+      'store belong to the same Shopify organisation.' +
+      (detail ? ` Shopify said: ${detail}` : '')
+    );
+  }
+
+  const data = await res.json();
+  if (!data.access_token) throw new ShopifyError('Shopify returned no access token.');
+
+  // Expire a minute early so a long sync cannot run past the deadline mid-flight.
+  cachedToken = {
+    value: data.access_token,
+    expiresAt: Date.now() + Math.max(60, (data.expires_in || 86399) - 60) * 1000,
+  };
+  return cachedToken.value;
+}
+
 async function shopify(env, query, variables = {}) {
   const url = `https://${env.SHOPIFY_STORE}/admin/api/${API_VERSION}/graphql.json`;
 
@@ -76,7 +123,7 @@ async function shopify(env, query, variables = {}) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Shopify-Access-Token': env.SHOPIFY_ADMIN_TOKEN,
+        'X-Shopify-Access-Token': await getAccessToken(env),
       },
       body: JSON.stringify({ query, variables }),
     });
@@ -88,9 +135,18 @@ async function shopify(env, query, variables = {}) {
       continue;
     }
 
-    if (res.status === 401 || res.status === 403) {
+    // A cached token can be revoked or expire early; drop it and try once more
+    // before giving up.
+    if (res.status === 401) {
+      cachedToken = null;
+      if (attempt === 0 && !env.SHOPIFY_ADMIN_TOKEN) continue;
+      throw new ShopifyError('Shopify rejected the access token.');
+    }
+
+    if (res.status === 403) {
       throw new ShopifyError(
-        'Shopify rejected the access token. Check SHOPIFY_ADMIN_TOKEN and that the app has the required scopes.'
+        'Shopify refused the request. The app is probably missing an access scope — ' +
+        'check the scopes on the app version in the Dev Dashboard and approve the change on the store.'
       );
     }
 
@@ -482,7 +538,12 @@ export default {
       return json(request, { error: 'Method not allowed.' }, 405);
     }
 
-    if (!env.PORTAL_PASSWORD || !env.SHOPIFY_STORE || !env.SHOPIFY_ADMIN_TOKEN) {
+    // Either a Dev Dashboard client id/secret pair, or a legacy custom app's
+    // permanent token, is enough to authenticate.
+    const hasCredentials =
+      env.SHOPIFY_ADMIN_TOKEN || (env.SHOPIFY_CLIENT_ID && env.SHOPIFY_CLIENT_SECRET);
+
+    if (!env.PORTAL_PASSWORD || !env.SHOPIFY_STORE || !hasCredentials) {
       return json(request, { error: 'Worker is missing required secrets. See SETUP.md.' }, 500);
     }
 

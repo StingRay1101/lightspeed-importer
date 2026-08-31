@@ -147,9 +147,25 @@ if (!shop.endsWith('.myshopify.com')) {
     'Use the permanent domain from Settings > Domains, not your custom storefront domain.');
 }
 
-const clientId = await ask('Client ID: ');
-const clientSecret = await ask('Client secret (hidden): ', true);
-if (!clientId || !clientSecret) fail('Both the client ID and secret are required.');
+console.log(`\n${bold('How does the app authenticate?')}`);
+console.log('  1  Admin API access token   ' + dim('app under Settings > Apps > Develop apps'));
+console.log('  2  Client ID and secret     ' + dim('app created in the Dev Dashboard'));
+console.log(dim('\nIf the app page shows an "Admin API access token" you want 1. Only apps'));
+console.log(dim('created in the Dev Dashboard support 2 — admin-created apps do not, and'));
+console.log(dim('trying gives "Oauth error invalid_request".'));
+
+const mode = await ask('\nChoose 1 or 2: ');
+if (!['1', '2'].includes(mode)) fail(`"${mode}" is not 1 or 2.`);
+
+let adminToken = '', clientId = '', clientSecret = '';
+if (mode === '1') {
+  adminToken = await ask('Admin API access token (hidden): ', true);
+  if (!adminToken) fail('The access token is required.');
+} else {
+  clientId = await ask('Client ID: ');
+  clientSecret = await ask('Client secret (hidden): ', true);
+  if (!clientId || !clientSecret) fail('Both the client ID and secret are required.');
+}
 
 /* ---------------------------------------------------------------- */
 /* 1. Exchange credentials for a token                               */
@@ -158,6 +174,24 @@ if (!clientId || !clientSecret) fail('Both the client ID and secret are required
 console.log(`\n${bold('Checking credentials')}`);
 
 let token, grantedScopes;
+
+if (mode === '1') {
+  token = adminToken;
+  // A permanent token carries no scope list, so ask Shopify what it can do.
+  const res = await fetch(`https://${shop}/admin/oauth/access_scopes.json`, {
+    headers: { 'X-Shopify-Access-Token': token },
+  });
+  if (res.status === 401 || res.status === 403) {
+    fail('Shopify rejected that access token.',
+      'Re-copy it from the app page. Note the token is shown only once when the app\n' +
+      'is installed — if you never saved it, uninstall and reinstall the app to get\n' +
+      'a new one. It is not the API secret key.');
+  }
+  if (!res.ok) fail(`Could not read the token's scopes (HTTP ${res.status}). ${describeBody(await res.text().catch(() => ''))}`);
+  const data = await res.json();
+  grantedScopes = (data.access_scopes || []).map(s => s.handle);
+  tick('Access token accepted');
+} else {
 try {
   const res = await fetch(`https://${shop}/admin/oauth/access_token`, {
     method: 'POST',
@@ -182,8 +216,10 @@ try {
 
   tick(`Token issued, valid for ${Math.round((data.expires_in || 0) / 3600)} hours`);
 } catch (err) {
+  if (err instanceof Stop) throw err;
   if (err?.code === 'ENOTFOUND') fail(`Could not reach ${shop}. Check the domain.`);
   throw err;
+}
 }
 
 /* ---------------------------------------------------------------- */
@@ -293,8 +329,12 @@ function putSecret(name, value) {
 console.log('');
 putSecret('PORTAL_PASSWORD', portalPassword);
 putSecret('SHOPIFY_STORE', shop);
-putSecret('SHOPIFY_CLIENT_ID', clientId);
-putSecret('SHOPIFY_CLIENT_SECRET', clientSecret);
+if (mode === '1') {
+  putSecret('SHOPIFY_ADMIN_TOKEN', adminToken);
+} else {
+  putSecret('SHOPIFY_CLIENT_ID', clientId);
+  putSecret('SHOPIFY_CLIENT_SECRET', clientSecret);
+}
 
 console.log(`\n${bold('Deploying worker.js')}`);
 const dep = spawnSync('npx', [

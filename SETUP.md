@@ -93,6 +93,28 @@ which scope to add.
 
 ---
 
+## Which store this syncs into
+
+The target is **Imagine Fashion** (www.imaginefashion.com.au), whose myshopify
+domain is:
+
+```
+imagine-retail.myshopify.com
+```
+
+Two traps here:
+
+- The store was renamed at some point, so `imagine-fashion-wholesale.myshopify.com`
+  still resolves and redirects to the same storefront. It is a dead alias — OAuth
+  against it fails, because the app is registered against `imagine-retail`. The
+  storefront's own `Shopify.shop` variable reports the stale alias, so don't
+  trust it. The handle in the admin URL (`admin.shopify.com/store/<handle>`) is
+  the authoritative one.
+- There is a separate store called **Imagine Fashion Wholesale - DEPRECATED**
+  (wholesale.imaginefashion.com.au). Never point the importer at it.
+
+---
+
 ## 2. Check your location names
 
 The importer's four stock columns are matched to Shopify locations **by name**.
